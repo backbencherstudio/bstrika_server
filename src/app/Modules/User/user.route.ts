@@ -23,7 +23,7 @@ router.post(
 );
 
 router.patch(
-  '/verifyOtpForResetPassword',
+  '/sendOtpForResetPassword',
   userController.verifyOtpForResetPassword,
 );
 
@@ -37,6 +37,13 @@ router.patch(
   upload.array('profileImage', 1), 
   userController.updateUserData,
 );
+
+router.patch(
+  '/setPortfolioImage/:id',
+  upload.array('portfolio', 1), 
+  userController.setPortfolioImage,
+);
+
 
 router.post(
   '/login',

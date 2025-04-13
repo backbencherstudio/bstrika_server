@@ -12,7 +12,7 @@ declare module 'express-session' {
     otpData?: {
       otp: string;
       createdAt : number;
-      name : string;
+      first_name : string;
       email : string;
       password : string;
       isDeleted : boolean;
@@ -34,21 +34,16 @@ declare module 'express-session' {
 
 const createUser = catchAsync(async (req, res) => {
     const result = await UserServices.createUserIntoDB(req.body);
-    console.log(37, result);
-    
 
   req.session.otpData = {
     otp: result.otp,
-    name : result.name,
+    first_name : result.first_name,
     email : result.email,
     password: result.password,
     isDeleted : result.isDeleted,
     role:result.role,
     createdAt: Date.now(),  
-  };
-
-  console.log(50, req.session.otpData);
-  
+  };  
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -59,14 +54,8 @@ const createUser = catchAsync(async (req, res) => {
 });
 
 const verifyOTP = catchAsync(async (req, res) => {
-  const { otp } = req.body;  
-  console.log(62, otp);
-  console.log(63, otp);
-  
-  const sessionOtpData = req.session.otpData;
-
-  console.log(66, sessionOtpData);
-  
+  const { otp } = req.body; 
+  const sessionOtpData = req.session.otpData; 
 
   if (!sessionOtpData) {
     throw new AppError(400, 'OTP expired or not set.');
@@ -107,8 +96,7 @@ const loginUser = catchAsync(async (req, res) => {
   });
 });
 
-const updateUserData = catchAsync(async (req, res) => {  
-
+const updateUserData = catchAsync(async (req, res) => {
   const files = req.files as Express.Multer.File[];
   const profileImage = files?.map((file) => `/uploads/${file.filename}`);
 
@@ -116,7 +104,7 @@ const updateUserData = catchAsync(async (req, res) => {
     ...req.body,
     profileImage : profileImage[0]
   };
-  
+    
   const result = await UserServices.updateUserDataIntoDB(profileData);
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -124,6 +112,28 @@ const updateUserData = catchAsync(async (req, res) => {
     message: 'User Data update successfully',
     data: result,
   });
+});
+
+
+const setPortfolioImage = catchAsync(async (req, res) => {
+  console.log(119, req.params.id);
+  
+  const files = req.files as Express.Multer.File[];
+  const portfolioImage = files?.map((file) => `/uploads/${file.filename}`);
+
+  const profileData = {
+    portfolio : portfolioImage[0]
+  };
+  
+  const result = await UserServices.setPortfolioImageIntoDB(req?.params.id,  profileData);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Portfolio added successfully',
+    data: result,
+  });
+
 });
 
 
@@ -217,6 +227,7 @@ const sendEmailToUser = catchAsync(async (req, res) => {
 
 export const userController = {
   getAllUser,
+  setPortfolioImage,
   getSingleUser,
   createUser,
   loginUser,

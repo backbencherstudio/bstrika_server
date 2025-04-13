@@ -31,7 +31,7 @@ const createUserIntoDB = async (payload: TUser) => {
     success: true,
     message: 'OTP sent to your email. Please verify to complete registration.',
     otp,
-    name: payload.name,
+    first_name: payload.first_name,
     email: payload.email,
     password: payload.password,
     isDeleted: false,
@@ -123,10 +123,10 @@ const deleteFile = (filePath: string) => {
   }
 };
 
-const updateUserDataIntoDB = async (payload: Partial<TUser>) => {  
+
+const updateUserDataIntoDB = async (payload: Partial<TUser>) => { 
   try {
     const userData = await User.findById(payload.userId).select("profileImage");
-
     if (userData?.profileImage) {
       const absoluteFilePath = getAbsoluteFilePath(userData.profileImage);
       if (absoluteFilePath) {
@@ -134,7 +134,6 @@ const updateUserDataIntoDB = async (payload: Partial<TUser>) => {
       }
     }
     const updatedPayload = filteredObject(payload);
-
     const result = await User.findByIdAndUpdate(
       payload.userId,
       { $set: updatedPayload },
@@ -148,9 +147,30 @@ const updateUserDataIntoDB = async (payload: Partial<TUser>) => {
   }
 };
 
+
+const setPortfolioImageIntoDB = async (id : string, payload: any) => {
+  const userData = await User.findById({_id : id}).select("portfolio");  
+  if (userData?.portfolio) {
+    const absoluteFilePath = getAbsoluteFilePath(userData.portfolio);
+    if (absoluteFilePath) {
+      deleteFile(absoluteFilePath);
+    }
+  }  
+  
+  const result = await User.findByIdAndUpdate(
+    {_id : id},
+    { $set: payload },
+    { new: true, runValidators: true }
+  );
+
+  return result;
+};
+
+
+
 const getAllUserFromDB = async (query: Record<string, unknown>) => {  
   const userQuery = new QueryBuilder(User.find(), query)
-    .search(["name", "email"])
+    .search(["first_name", "email"])
     .filter();
 
   return await userQuery.modelQuery;
@@ -237,6 +257,7 @@ const sendEmailToAllUser = async (payload: any) => {
 
 export const UserServices = {
   getAllUserFromDB,
+  setPortfolioImageIntoDB,
   getSingleUserFromDB,
   updateUserDataIntoDB,
   createUserIntoDB,

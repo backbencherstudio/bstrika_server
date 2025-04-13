@@ -6,8 +6,6 @@ export const createToken = (
     email: string;
     role : string;
     userId : Types.ObjectId;
-    customerId ?: string;
-    subscriptionStatus?:string;
   },
   secret: string,
   expiresIn: string,
