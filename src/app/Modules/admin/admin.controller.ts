@@ -14,24 +14,6 @@ export const createCategory = catchAsync(async (req, res) => {
   });
 });
 
-// export const addSubCategory = catchAsync(async (req, res) => {
-
-//   const files = req.files as Express.Multer.File[];
-//   const categoryImage = files?.map((file) => `/uploads/${file.filename}`);
-
-//   const categoryData = {
-//     ...req.body,
-//     categoryImage : categoryImage[0]
-//   };
-
-//   const result = await CategoryService.addSubCategory(req.params.categoryId, categoryData);
-//   sendResponse(res, {
-//     statusCode: httpStatus.OK,
-//     success: true,
-//     message: 'Subcategory added successfully',
-//     data: result,
-//   });
-// });
 
 export const addSubCategory = catchAsync(async (req, res) => {
     const files = req.files as Express.Multer.File[];
@@ -61,12 +43,22 @@ export const removeSubCategory = catchAsync(async (req, res) => {
   });
 });
 
-export const getAllCategories = catchAsync(async (_req, res) => {
+export const getAllCategories = catchAsync(async (req, res) => {
   const result = await CategoryService.getAllCategories();
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
     message: 'All categories fetched',
+    data: result,
+  });
+});
+
+export const getSingleCategory = catchAsync(async (req, res) => {
+  const result = await CategoryService.getSingleCategorieFromDB(req.params.categoryId);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Single categories fetched',
     data: result,
   });
 });

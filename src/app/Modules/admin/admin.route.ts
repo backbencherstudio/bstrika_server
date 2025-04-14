@@ -1,5 +1,5 @@
 import express from 'express';
-import { addSubCategory, createCategory, getAllCategories, removeSubCategory } from './admin.controller';
+import { addSubCategory, createCategory, getAllCategories, getSingleCategory, removeSubCategory } from './admin.controller';
 import { Auth } from '../../middleware/auth';
 import { User_Role } from '../User/user.constent';
 import { upload } from '../../middleware/upload';
@@ -13,6 +13,8 @@ router.patch('/:categoryId', Auth(User_Role.admin), upload.array('categoryImage'
 router.patch('/remove-subcategory/:categoryId',Auth(User_Role.admin), removeSubCategory);
 
 router.get('/', getAllCategories);
+
+router.get('/:categoryId', getSingleCategory);
 
 export const categoryRoutes = router;
  

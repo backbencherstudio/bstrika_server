@@ -9,18 +9,6 @@ const createCategory = async (payload: TCategory) => {
   return await Category.create(payload);
 };
 
-
-// const addSubCategory = async (
-//     categoryId: string,
-//     subCategory: { subCategories: string }
-//   ) => {
-//     return await Category.findByIdAndUpdate(
-//       { _id: categoryId },
-//       { $addToSet: { subCategories: subCategory.subCategories } },
-//       { new: true, runValidators: true }
-//     );
-//   };
-
 const addSubCategory = async (
     categoryId: string,
     subCategoryData: { subCategory: string; categoryImage: string }
@@ -30,48 +18,23 @@ const addSubCategory = async (
     const isDuplicate = category.subCategories.some(
       (item) =>
         item?.subCategory?.toLowerCase() === subCategoryData?.subCategory.toLowerCase()
-    );
-  
+    );  
     if (isDuplicate) {
       throw new Error("Subcategory already exists");
-    }
-  
+    }  
     category.subCategories.push(subCategoryData);
-    const updatedCategory = await category.save();
-  
+    const updatedCategory = await category.save();  
     return updatedCategory;
   };
   
-
-
 
 const getAllCategories = async () => {
   return await Category.find();
 };
 
-// const removeSubCategory = async (
-//   categoryId: string,
-//   subCategorieId : string
-// ) => {
-
-//     console.log(categoryId, subCategorieId);
-
-//     const categoryData = await Category.findById({_id : categoryId}).select("subCategories")
-//     console.log(categoryData);
-
-//     const subCategoryResult = await Category.findByIdAndUpdate({_id : categoryId}, { subCategories : { $in : subCategorieId } } )
-    
-
-    
-
-// //   return await Category.findByIdAndUpdate(
-// //     {_id : categoryId},
-// //     { $pull: { subCategories: subCategory.subCategories } },
-// //     { new: true }
-// //   );
-
-
-// };
+const getSingleCategorieFromDB = async (id : string) => {
+  return await Category.find({_id : id});
+};
 
 const getAbsoluteFilePath = (dbPath: string) => {
   try {
@@ -140,13 +103,12 @@ const removeSubCategory = async (
   
     return updatedCategory;
   };
-  
-
-  
+    
 
 export const CategoryService = {
     createCategory,
     addSubCategory,
     getAllCategories,
+    getSingleCategorieFromDB,
     removeSubCategory,
 }
