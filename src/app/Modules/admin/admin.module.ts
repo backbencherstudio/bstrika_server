@@ -8,10 +8,12 @@ const CategorySchema = new Schema<TCategory>(
       required: true,
       unique: true,
     },
-    subCategories: {
-      type: [String],
-      default: [],
-    },
+    subCategories: [
+      {
+        categoryImage: { type: String },
+        subCategory: { type: String },
+      },
+    ],
   },
   {
     timestamps: true,
