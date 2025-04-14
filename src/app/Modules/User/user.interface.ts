@@ -37,7 +37,8 @@ export interface TUser {
   my_service? : string[];
   extra_skills? : string[];
   portfolio : string;
-  cartificate : string
+  cartificate : string;
+  reating ?: number
 }
 
 // ======================================>>>>>>>> Login Interface

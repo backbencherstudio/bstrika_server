@@ -209,6 +209,15 @@ const deleteExtraSkills = catchAsync(async (req, res) => {
   });
 });
 
+const findUsersBasedOnSubcategory = catchAsync(async (req, res) => {
+  const result = await UserServices.findUsersBasedOnSubcategoryFromDB(req?.body?.subCategory);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'get all users base on subcategory',
+    data: result,
+  });
+});
 
 const getAllUser = catchAsync(async (req, res) => {
   const result = await UserServices.getAllUserFromDB(req?.query);
@@ -308,6 +317,7 @@ export const userController = {
   deleteServices,
   addExtraSkills,
   deleteExtraSkills,
+  findUsersBasedOnSubcategory,
   getSingleUser,
   createUser,
   loginUser,

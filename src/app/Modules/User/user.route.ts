@@ -13,6 +13,11 @@ router.get(
 );
 
 router.get(
+  '/userFindBycategory',
+  userController.findUsersBasedOnSubcategory,
+);
+
+router.get(
   '/',
   userController.getSingleUser,
 );
