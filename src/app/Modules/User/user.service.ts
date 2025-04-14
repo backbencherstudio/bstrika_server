@@ -40,7 +40,6 @@ const createUserIntoDB = async (payload: TUser) => {
 
 };
 
-
 const verifyOTPintoDB = async (otp: string, sessionOtpData: { otp: string, password: string, createdAt: number }) => {
   const { otp: sessionOTP, password, createdAt, ...verifyData } = sessionOtpData;
   const hashedPassword = await bcrypt.hash(password, 8);
@@ -123,7 +122,6 @@ const deleteFile = (filePath: string) => {
   }
 };
 
-
 const updateUserDataIntoDB = async (payload: Partial<TUser>) => { 
   try {
     const userData = await User.findById(payload.userId).select("profileImage");
@@ -183,10 +181,10 @@ const deletePortfolioImageFromDB = async (id : string) => {
 
   return result;
 };
-// =======================================================  portfolio API End ======================================
+// =====================================================================  portfolio API End ======================================
 
 
-// ========================================================  cartificate API start  =======================================
+// =====================================================================  cartificate API start  =======================================
 const setCartificateIntoDB = async (id : string, payload: any) => {
   const userData = await User.findById({_id : id}).select("cartificate");  
   if (userData?.cartificate) {
@@ -221,11 +219,10 @@ const deleteCartificateFromDB = async (id : string) => {
 
   return result;
 };
-// ========================================================  cartificate API END  =======================================
+// ====================================================================  cartificate API END  =======================================
 
 
-// ==========================================================  Service API Start =========================
-
+// ======================================================================  Service API Start =========================
 const addServicesIntoDB = async(id : string, payload : { my_service : string[] })=>{
   const result = await User.findByIdAndUpdate({_id : id}, {$set : payload}, {new : true, runValidators : true} )
   return result
@@ -235,12 +232,10 @@ const deleteServicesFromDB = async(id : string)=>{
   const result = await User.findByIdAndUpdate({_id : id}, {$set : {my_service : []}}, {new : true, runValidators : true} )
   return result
 }
+// =======================================================================  Service API end  =======================
 
-// =======================================================  Service API end  =======================
 
-
-// ==========================================================  extra_skills API Start =========================
-
+// =======================================================================  extra_skills API Start =========================
 const addExtraSkillsIntoDB = async(id : string, payload : { extra_skills : string[] })=>{
   const result = await User.findByIdAndUpdate({_id : id}, {$set : payload}, {new : true, runValidators : true} )
   return result
@@ -250,8 +245,7 @@ const deleteExtraSkillsFromDB = async(id : string)=>{
   const result = await User.findByIdAndUpdate({_id : id}, {$set : {extra_skills : []}}, {new : true, runValidators : true} )
   return result
 }
-
-// =======================================================  extra_skills API end  =======================
+// ========================================================================  extra_skills API end  =======================
 
 
 

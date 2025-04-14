@@ -46,12 +46,12 @@ router.patch(
 
 router.delete("/deletePortfolioImage/:id", userController.deletePortfolioImage)
 
-
 router.patch(
   '/setCertificate/:id',
   upload.array('cartificate', 1), 
   userController.setCartificate,
 );
+
 router.delete("/deleteCertificate/:id", userController.deleteCertificate)
 
 router.patch("/addServices/:id", userController.addServices)
@@ -59,9 +59,6 @@ router.delete("/deleteServices/:id", userController.deleteServices)
 
 router.patch("/addExtraSkills/:id", userController.addExtraSkills)
 router.delete("/deleteExtraSkills/:id", userController.deleteExtraSkills)
-
-
-
 
 router.post(
   '/login',
