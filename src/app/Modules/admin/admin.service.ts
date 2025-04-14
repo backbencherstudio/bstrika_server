@@ -32,9 +32,7 @@ const getAllCategories = async () => {
   return await Category.find();
 };
 
-const getSingleCategorieFromDB = async (id : string) => {
-  return await Category.find({_id : id});
-};
+
 
 const getAbsoluteFilePath = (dbPath: string) => {
   try {
@@ -109,6 +107,5 @@ export const CategoryService = {
     createCategory,
     addSubCategory,
     getAllCategories,
-    getSingleCategorieFromDB,
     removeSubCategory,
 }

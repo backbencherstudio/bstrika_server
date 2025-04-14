@@ -12,10 +12,6 @@ router.get(
   userController.getAllUser,
 );
 
-router.get(
-  '/userFindBycategory',
-  userController.findUsersBasedOnSubcategory,
-);
 
 router.get(
   '/',

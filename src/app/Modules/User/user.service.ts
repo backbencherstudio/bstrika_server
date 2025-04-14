@@ -248,14 +248,6 @@ const deleteExtraSkillsFromDB = async(id : string)=>{
 // ========================================================================  extra_skills API end  =======================
 
 
-const findUsersBasedOnSubcategoryFromDB = async (subCategory: string) => {
-  const users = await User.find({
-    my_service: { $in: [subCategory] }, 
-    isDeleted: false,
-  }).select("email first_name my_service extra_skills portfolio certificate");
-
-  return users;
-};
 
 
 
@@ -358,8 +350,7 @@ export const UserServices = {
   addServicesIntoDB,
   deleteServicesFromDB,
   addExtraSkillsIntoDB,
-  deleteExtraSkillsFromDB,
-  findUsersBasedOnSubcategoryFromDB,
+  deleteExtraSkillsFromDB,  
   getSingleUserFromDB,
   updateUserDataIntoDB,
   createUserIntoDB,

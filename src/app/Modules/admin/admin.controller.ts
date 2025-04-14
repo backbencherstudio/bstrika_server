@@ -53,13 +53,4 @@ export const getAllCategories = catchAsync(async (req, res) => {
   });
 });
 
-export const getSingleCategory = catchAsync(async (req, res) => {
-  const result = await CategoryService.getSingleCategorieFromDB(req.params.categoryId);
-  sendResponse(res, {
-    statusCode: httpStatus.OK,
-    success: true,
-    message: 'Single categories fetched',
-    data: result,
-  });
-});
 
