@@ -116,24 +116,97 @@ const updateUserData = catchAsync(async (req, res) => {
 
 
 const setPortfolioImage = catchAsync(async (req, res) => {
-  console.log(119, req.params.id);
-  
   const files = req.files as Express.Multer.File[];
   const portfolioImage = files?.map((file) => `/uploads/${file.filename}`);
 
   const profileData = {
     portfolio : portfolioImage[0]
-  };
-  
+  };  
   const result = await UserServices.setPortfolioImageIntoDB(req?.params.id,  profileData);
-
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
     message: 'Portfolio added successfully',
     data: result,
   });
+});
 
+const deletePortfolioImage = catchAsync(async (req, res) => {  
+  const result = await UserServices.deletePortfolioImageFromDB(req?.params.id);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Portfolio delete successfully',
+    data: result,
+  });
+});
+
+const setCartificate = catchAsync(async (req, res) => {
+  const files = req.files as Express.Multer.File[];
+  const cartificateImage = files?.map((file) => `/uploads/${file.filename}`);
+
+  const cartificateData = {
+    cartificate : cartificateImage[0]
+  };  
+  const result = await UserServices.setCartificateIntoDB(req?.params.id,  cartificateData);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'certificate added successfully',
+    data: result,
+  });
+});
+
+
+const deleteCertificate = catchAsync(async (req, res) => {  
+  const result = await UserServices.deleteCartificateFromDB(req?.params.id);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'certificate delete successfully',
+    data: result,
+  });
+});
+
+const addServices = catchAsync(async (req, res) => {  
+  const result = await UserServices.addServicesIntoDB(req?.params.id, req?.body);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Services added successfully',
+    data: result,
+  });
+});
+
+const deleteServices = catchAsync(async (req, res) => {  
+  const result = await UserServices.deleteServicesFromDB(req?.params.id);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Services Remove successfully',
+    data: result,
+  });
+});
+
+
+const addExtraSkills = catchAsync(async (req, res) => {  
+  const result = await UserServices.addExtraSkillsIntoDB(req?.params.id, req.body);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Extra Skills Added successfully',
+    data: result,
+  });
+});
+
+const deleteExtraSkills = catchAsync(async (req, res) => {  
+  const result = await UserServices.deleteExtraSkillsFromDB(req?.params.id);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Extra Skills Remove successfully',
+    data: result,
+  });
 });
 
 
@@ -228,6 +301,13 @@ const sendEmailToUser = catchAsync(async (req, res) => {
 export const userController = {
   getAllUser,
   setPortfolioImage,
+  deletePortfolioImage,
+  setCartificate,
+  deleteCertificate,
+  addServices,
+  deleteServices,
+  addExtraSkills,
+  deleteExtraSkills,
   getSingleUser,
   createUser,
   loginUser,

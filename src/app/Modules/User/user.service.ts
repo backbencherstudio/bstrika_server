@@ -147,7 +147,7 @@ const updateUserDataIntoDB = async (payload: Partial<TUser>) => {
   }
 };
 
-
+// =====================================================================  portfolio API Start ===============================
 const setPortfolioImageIntoDB = async (id : string, payload: any) => {
   const userData = await User.findById({_id : id}).select("portfolio");  
   if (userData?.portfolio) {
@@ -155,7 +155,7 @@ const setPortfolioImageIntoDB = async (id : string, payload: any) => {
     if (absoluteFilePath) {
       deleteFile(absoluteFilePath);
     }
-  }  
+  }
   
   const result = await User.findByIdAndUpdate(
     {_id : id},
@@ -165,6 +165,94 @@ const setPortfolioImageIntoDB = async (id : string, payload: any) => {
 
   return result;
 };
+
+const deletePortfolioImageFromDB = async (id : string) => {
+  const userData = await User.findById({_id : id}).select("portfolio");  
+  if (userData?.portfolio) {
+    const absoluteFilePath = getAbsoluteFilePath(userData?.portfolio);
+    if (absoluteFilePath) {
+      deleteFile(absoluteFilePath);
+    }
+  }
+  
+  const result = await User.findByIdAndUpdate(
+    {_id : id},
+    { $set: { portfolio : "" } },
+    { new: true, runValidators: true }
+  );
+
+  return result;
+};
+// =======================================================  portfolio API End ======================================
+
+
+// ========================================================  cartificate API start  =======================================
+const setCartificateIntoDB = async (id : string, payload: any) => {
+  const userData = await User.findById({_id : id}).select("cartificate");  
+  if (userData?.cartificate) {
+    const absoluteFilePath = getAbsoluteFilePath(userData.cartificate);
+    if (absoluteFilePath) {
+      deleteFile(absoluteFilePath);
+    }
+  }
+  const result = await User.findByIdAndUpdate(
+    {_id : id},
+    { $set: payload },
+    { new: true, runValidators: true }
+  );
+
+  return result;
+};
+
+
+const deleteCartificateFromDB = async (id : string) => {
+  const userData = await User.findById({_id : id}).select("cartificate");  
+  if (userData?.cartificate) {
+    const absoluteFilePath = getAbsoluteFilePath(userData.cartificate);
+    if (absoluteFilePath) {
+      deleteFile(absoluteFilePath);
+    }
+  }
+  const result = await User.findByIdAndUpdate(
+    {_id : id},
+    { $set: { cartificate : "" } },
+    { new: true, runValidators: true }
+  );
+
+  return result;
+};
+// ========================================================  cartificate API END  =======================================
+
+
+// ==========================================================  Service API Start =========================
+
+const addServicesIntoDB = async(id : string, payload : { my_service : string[] })=>{
+  const result = await User.findByIdAndUpdate({_id : id}, {$set : payload}, {new : true, runValidators : true} )
+  return result
+}
+
+const deleteServicesFromDB = async(id : string)=>{
+  const result = await User.findByIdAndUpdate({_id : id}, {$set : {my_service : []}}, {new : true, runValidators : true} )
+  return result
+}
+
+// =======================================================  Service API end  =======================
+
+
+// ==========================================================  extra_skills API Start =========================
+
+const addExtraSkillsIntoDB = async(id : string, payload : { extra_skills : string[] })=>{
+  const result = await User.findByIdAndUpdate({_id : id}, {$set : payload}, {new : true, runValidators : true} )
+  return result
+}
+
+const deleteExtraSkillsFromDB = async(id : string)=>{
+  const result = await User.findByIdAndUpdate({_id : id}, {$set : {extra_skills : []}}, {new : true, runValidators : true} )
+  return result
+}
+
+// =======================================================  extra_skills API end  =======================
+
 
 
 
@@ -258,6 +346,13 @@ const sendEmailToAllUser = async (payload: any) => {
 export const UserServices = {
   getAllUserFromDB,
   setPortfolioImageIntoDB,
+  deletePortfolioImageFromDB,
+  setCartificateIntoDB,
+  deleteCartificateFromDB,
+  addServicesIntoDB,
+  deleteServicesFromDB,
+  addExtraSkillsIntoDB,
+  deleteExtraSkillsFromDB,
   getSingleUserFromDB,
   updateUserDataIntoDB,
   createUserIntoDB,
