@@ -1,5 +1,5 @@
 import express from 'express';
-import { findUsersBasedOnSubcategory, getCategory, ReviewController } from './shared.controller';
+import { findUsersBasedOnSubcategory, getCategory, SharedController } from './shared.controller';
 
 const router = express.Router();
 
@@ -10,7 +10,12 @@ router.get(
 
 router.get('/', getCategory);
 
-router.post('/review', ReviewController.createReview);
+router.post('/review', SharedController.createReview);
+
+router.post('/exchange', SharedController.sendAndStoreExchangeRequestController);
+router.get('/exchange', SharedController.getAllExchangeData);
+
+router.patch('/exchange/:exchangeId', SharedController.exchangeRequestAcceptOrDeclineAPI);
 
 
 export const SharedRoutes = router;

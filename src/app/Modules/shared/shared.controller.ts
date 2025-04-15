@@ -34,11 +34,46 @@ export const findUsersBasedOnSubcategory = catchAsync(async (req, res) => {
       data: result,
     });
   });
+
+
+  // ============================================================== Exchange controllers Start =================================
+  const sendAndStoreExchangeRequestController = catchAsync(async (req, res) => {
+    const result = await SharedServices.sendAndStoreExchangeRequest(req.body);
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: 'Exchange request send successfully',
+      data: result,
+    });
+  });
+
+  const getAllExchangeData = catchAsync(async (req, res) => {
+    const result = await SharedServices.getAllExchangeDataFromDB(req.body.userId, req.body.isAccepted);
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: 'Exchange data get successfully',
+      data: result,
+    });
+  });
+
+  const exchangeRequestAcceptOrDeclineAPI = catchAsync(async (req, res) => {
+    const result = await SharedServices.exchangeRequestAcceptOrDeclineAPI(req.params.exchangeId, req.body.isAcceptedStatus);
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: 'You accepted the request. Now you may begin communicating with each other.',
+      data: result,
+    });
+  });
   
   
 
-export const ReviewController = {
-  createReview
+export const SharedController = {
+  createReview,
+  sendAndStoreExchangeRequestController,
+  getAllExchangeData,
+  exchangeRequestAcceptOrDeclineAPI
 }
 
 

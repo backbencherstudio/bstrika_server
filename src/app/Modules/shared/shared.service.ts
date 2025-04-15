@@ -1,9 +1,10 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 import mongoose from "mongoose";
 import { Category } from "../admin/admin.module";
 import { User } from "../User/user.model";
 import { TReviews } from "./shared.interface";
-import { Review } from "./shared.module";
+import { Exchange, Review } from "./shared.module";
 
 export const findUsersBasedOnSubcategoryFromDB = async (subCategory: string) => {
     const users = await User.find({
@@ -24,8 +25,7 @@ export const findUsersBasedOnSubcategoryFromDB = async (subCategory: string) => 
     const selectedCategory = await Category.findOne({ category_name: category }).select("subCategories");  
     return selectedCategory?.subCategories || [];
   };
-  
-
+    
 
 
 // ====================================== Review API,s Start =============================
@@ -72,7 +72,7 @@ const createReviewIntoDB = async (data: TReviews) => {
       $set: { rating: avgRating.toFixed(1) },
       $inc: { review: 1 }
     },
-    { new: true }
+    { new: true, runValidators : true }
   );
 
   return result;
@@ -91,10 +91,51 @@ const getReviewsByUser = async (reciverId: string) => {
 // ====================================== Review API,s End =============================
 
 
+// ====================================== Exchange API,s Start =============================
+
+const sendAndStoreExchangeRequest = async (payload : any)=>{
+
+  const emailArray = payload.map((item: { email: any; }) => item.email);
+  // await sendExchangeRequestEmail(emailArray)
+
+  const result = await Exchange.create(payload)
+  return result  
+}
+
+const getAllExchangeDataFromDB = async (id: string, isAccepted: boolean) => {
+  const result = await Exchange.find({
+    isAccepted,
+    $or: [
+      { senderUserId: id },
+      // { reciverUserId: id }
+    ]
+  }).populate("reciverUserId");
+
+  return result;
+};
+
+
+ const exchangeRequestAcceptOrDeclineAPI = async (exchangeId : string, isAcceptedStatus : string  ) =>{
+  const result = await Exchange.findByIdAndUpdate({_id : exchangeId}, {isAccepted : isAcceptedStatus}, {new : true, runValidators : true})
+  return result  
+ }
+
+
+
+
+// ====================================== Exchange API,s End =============================
+
+
+
+
+
 export const SharedServices = {
   createReviewIntoDB,
   getReviewsByUser,
-  deleteReview
+  deleteReview,
+  sendAndStoreExchangeRequest,
+  getAllExchangeDataFromDB,
+  exchangeRequestAcceptOrDeclineAPI
 }
 
 

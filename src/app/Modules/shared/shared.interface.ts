@@ -9,3 +9,11 @@ export type TReviews = {
     like ?: number;
     disLike ?: number; 
 }
+
+export type TExchange = {
+    senderUserId : Schema.Types.ObjectId;
+    reciverUserId : Schema.Types.ObjectId;
+    email : string;
+    isAccepted: 'true' | 'false' | 'decline';
+    isExchange : boolean
+}

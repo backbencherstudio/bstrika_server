@@ -96,7 +96,7 @@ const removeSubCategory = async (
           subCategories: { _id: subCategoryId },
         },
       },
-      { new: true }
+      { new: true, runValidators : true }
     );
   
     return updatedCategory;

@@ -1,6 +1,6 @@
 // review.schema.ts
 import { Schema, model } from 'mongoose';
-import { TReviews } from './shared.interface';
+import { TExchange, TReviews } from './shared.interface';
 
 const reviewSchema = new Schema<TReviews>(
   {
@@ -41,4 +41,40 @@ const reviewSchema = new Schema<TReviews>(
   }
 );
 
+
+const exchangeSchema = new Schema<TExchange>(
+  {
+    senderUserId: {
+      type: Schema.Types.ObjectId,
+      required: true,
+      ref: 'User',
+    },
+    reciverUserId: {
+      type: Schema.Types.ObjectId,
+      required: true,
+      ref: 'User',
+    },
+    email: {
+      type: String,
+      required: true,
+    },
+    isAccepted: {
+      type: String,
+      enum: ['true', 'false', 'decline'],
+      default: 'false',
+    },
+    isExchange: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  {
+    timestamps: true, 
+    versionKey : false
+  }
+);
+
+
 export const Review = model<TReviews>('Review', reviewSchema);
+
+export const Exchange = model<TExchange>('Exchange', exchangeSchema);
