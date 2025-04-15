@@ -19,7 +19,7 @@ export type TAddressInfo = {
   apt_suite ?: string;
   city ?: string
   state_province_country_region ?: string
-  zipCode ?: number;
+  zipCode ?: string;
 }
 
 

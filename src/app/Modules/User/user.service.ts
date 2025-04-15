@@ -252,7 +252,11 @@ const deleteExtraSkillsFromDB = async(id : string)=>{
 
 const getAllUserFromDB = async (query: Record<string, unknown>) => {  
   const userQuery = new QueryBuilder(User.find(), query)
-    .search(["first_name", "email"])
+    .search([
+      "addressInfo.zipCode",
+      "addressInfo.city",
+      "addressInfo.country"
+    ])
     .filter();
 
     const result = await userQuery.modelQuery.select(

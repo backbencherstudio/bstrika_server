@@ -22,7 +22,7 @@ const addressInfoSchema = new Schema<TAddressInfo>(
     apt_suite: { type: String },
     city: { type: String },
     state_province_country_region: { type: String },
-    zipCode: { type: Number },
+    zipCode: { type: String },
   },
   { _id: false }
 );

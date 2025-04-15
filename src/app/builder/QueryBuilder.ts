@@ -13,6 +13,10 @@ class QueryBuilder<T> {
   search(searchableFields: string[]) {
     const searchTerm = this?.query?.searchTerm;
 
+    console.log(searchableFields);
+    console.log(searchTerm);
+
+
     if (searchTerm) {
       this.modelQuery = this.modelQuery.find({
         $or: searchableFields.map(
@@ -25,6 +29,7 @@ class QueryBuilder<T> {
     }
     return this;
   }
+
 
   // filter() {
   //   const queryObj = { ...this.query };     
@@ -57,8 +62,8 @@ class QueryBuilder<T> {
       filterConditions['addressInfo.city'] = queryObj.city;
     }
   
-    if (queryObj.countru) {
-      filterConditions['addressInfo.countru'] = queryObj.countru;
+    if (queryObj.country) {
+      filterConditions['addressInfo.country'] = queryObj.countru;
     }
   
     if (queryObj.my_service) {
