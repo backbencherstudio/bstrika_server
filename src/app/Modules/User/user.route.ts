@@ -1,6 +1,4 @@
 import express from 'express';
-import { Auth } from '../../middleware/auth';
-import { User_Role } from './user.constent';
 import { upload } from '../../middleware/upload';
 import { userController } from './user.controller';
 
@@ -8,7 +6,7 @@ const router = express.Router();
 
 router.get(
   '/allUsers',
-  Auth(User_Role.admin),
+  // Auth(User_Role.admin),
   userController.getAllUser,
 );
 

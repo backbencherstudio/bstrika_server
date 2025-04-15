@@ -78,8 +78,13 @@ const userSchema = new Schema<TUser>(
       type: String,
       default: '',
     },
-    reating: {
+    rating: {
       type: Number,
+      default : 0
+    },
+    review: {
+      type: Number,
+      default : 0
     },
 
   },  

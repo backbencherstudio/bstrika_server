@@ -250,17 +250,20 @@ const deleteExtraSkillsFromDB = async(id : string)=>{
 
 
 
-
-
-
-
 const getAllUserFromDB = async (query: Record<string, unknown>) => {  
   const userQuery = new QueryBuilder(User.find(), query)
     .search(["first_name", "email"])
     .filter();
 
-  return await userQuery.modelQuery;
+    const result = await userQuery.modelQuery.select(
+      'first_name email profileImage rating my_service portfolio review'
+    );
+  
+    return result;
 };
+
+
+
 
 const getSingleUserFromDB = async (email: string) => {
   const result = await User.findOne({ email })

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { FilterQuery, Query } from 'mongoose';
 
 class QueryBuilder<T> {
@@ -33,17 +34,54 @@ class QueryBuilder<T> {
   //   return this;
   // }
 
+  // filter() {
+  //   const queryObj = { ...this.query };
+  //   const excluedeFields = ['searchTerm', 'sort', 'limit', 'page', 'fields'];
+  //   excluedeFields.forEach((el) => delete queryObj[el]);
+  //   if (queryObj.role && queryObj.role !== 'all') {
+  //     this.modelQuery = this.modelQuery.find({ role: queryObj.role, subscriptionStatus: queryObj.subscriptionStatus } as FilterQuery<T>);
+  //   } else {
+  //     this.modelQuery = this.modelQuery.find();
+  //   }
+  //   return this;
+  // }
+
   filter() {
     const queryObj = { ...this.query };
-    const excluedeFields = ['searchTerm', 'sort', 'limit', 'page', 'fields'];
-    excluedeFields.forEach((el) => delete queryObj[el]);
-    if (queryObj.role && queryObj.role !== 'all') {
-      this.modelQuery = this.modelQuery.find({ role: queryObj.role, subscriptionStatus: queryObj.subscriptionStatus } as FilterQuery<T>);
-    } else {
-      this.modelQuery = this.modelQuery.find();
+    const excludedFields = ['searchTerm', 'sort', 'limit', 'page', 'fields'];
+    excludedFields.forEach((el) => delete queryObj[el]);
+  
+    const filterConditions: Record<string, any> = {};
+
+    if (queryObj.city) {
+      filterConditions['addressInfo.city'] = queryObj.city;
     }
+  
+    if (queryObj.countru) {
+      filterConditions['addressInfo.countru'] = queryObj.countru;
+    }
+  
+    if (queryObj.my_service) {
+      filterConditions['my_service'] = {
+        $in: Array.isArray(queryObj.my_service)
+          ? queryObj.my_service
+          : [queryObj.my_service],
+      };
+    }
+  
+    if (queryObj.rating) {
+      filterConditions['rating'] = Number(queryObj.rating);
+    }
+  
+    if (queryObj.review) {
+      filterConditions['review'] = Number(queryObj.review);
+    }
+  
+    this.modelQuery = this.modelQuery.find(filterConditions);
+  
     return this;
   }
+  
 
 
   sort() {
