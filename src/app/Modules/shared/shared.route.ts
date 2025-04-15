@@ -15,7 +15,8 @@ router.post('/review', SharedController.createReview);
 router.post('/exchange', SharedController.sendAndStoreExchangeRequestController);
 router.get('/exchange', SharedController.getAllExchangeData);
 
-router.patch('/exchange/:exchangeId', SharedController.exchangeRequestAcceptOrDeclineAPI);
+router.patch('/exchange/:exchangeId', SharedController.chatexchangeRequestAcceptOrDeclineAPI);
+router.patch('/acceptExchange/:exchangeId', SharedController.acceptExchangeController);
 
 
 export const SharedRoutes = router;

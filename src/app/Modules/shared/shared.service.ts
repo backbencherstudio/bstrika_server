@@ -115,11 +115,16 @@ const getAllExchangeDataFromDB = async (id: string, isAccepted: boolean) => {
 };
 
 
- const exchangeRequestAcceptOrDeclineAPI = async (exchangeId : string, isAcceptedStatus : string  ) =>{
+ const ChatExchangeRequestAcceptOrDeclineAPI = async (exchangeId : string, isAcceptedStatus : string  ) =>{
   const result = await Exchange.findByIdAndUpdate({_id : exchangeId}, {isAccepted : isAcceptedStatus}, {new : true, runValidators : true})
   return result  
  }
 
+ const acceptExchange = async (exchangeId : string) =>{
+  const result = await Exchange.findByIdAndUpdate({_id : exchangeId}, {isExchange : true}, {new : true, runValidators : true})
+  return result  
+ }
+                      
 
 
 
@@ -135,7 +140,8 @@ export const SharedServices = {
   deleteReview,
   sendAndStoreExchangeRequest,
   getAllExchangeDataFromDB,
-  exchangeRequestAcceptOrDeclineAPI
+  ChatExchangeRequestAcceptOrDeclineAPI,
+  acceptExchange
 }
 
 

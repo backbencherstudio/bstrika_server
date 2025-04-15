@@ -57,12 +57,23 @@ export const findUsersBasedOnSubcategory = catchAsync(async (req, res) => {
     });
   });
 
-  const exchangeRequestAcceptOrDeclineAPI = catchAsync(async (req, res) => {
-    const result = await SharedServices.exchangeRequestAcceptOrDeclineAPI(req.params.exchangeId, req.body.isAcceptedStatus);
+  const chatexchangeRequestAcceptOrDeclineAPI = catchAsync(async (req, res) => {
+    const result = await SharedServices.ChatExchangeRequestAcceptOrDeclineAPI(req.params.exchangeId, req.body.isAcceptedStatus);
     sendResponse(res, {
       statusCode: httpStatus.OK,
       success: true,
       message: 'You accepted the request. Now you may begin communicating with each other.',
+      data: result,
+    });
+  });
+
+
+  const acceptExchangeController = catchAsync(async (req, res) => {
+    const result = await SharedServices.acceptExchange(req.params.exchangeId);
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: 'exchange accepted.',
       data: result,
     });
   });
@@ -73,7 +84,8 @@ export const SharedController = {
   createReview,
   sendAndStoreExchangeRequestController,
   getAllExchangeData,
-  exchangeRequestAcceptOrDeclineAPI
+  chatexchangeRequestAcceptOrDeclineAPI,
+  acceptExchangeController
 }
 
 
