@@ -58,6 +58,10 @@ const exchangeSchema = new Schema<TExchange>(
       type: String,
       required: true,
     },
+    serviceRequested: {
+      type: String,
+      required : true
+    },
     isAccepted: {
       type: String,
       enum: ['true', 'false', 'decline'],
@@ -67,6 +71,7 @@ const exchangeSchema = new Schema<TExchange>(
       type: Boolean,
       default: false,
     },
+   
   },
   {
     timestamps: true, 

@@ -15,5 +15,6 @@ export type TExchange = {
     reciverUserId : Schema.Types.ObjectId;
     email : string;
     isAccepted: 'true' | 'false' | 'decline';
-    isExchange : boolean
+    isExchange : boolean;
+    serviceRequested : string
 }
