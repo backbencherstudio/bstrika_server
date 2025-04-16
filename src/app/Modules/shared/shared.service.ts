@@ -3,8 +3,8 @@
 import mongoose from "mongoose";
 import { Category } from "../admin/admin.module";
 import { User } from "../User/user.model";
-import { TReviews } from "./shared.interface";
-import { Exchange, Review } from "./shared.module";
+import { TReviewReport, TReviews } from "./shared.interface";
+import { Exchange, Report, Review } from "./shared.module";
 
 export const findUsersBasedOnSubcategoryFromDB = async (subCategory: string) => {
     const users = await User.find({
@@ -80,6 +80,8 @@ const createReviewIntoDB = async (data: TReviews) => {
 
 
 
+
+
 const getReviewsByUser = async (reciverId: string) => {
   return await Review.find({ reciverId }).populate('reviewerId');
 };
@@ -107,7 +109,6 @@ const sendAndStoreExchangeRequest = async (payload : any)=>{
 //=====>>> jokhon Request a click korbe tokhon false send korbe,,, 
 //=====>>> isAccepted "false" hole , jara jara take request pathiyeche tader data show korbe, se caile request accept korbe , na caile decline korbe,,, ar
 //  true hole se jader request accept korse a jara tar request accept korse sobar data dekhabe ,,,, 
-
 const getAllExchangeDataFromDB = async (id: string, isAccepted: string) => {
   const isAcceptedBool = isAccepted === "true";
   
@@ -148,17 +149,27 @@ const getAllExchangeDataFromDB = async (id: string, isAccepted: string) => {
  }
 
  const acceptExchange = async (exchangeId : string) =>{
-
   const result = await Exchange.findByIdAndUpdate({_id : exchangeId}, {isExchange : true}, {new : true, runValidators : true})
   return result  
-
  }
-
-
 
 
 // ====================================== Exchange API,s End =============================
 
+
+// ======================== report API's Start ========================
+const reportPlacedToAdmin = async (payload : TReviewReport)=>{ 
+  const result = await Report.create(payload)
+  if(result){
+    await Review.findByIdAndUpdate({_id : payload.reportId}, {report : true}, {new : true, runValidators : true})
+  }
+  return result   
+}
+
+const getALlReportsFromDBByAdmin = async () =>{
+  const result = await Report.find();
+  return result
+}
 
 
 
@@ -170,7 +181,9 @@ export const SharedServices = {
   sendAndStoreExchangeRequest,
   getAllExchangeDataFromDB,
   ChatExchangeRequestAcceptOrDeclineAPI,
-  acceptExchange
+  acceptExchange,
+  reportPlacedToAdmin,
+  getALlReportsFromDBByAdmin
 }
 
 

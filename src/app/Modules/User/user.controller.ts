@@ -97,15 +97,15 @@ const loginUser = catchAsync(async (req, res) => {
 });
 
 const updateUserData = catchAsync(async (req, res) => {
-  // const files = req.files as Express.Multer.File[];
-  // const profileImage = files?.map((file) => `/uploads/${file.filename}`);
+  const files = req.files as Express.Multer.File[];
+  const profileImage = files?.map((file) => `/uploads/${file.filename}`);
 
-  // const profileData = {
-  //   ...req.body,
-  //   profileImage : profileImage[0]
-  // };
+  const profileData = {
+    ...req.body,
+    profileImage : profileImage[0]
+  };
     
-  const result = await UserServices.updateUserDataIntoDB(req.body);
+  const result = await UserServices.updateUserDataIntoDB(profileData);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,

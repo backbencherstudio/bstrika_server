@@ -267,8 +267,6 @@ const getAllUserFromDB = async (query: Record<string, unknown>) => {
 };
 
 
-
-
 const getSingleUserFromDB = async (email: string) => {
   const result = await User.findOne({ email })
   return result

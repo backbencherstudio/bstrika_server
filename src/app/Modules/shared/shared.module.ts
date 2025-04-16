@@ -1,6 +1,6 @@
 // review.schema.ts
 import { Schema, model } from 'mongoose';
-import { TExchange, TReviews } from './shared.interface';
+import { TExchange, TReviewReport, TReviews } from './shared.interface';
 
 const reviewSchema = new Schema<TReviews>(
   {
@@ -79,7 +79,25 @@ const exchangeSchema = new Schema<TExchange>(
   }
 );
 
+export const reportSchema = new Schema<TReviewReport>({
+  reportId : {
+    type : Schema.Types.ObjectId,
+    required : true,
+    ref : "Review"
+  },
+  document : {
+    type : String,
+    required : true
+  },
+  reportDetails : {
+    type : String,
+    required : true
+  }
+})
 
 export const Review = model<TReviews>('Review', reviewSchema);
 
 export const Exchange = model<TExchange>('Exchange', exchangeSchema);
+
+export const Report = model<TReviewReport>('Report', reportSchema);
+

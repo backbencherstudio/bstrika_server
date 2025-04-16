@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import httpStatus from "http-status";
 import { catchAsync } from "../../utils/catchAsync";
 import sendResponse from "../../utils/sendResponse";
@@ -31,6 +32,16 @@ export const findUsersBasedOnSubcategory = catchAsync(async (req, res) => {
       statusCode: httpStatus.OK,
       success: true,
       message: 'Your review placed successfully',
+      data: result,
+    });
+  });
+
+  const getReviewsByUser = catchAsync(async (req, res) => {
+    const result = await SharedServices.getReviewsByUser(req.params.reciverId);
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: 'Review get successfully',
       data: result,
     });
   });
@@ -78,15 +89,49 @@ export const findUsersBasedOnSubcategory = catchAsync(async (req, res) => {
       data: result,
     });
   });
+
+  const reportPlacedToAdmin = catchAsync(async (req, res) => {
+
+  const files = req.files as Express.Multer.File[];
+   const document = files?.map((file) => `/uploads/${file.filename}`);
+
+  const reportData = {
+    ...req.body,
+    document : document[0]
+  };
+
+    const result = await SharedServices.reportPlacedToAdmin(reportData);
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: 'report placed successfully , very sort time our team contact with you',
+      data: result,
+    });
+  });
+  
+
+  const getALlReportsFromDBByAdmin = catchAsync(async (req, res) => {
+
+    const result = await SharedServices.getALlReportsFromDBByAdmin();
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: 'get all report successfully',
+      data: result,
+    });
+  });
   
   
 
 export const SharedController = {
   createReview,
   sendAndStoreExchangeRequestController,
+  getReviewsByUser,
   getAllExchangeData,
   chatexchangeRequestAcceptOrDeclineAPI,
-  acceptExchangeController
+  acceptExchangeController,
+  reportPlacedToAdmin,
+  getALlReportsFromDBByAdmin
 }
 
 

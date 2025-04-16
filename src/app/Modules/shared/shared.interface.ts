@@ -18,3 +18,9 @@ export type TExchange = {
     isExchange : boolean;
     serviceRequested : string
 }
+
+export type TReviewReport = {
+    reportId : Schema.Types.ObjectId;
+    document : string;
+    reportDetails:string;
+}
