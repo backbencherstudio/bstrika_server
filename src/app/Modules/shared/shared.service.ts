@@ -102,17 +102,44 @@ const sendAndStoreExchangeRequest = async (payload : any)=>{
   return result  
 }
 
-const getAllExchangeDataFromDB = async (id: string, isAccepted: boolean) => {
-  const result = await Exchange.find({
-    isAccepted,
-    $or: [
-      { senderUserId: id },
-      // { reciverUserId: id }
-    ]
-  }).populate("reciverUserId");
+//====>>> get chat data, filtered by "true ... for chat" "false for pending accept"
+//=====>>> jokhon All connections a click korbe tokhon true send korbe,,, 
+//=====>>> jokhon Request a click korbe tokhon false send korbe,,, 
+//=====>>> isAccepted "false" hole , jara jara take request pathiyeche tader data show korbe, se caile request accept korbe , na caile decline korbe,,, ar
+//  true hole se jader request accept korse a jara tar request accept korse sobar data dekhabe ,,,, 
+
+const getAllExchangeDataFromDB = async (id: string, isAccepted: string) => {
+  const isAcceptedBool = isAccepted === "true";
+  
+  const query = isAcceptedBool
+    ? {
+        isAccepted: true,
+        $or: [
+          { senderUserId: id },
+          { reciverUserId: id }
+        ]
+      }
+    : {
+        isAccepted: false,
+        reciverUserId: id
+      };
+
+  const result = await Exchange.find(query).populate("reciverUserId");
 
   return result;
 };
+// ===================== not remove this function now
+// const getAllExchangeDataFromDB = async (id: string, isAccepted: boolean) => {
+//   const result = await Exchange.find({
+//     isAccepted,
+//     $or: [
+//       { senderUserId: id }, 
+//       { reciverUserId: id }
+//     ]
+//   }).populate("reciverUserId");
+
+//   return result;
+// };
 
 
  const ChatExchangeRequestAcceptOrDeclineAPI = async (exchangeId : string, isAcceptedStatus : string  ) =>{
@@ -121,10 +148,12 @@ const getAllExchangeDataFromDB = async (id: string, isAccepted: boolean) => {
  }
 
  const acceptExchange = async (exchangeId : string) =>{
+
   const result = await Exchange.findByIdAndUpdate({_id : exchangeId}, {isExchange : true}, {new : true, runValidators : true})
   return result  
+
  }
-                      
+
 
 
 

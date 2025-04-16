@@ -13,7 +13,7 @@ router.get('/', getCategory);
 router.post('/review', SharedController.createReview);
 
 router.post('/exchange', SharedController.sendAndStoreExchangeRequestController);
-router.get('/exchange', SharedController.getAllExchangeData);
+router.get('/exchange', SharedController.getAllExchangeData);  //====>>> get chat data, filtered by "true ... for chat" "false for pending accept"
 
 router.patch('/exchange/:exchangeId', SharedController.chatexchangeRequestAcceptOrDeclineAPI);
 router.patch('/acceptExchange/:exchangeId', SharedController.acceptExchangeController);
