@@ -5,6 +5,8 @@ import { Category } from "../admin/admin.module";
 import { User } from "../User/user.model";
 import { TReviewReport, TReviews } from "./shared.interface";
 import { Exchange, Report, Review } from "./shared.module";
+import { AppError } from "../../errors/AppErrors";
+import { NOT_ACCEPTABLE } from "http-status";
 
 export const findUsersBasedOnSubcategoryFromDB = async (subCategory: string) => {
     const users = await User.find({
@@ -143,15 +145,56 @@ const getAllExchangeDataFromDB = async (id: string, isAccepted: string) => {
 // };
 
 
- const ChatExchangeRequestAcceptOrDeclineAPI = async (exchangeId : string, isAcceptedStatus : string  ) =>{
-  const result = await Exchange.findByIdAndUpdate({_id : exchangeId}, {isAccepted : isAcceptedStatus}, {new : true, runValidators : true})
+ const ChatExchangeRequestAcceptOrDeclineAPI = async (exchangeId : string, payload : any  ) =>{
+  const result = await Exchange.findOneAndUpdate({_id : exchangeId, reciverUserId : payload?.reciverUserId }, {isAccepted : payload?.isAccepted}, {new : true, runValidators : true})
   return result  
  }
 
- const acceptExchange = async (exchangeId : string) =>{
-  const result = await Exchange.findByIdAndUpdate({_id : exchangeId}, {isExchange : true}, {new : true, runValidators : true})
-  return result  
- }
+
+//  const acceptExchange = async (exchangeId : string, payload : any) =>{
+
+//   console.log(payload);
+//   console.log(exchangeId);
+//   const exchangeData = await Exchange.findById({ _id : exchangeId, $or : [{ sendderUserId : payload.userId }, {reciverUserId : payload.userId}]  })
+//   console.log(exchangeData);
+  
+  
+  
+
+//   // const result = await Exchange.findByIdAndUpdate({_id : exchangeId}, {isExchange : true}, {new : true, runValidators : true})
+//   // return result  
+
+//  }
+
+const acceptExchange = async (exchangeId: string, payload: any) => {
+  const exchangeData = await Exchange.findOne({
+    _id: exchangeId,
+    $or: [
+      { senderUserId: payload.userId },
+      { reciverUserId: payload.userId }
+    ]
+  });
+
+  if (!exchangeData) {
+    return { success: false, message: "No exchange found for this user." };
+  }
+  if(exchangeData?.isAccepted !== "true"){
+    throw new AppError(NOT_ACCEPTABLE, "At First need to accept the request")
+  }
+
+  // Determine which field matched
+  const matchedField =
+    exchangeData.senderUserId.toString() === payload.userId
+    ? "senderUserAccepted"
+    : "reciverUserAccepted";
+
+      console.log(matchedField);
+      console.log(exchangeData);
+      
+      const result = await Exchange.findByIdAndUpdate({_id : exchangeId}, {[matchedField] : true }, {new : true, runValidators : true});
+      return result
+  
+};
 
 
 // ====================================== Exchange API,s End =============================

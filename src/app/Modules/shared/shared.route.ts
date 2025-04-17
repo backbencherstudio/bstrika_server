@@ -15,7 +15,11 @@ router.post('/review', SharedController.createReview);
 router.get('/review/:reciverId', SharedController.getReviewsByUser);
 
 router.post('/report', upload.array('document', 1), SharedController.reportPlacedToAdmin);
-router.get('/report', SharedController.getALlReportsFromDBByAdmin);
+router.get(
+    '/report', 
+    // Auth(User_Role.admin),   //======== after attached frontend then uncoment it 
+    SharedController.getALlReportsFromDBByAdmin
+  );
 
 
 router.post('/exchange', SharedController.sendAndStoreExchangeRequestController);

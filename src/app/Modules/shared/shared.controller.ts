@@ -70,7 +70,7 @@ export const findUsersBasedOnSubcategory = catchAsync(async (req, res) => {
   });
 
   const chatexchangeRequestAcceptOrDeclineAPI = catchAsync(async (req, res) => {
-    const result = await SharedServices.ChatExchangeRequestAcceptOrDeclineAPI(req.params.exchangeId, req.body.isAcceptedStatus);
+    const result = await SharedServices.ChatExchangeRequestAcceptOrDeclineAPI(req.params.exchangeId, req.body);
     sendResponse(res, {
       statusCode: httpStatus.OK,
       success: true,
@@ -81,7 +81,7 @@ export const findUsersBasedOnSubcategory = catchAsync(async (req, res) => {
 
 
   const acceptExchangeController = catchAsync(async (req, res) => {
-    const result = await SharedServices.acceptExchange(req.params.exchangeId);
+    const result = await SharedServices.acceptExchange(req.params.exchangeId, req.body);
     sendResponse(res, {
       statusCode: httpStatus.OK,
       success: true,
