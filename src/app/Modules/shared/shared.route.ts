@@ -13,6 +13,7 @@ router.get('/', getCategory);
 
 router.post('/review', SharedController.createReview);
 router.get('/review/:reciverId', SharedController.getReviewsByUser);
+
 router.post('/report', upload.array('document', 1), SharedController.reportPlacedToAdmin);
 router.get('/report', SharedController.getALlReportsFromDBByAdmin);
 
@@ -23,7 +24,7 @@ router.get('/exchange', SharedController.getAllExchangeData);  //====>>> get cha
 router.patch('/exchange/:exchangeId', SharedController.chatexchangeRequestAcceptOrDeclineAPI);
 router.patch('/acceptExchange/:exchangeId', SharedController.acceptExchangeController);
 
-
+     
 
 
 

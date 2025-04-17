@@ -167,10 +167,21 @@ const reportPlacedToAdmin = async (payload : TReviewReport)=>{
 }
 
 const getALlReportsFromDBByAdmin = async () =>{
-  const result = await Report.find();
+  const result = await Report.find().populate({
+    path: 'reportId',
+    populate: [
+      {
+        path: 'reciverId',
+        select: 'first_name image email personalInfo'
+      },
+      {
+        path: 'reviewerId',
+        select: 'first_name image email personalInfo'
+      }
+    ]
+  });
   return result
 }
-
 
 
 
@@ -187,7 +198,12 @@ export const SharedServices = {
 }
 
 
+// Before we proceed with the upcoming team meeting regarding the next project, I would appreciate the opportunity to schedule a brief one-on-one meeting with you. This will allow us to align on key points and clarify a few important matters in advance.
 
+//  Additionally, I would like to take this time to discuss some specific aspects related to the RentPadHomes project that require your input and guidance.
+
+//  Please let me know a suitable time for you, and I’ll be happy to coordinate accordingly
+//  and one more think This will be a private one-on-one meeting, and I kindly request that it not be shared or discussed on Fiverr. I believe this meeting will be mutually beneficial for both of us 
 
 
 
