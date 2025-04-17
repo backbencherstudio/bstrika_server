@@ -20,6 +20,7 @@ router.get(
     // Auth(User_Role.admin),   //======== after attached frontend then uncoment it 
     SharedController.getALlReportsFromDBByAdmin
   );
+router.get('/report/:id',SharedController.getSingleReportFromDB );
 
 
 router.post('/exchange', SharedController.sendAndStoreExchangeRequestController);

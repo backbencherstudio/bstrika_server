@@ -186,32 +186,33 @@ const acceptExchange = async (exchangeId: string, payload: any) => {
   const matchedField =
     exchangeData.senderUserId.toString() === payload.userId
     ? "senderUserAccepted"
-    : "reciverUserAccepted";
-
-      console.log(matchedField);
-      console.log(exchangeData);
-      
+    : "reciverUserAccepted";      
       const result = await Exchange.findByIdAndUpdate({_id : exchangeId}, {[matchedField] : true }, {new : true, runValidators : true});
-      return result
-  
+      return result  
 };
 
 
 // ====================================== Exchange API,s End =============================
 
-
+ 
 // ======================== report API's Start ========================
 const reportPlacedToAdmin = async (payload : TReviewReport)=>{ 
   const result = await Report.create(payload)
   if(result){
-    await Review.findByIdAndUpdate({_id : payload.reportId}, {report : true}, {new : true, runValidators : true})
+    await Review.findByIdAndUpdate({_id : payload.reviewId}, {report : true}, {new : true, runValidators : true})
   }
   return result   
 }
 
+const getSingleReportFromDB = async (reportId : string)=>{ 
+  const result = await Report.findById({_id : reportId}).populate("reviewId")
+  return result   
+}
+
+
 const getALlReportsFromDBByAdmin = async () =>{
   const result = await Report.find().populate({
-    path: 'reportId',
+    path: 'reviewId',
     populate: [
       {
         path: 'reciverId',
@@ -237,16 +238,10 @@ export const SharedServices = {
   ChatExchangeRequestAcceptOrDeclineAPI,
   acceptExchange,
   reportPlacedToAdmin,
-  getALlReportsFromDBByAdmin
+  getALlReportsFromDBByAdmin,
+  getSingleReportFromDB
 }
 
-
-// Before we proceed with the upcoming team meeting regarding the next project, I would appreciate the opportunity to schedule a brief one-on-one meeting with you. This will allow us to align on key points and clarify a few important matters in advance.
-
-//  Additionally, I would like to take this time to discuss some specific aspects related to the RentPadHomes project that require your input and guidance.
-
-//  Please let me know a suitable time for you, and I’ll be happy to coordinate accordingly
-//  and one more think This will be a private one-on-one meeting, and I kindly request that it not be shared or discussed on Fiverr. I believe this meeting will be mutually beneficial for both of us 
 
 
 

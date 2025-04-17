@@ -12,7 +12,7 @@ router.get(
 
 
 router.get(
-  '/',
+  '/:userId',
   userController.getSingleUser,
 );
 

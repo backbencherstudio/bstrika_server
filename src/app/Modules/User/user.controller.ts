@@ -43,7 +43,7 @@ const createUser = catchAsync(async (req, res) => {
     isDeleted : result.isDeleted,
     role:result.role,
     createdAt: Date.now(),  
-  };  
+  };
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -221,7 +221,7 @@ const getAllUser = catchAsync(async (req, res) => {
 });
 
 const getSingleUser = catchAsync(async (req, res) => {
-  const result = await UserServices.getSingleUserFromDB(req?.query?.email as string);
+  const result = await UserServices.getSingleUserFromDB(req?.params.userId as string);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,

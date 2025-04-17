@@ -21,7 +21,8 @@ export type TExchange = {
 }
 
 export type TReviewReport = {
-    reportId : Schema.Types.ObjectId;
+    reviewId : Schema.Types.ObjectId;
+    reporterId : Schema.Types.ObjectId;
     document : string;
     reportDetails:string;
 }

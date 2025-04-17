@@ -267,8 +267,8 @@ const getAllUserFromDB = async (query: Record<string, unknown>) => {
 };
 
 
-const getSingleUserFromDB = async (email: string) => {
-  const result = await User.findOne({ email })
+const getSingleUserFromDB = async (userId: string) => {
+  const result = await User.findById({ _id : userId })
   return result
 }
 

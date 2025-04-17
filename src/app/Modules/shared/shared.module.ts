@@ -84,10 +84,15 @@ const exchangeSchema = new Schema<TExchange>(
 );
 
 export const reportSchema = new Schema<TReviewReport>({
-  reportId : {
+  reviewId : {
     type : Schema.Types.ObjectId,
     required : true,
     ref : "Review"
+  },
+  reporterId : {
+    type : Schema.Types.ObjectId,
+    required : true,
+    ref : "User"
   },
   document : {
     type : String,

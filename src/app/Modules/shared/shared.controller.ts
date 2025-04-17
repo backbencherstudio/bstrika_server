@@ -120,6 +120,18 @@ export const findUsersBasedOnSubcategory = catchAsync(async (req, res) => {
       data: result,
     });
   });
+
+  
+  const getSingleReportFromDB = catchAsync(async (req, res) => {
+
+    const result = await SharedServices.getSingleReportFromDB(req.params.id);
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: 'get single report successfully',
+      data: result,
+    });
+  });
   
   
 
@@ -131,7 +143,8 @@ export const SharedController = {
   chatexchangeRequestAcceptOrDeclineAPI,
   acceptExchangeController,
   reportPlacedToAdmin,
-  getALlReportsFromDBByAdmin
+  getALlReportsFromDBByAdmin,
+  getSingleReportFromDB
 }
 
 
