@@ -34,6 +34,8 @@ declare module 'express-session' {
 
 const createUser = catchAsync(async (req, res) => {
     const result = await UserServices.createUserIntoDB(req.body);
+    console.log(37, result);
+    
 
   req.session.otpData = {
     otp: result.otp,
@@ -45,6 +47,8 @@ const createUser = catchAsync(async (req, res) => {
     createdAt: Date.now(),  
   };
 
+  console.log(50, req.session.otpData);
+  
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
@@ -55,7 +59,11 @@ const createUser = catchAsync(async (req, res) => {
 
 const verifyOTP = catchAsync(async (req, res) => {
   const { otp } = req.body; 
+  console.log(otp);
+  
   const sessionOtpData = req.session.otpData; 
+  console.log(61, sessionOtpData);
+  
 
   if (!sessionOtpData) {
     throw new AppError(400, 'OTP expired or not set.');

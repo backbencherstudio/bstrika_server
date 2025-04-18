@@ -52,6 +52,8 @@ const verifyOTPintoDB = async (otp: string, sessionOtpData: { otp: string, passw
     ...verifyData,
     password: hashedPassword
   }
+  console.log(updateData);
+  
   const result = await User.create(updateData);
   return result
 };
@@ -268,6 +270,8 @@ const getAllUserFromDB = async (query: Record<string, unknown>) => {
 
 
 const getSingleUserFromDB = async (userId: string) => {
+  console.log(userId);
+  
   const result = await User.findById({ _id : userId })
   return result
 }
