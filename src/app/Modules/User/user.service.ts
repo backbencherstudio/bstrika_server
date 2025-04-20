@@ -7,7 +7,7 @@ import httpStatus from "http-status";
 import { AppError } from "../../errors/AppErrors";
 import bcrypt from 'bcrypt';
 import config from "../../config";
-import {  User } from "./user.model";
+import {  TempUser, User } from "./user.model";
 import {  TLoginUser, TUser } from "./user.interface";
 import { createToken, verifyToken } from "./user.utils";
 import { sendEmailToUser } from "../../utils/sendEmailToUser";
@@ -20,41 +20,55 @@ import { sendEmail } from "../../utils/sendEmail";
 
 const createUserIntoDB = async (payload: TUser) => {
   const otp = Math.floor(100000 + Math.random() * 900000).toString();
-  const isStudentExistsInUser = await User.findOne({ email: payload?.email });
-  if (isStudentExistsInUser) {
+  const isUserExistsInUser = await User.findOne({ email: payload?.email });
+  const isTempUserExistsInUser = await TempUser.findOne({ email: payload?.email });
+  if (isUserExistsInUser) {
     throw new AppError(400, 'User already exists');
   }
-  
-   await sendEmail(payload?.email, otp);
-  
-  return {
-    success: true,
-    message: 'OTP sent to your email. Please verify to complete registration.',
+
+  if (isTempUserExistsInUser) {
+      const resetData =  await TempUser.findOneAndUpdate({email : payload.email}, { otp }, {runValidators : true, new : true})
+      await sendEmail(payload?.email, otp);  
+      return resetData;
+  }
+
+  const tempUser = {
     otp,
     first_name: payload.first_name,
     email: payload.email,
     password: payload.password,
     isDeleted: false,
     role: payload.role
-  };
-
+  }  
+  const setTempUser = await TempUser.create(tempUser)  
+   await sendEmail(payload?.email, otp);  
+  return setTempUser;
 };
 
-const verifyOTPintoDB = async (otp: string, sessionOtpData: { otp: string, password: string, createdAt: number }) => {
-  const { otp: sessionOTP, password, createdAt, ...verifyData } = sessionOtpData;
-  const hashedPassword = await bcrypt.hash(password, 8);
-
-  const isMatched = parseInt(otp) === parseInt(sessionOTP)
-  if (!isMatched) {
-    throw new AppError(httpStatus.NOT_EXTENDED, "Otp not matche try again")
+const verifyOTPintoDB = async (otp: string, email : string) => {
+  const TempUserData = await TempUser.findOne({email});
+  if (!TempUserData) {
+    throw new AppError(httpStatus.NOT_FOUND, "User not found")    
   }
+  const isMatchedOTP = Number(TempUserData.otp) !== Number(otp)
+  if (isMatchedOTP) {
+    throw new AppError(httpStatus.NOT_ACCEPTABLE, "OTP not match")    
+  }
+
+   
+
+
+  const { first_name, isDeleted, role } = TempUserData;
+  const hashedPassword = await bcrypt.hash(TempUserData?.password, 8);
   const updateData = {
-    ...verifyData,
+    first_name, isDeleted, role,email,
     password: hashedPassword
   }
-  console.log(updateData);
-  
+
   const result = await User.create(updateData);
+  if (result) {
+    await TempUser.findOneAndDelete({email})    
+  }
   return result
 };
 

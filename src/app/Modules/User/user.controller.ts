@@ -5,50 +5,10 @@ import httpStatus from 'http-status';
 import { catchAsync } from '../../utils/catchAsync';
 import { UserServices } from './user.service';
 import config from '../../config';
-import { AppError } from '../../errors/AppErrors';
-
-declare module 'express-session' {
-  interface SessionData {
-    otpData?: {
-      otp: string;
-      createdAt : number;
-      first_name : string;
-      email : string;
-      password : string;
-      isDeleted : boolean;
-      role : string
-    };
-  }
-}
-
-declare module 'express-session' {
-  interface SessionData {
-    resetOTP?: {
-      otp: string;
-      email : string;
-      password : string;
-    };
-  }
-}
 
 
 const createUser = catchAsync(async (req, res) => {
     const result = await UserServices.createUserIntoDB(req.body);
-    console.log(37, result);
-    
-
-  req.session.otpData = {
-    otp: result.otp,
-    first_name : result.first_name,
-    email : result.email,
-    password: result.password,
-    isDeleted : result.isDeleted,
-    role:result.role,
-    createdAt: Date.now(),  
-  };
-
-  console.log(50, req.session.otpData);
-  
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
@@ -58,24 +18,9 @@ const createUser = catchAsync(async (req, res) => {
 });
 
 const verifyOTP = catchAsync(async (req, res) => {
-  const { otp } = req.body; 
-  console.log(otp);
-  
-  const sessionOtpData = req.session.otpData; 
-  console.log(61, sessionOtpData);
-  
+  const { otp, email } = req.body; 
 
-  if (!sessionOtpData) {
-    throw new AppError(400, 'OTP expired or not set.');
-  }
-  const currentTime = Date.now();
-  const elapsedTime = (currentTime - sessionOtpData.createdAt) / 1000;
-
-  if (elapsedTime > 120) { 
-    req.session.destroy(() => {}); 
-    throw new AppError(400, 'OTP has expired. Please request a new OTP.');
-  }
-  const result = await UserServices.verifyOTPintoDB(otp, sessionOtpData);
+  const result = await UserServices.verifyOTPintoDB(otp, email);
   req.session.destroy(() => {}); 
   sendResponse(res, {
     statusCode: httpStatus.OK,

@@ -1,6 +1,22 @@
 import { model, Schema } from "mongoose";
 import bcrypt from 'bcrypt';
-import { TAddressInfo, TPersonalInfo, TUser } from "./user.interface";
+import { ITempUser, TAddressInfo, TPersonalInfo, TUser } from "./user.interface";
+
+const tempUserSchema = new Schema<ITempUser>(
+  {
+    otp: { type: String, required: true },
+    first_name: { type: String, required: true },
+    email: { type: String, required: true, unique: true },
+    password: { type: String, required: true },
+    isDeleted: { type: Boolean, default: false },
+    role: {
+      type: String,
+      enum: ['admin', 'user'],
+      default: 'user',
+    },
+  },
+  { timestamps: true }
+)
 
 
 const personalInfoSchema = new Schema<TPersonalInfo>(
@@ -102,3 +118,5 @@ userSchema.statics.isPasswordMatched = async function (
 };
 
 export const User = model<TUser>('User', userSchema);
+
+export const TempUser = model<ITempUser>('TempUser', tempUserSchema);

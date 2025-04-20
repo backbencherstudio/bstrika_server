@@ -31,13 +31,13 @@ app.use(
 app.use(
   session({
     secret: "changeit",
-    // resave: true,
-    // saveUninitialized: true,
+    resave: true,
+    saveUninitialized: true,
     cookie: {
       maxAge: 2 * 60 * 1000,
       httpOnly: true,
-      sameSite: 'none', // important for cross-origin cookies
-      secure: false,    // set to true if using HTTPS
+      sameSite: 'none', 
+      secure: false,
     },
   })
 );
@@ -46,7 +46,6 @@ app.use(
 app.use('/uploads', express.static('uploads'));  
   
 app.use("/api/v1", router)
-
 
 
 app.get("/",(req, res)=>{

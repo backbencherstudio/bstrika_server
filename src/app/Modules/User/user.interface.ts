@@ -2,6 +2,19 @@
 import { Model } from 'mongoose';
 import { User_Role } from './user.constent';
 
+// ======================================>>>>>>>> Temp User Interface
+
+export interface ITempUser {
+  otp: string;
+  first_name: string;
+  email: string;
+  password: string;
+  isDeleted: boolean;
+  role?: string;
+}
+
+
+
 // ======================================>>>>>>>> Register Interface
 
 export type TPersonalInfo = {
