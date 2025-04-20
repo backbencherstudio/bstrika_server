@@ -283,7 +283,7 @@ const getAllUserFromDB = async (query: Record<string, unknown>) => {
     return result;
 }; 
 
-
+      
 const getSingleUserFromDB = async (userId: string) => {
   const result = await User.findById({ _id: userId });
   const allReview = await Review.find({ reviewerId: userId }).sort({ createdAt: -1 }).populate([

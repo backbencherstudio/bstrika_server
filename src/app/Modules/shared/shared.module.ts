@@ -58,9 +58,12 @@ const exchangeSchema = new Schema<TExchange>(
       type: String,
       required: true,
     },
-    serviceRequested: {
+    senderService: {
       type: String,
       required : true
+    },
+    reciverService: {
+      type: String
     },
     isAccepted: {
       type: String,

@@ -166,6 +166,34 @@ const getAllExchangeDataFromDB = async (id: string, isAccepted: string) => {
 
 //  }
 
+
+
+// const acceptExchange = async (exchangeId: string, payload: any) => {
+//   const exchangeData = await Exchange.findOne({
+//     _id: exchangeId,
+//     $or: [
+//       { senderUserId: payload.userId },
+//       { reciverUserId: payload.userId }
+//     ]
+//   });
+
+//   if (!exchangeData) {
+//     return { success: false, message: "No exchange found for this user." };
+//   }
+//   if(exchangeData?.isAccepted !== "true"){
+//     throw new AppError(NOT_ACCEPTABLE, "At First need to accept the request")
+//   }
+
+//   // Determine which field matched
+//   const matchedField =
+//     exchangeData.senderUserId.toString() === payload.userId
+//     ? "senderUserAccepted"
+//     : "reciverUserAccepted";      
+//       const result = await Exchange.findByIdAndUpdate({_id : exchangeId}, {[matchedField] : true }, {new : true, runValidators : true});
+//       return result  
+// };
+
+
 const acceptExchange = async (exchangeId: string, payload: any) => {
   const exchangeData = await Exchange.findOne({
     _id: exchangeId,
@@ -178,18 +206,32 @@ const acceptExchange = async (exchangeId: string, payload: any) => {
   if (!exchangeData) {
     return { success: false, message: "No exchange found for this user." };
   }
-  if(exchangeData?.isAccepted !== "true"){
-    throw new AppError(NOT_ACCEPTABLE, "At First need to accept the request")
+
+  if (exchangeData?.isAccepted !== "true") {
+    throw new AppError(NOT_ACCEPTABLE, "At First need to accept the request");
   }
 
-  // Determine which field matched
-  const matchedField =
-    exchangeData.senderUserId.toString() === payload.userId
-    ? "senderUserAccepted"
-    : "reciverUserAccepted";      
-      const result = await Exchange.findByIdAndUpdate({_id : exchangeId}, {[matchedField] : true }, {new : true, runValidators : true});
-      return result  
+  const isSender = exchangeData.senderUserId.toString() === payload.userId;
+
+  const updateData: any = {};
+
+  if (isSender) {
+    updateData.senderUserAccepted = true;
+  } else {
+    updateData.reciverUserAccepted = true;
+    updateData.reciverService = payload.reciverService;
+  }
+
+  const result = await Exchange.findByIdAndUpdate(
+    { _id: exchangeId },
+    updateData,
+    { new: true, runValidators: true }
+  );
+
+  return result;
 };
+
+
 
 
 // ====================================== Exchange API,s End =============================
