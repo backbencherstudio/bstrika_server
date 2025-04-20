@@ -18,17 +18,15 @@ const createUser = catchAsync(async (req, res) => {
 });
 
 const verifyOTP = catchAsync(async (req, res) => {
-  const { otp, email } = req.body; 
-
+  const { otp, email } = req.body;
   const result = await UserServices.verifyOTPintoDB(otp, email);
-  req.session.destroy(() => {}); 
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
     message: 'User registered successfully!',
     data: result,
   });
-});
+}); 
 
 const loginUser = catchAsync(async (req, res) => {  
   const result = await UserServices.loginUserIntoDB(req.body);

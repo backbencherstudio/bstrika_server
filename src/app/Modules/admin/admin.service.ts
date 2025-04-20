@@ -4,6 +4,7 @@ import fs from "fs"
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { TCategory } from "./admin.interface";
 import { Category } from "./admin.module";
+import { Exchange } from "../shared/shared.module";
 
 const createCategory = async (payload: TCategory) => {
   return await Category.create(payload);
@@ -27,12 +28,9 @@ const addSubCategory = async (
     return updatedCategory;
   };
   
-
 const getAllCategories = async () => {
   return await Category.find();
 };
-
-
 
 const getAbsoluteFilePath = (dbPath: string) => {
   try {
@@ -101,11 +99,24 @@ const removeSubCategory = async (
   
     return updatedCategory;
   };
-    
+
+  const getAllExchangeDataFromDBbyAdmin = async () =>{
+    const exchangeData = await Exchange.find({reciverUserAccepted: true, senderUserAccepted : true  }).populate([{
+      path: 'senderUserId',
+      select: 'first_name image email personalInfo'
+    },
+    {
+      path: 'reciverUserId',
+      select: 'first_name image email personalInfo'
+    }])
+    return exchangeData
+  }
+
 
 export const CategoryService = {
     createCategory,
     addSubCategory,
     getAllCategories,
     removeSubCategory,
+    getAllExchangeDataFromDBbyAdmin
 }

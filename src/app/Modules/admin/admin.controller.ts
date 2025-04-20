@@ -53,4 +53,14 @@ export const getAllCategories = catchAsync(async (req, res) => {
   });
 });
 
+export const getAllExchangeDatabyAdmin = catchAsync(async (req, res) => {
+  const result = await CategoryService.getAllExchangeDataFromDBbyAdmin();
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'get all exchange data by admin',
+    data: result,
+  });
+});
+
 
