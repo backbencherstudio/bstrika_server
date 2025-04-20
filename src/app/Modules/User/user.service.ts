@@ -274,14 +274,14 @@ const getAllUserFromDB = async (query: Record<string, unknown>) => {
       "addressInfo.city",
       "addressInfo.country"
     ])
-    .filter();
+    .filter(); 
 
     const result = await userQuery.modelQuery.select(
       'first_name email profileImage rating my_service portfolio review'
     );
   
     return result;
-};
+}; 
 
 
 const getSingleUserFromDB = async (userId: string) => {
