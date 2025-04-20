@@ -7,8 +7,8 @@ import httpStatus from "http-status";
 import { AppError } from "../../errors/AppErrors";
 import bcrypt from 'bcrypt';
 import config from "../../config";
-import {  TempUser, User } from "./user.model";
-import {  TLoginUser, TUser } from "./user.interface";
+import {  ReportProfile, TempUser, User } from "./user.model";
+import {  TLoginUser, TReportProfile, TUser } from "./user.interface";
 import { createToken, verifyToken } from "./user.utils";
 import { sendEmailToUser } from "../../utils/sendEmailToUser";
 import { filteredObject } from "../../utils/updateDataUtils";
@@ -149,6 +149,7 @@ const updateUserDataIntoDB = async (payload: Partial<TUser>) => {
       }
     }
     const updatedPayload = filteredObject(payload);
+    
     const result = await User.findByIdAndUpdate(
       payload.userId,
       { $set: updatedPayload },
@@ -371,6 +372,12 @@ const sendEmailToAllUser = async (payload: any) => {
   return result;
 }
 
+const sendProfileReportToTheAdmin = async(payload : TReportProfile )=>{
+  const result = await ReportProfile.create(payload);
+  console.log(result);
+  return result
+  
+}
 
 
 export const UserServices = {
@@ -393,4 +400,5 @@ export const UserServices = {
   resetPasswordIntoDB,
   refreshToken,
   sendEmailToAllUser,
+  sendProfileReportToTheAdmin
 };

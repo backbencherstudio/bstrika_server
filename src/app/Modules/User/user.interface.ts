@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import { Model } from 'mongoose';
+import { Model, Schema } from 'mongoose';
 import { User_Role } from './user.constent';
 
 // ======================================>>>>>>>> Temp User Interface
@@ -60,6 +60,14 @@ export type TLoginUser = {
   email: string;
   password: string;
 };
+
+
+export type TReportProfile = {
+  reporterId : Schema.Types.ObjectId,
+  reportedId : Schema.Types.ObjectId,
+  reportType : string,
+  supportingFile : string,
+}
 
  
 export interface UserModel extends Model<TUser> {

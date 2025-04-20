@@ -84,5 +84,10 @@ router.post(
   userController.sendEmailToUser,
 );
 
+router.post(
+  '/sendProfileReport',
+  upload.array('supportingFile', 1), 
+  userController.sendProfileReportToTheAdmin,
+);
 
 export const UserRouter = router;

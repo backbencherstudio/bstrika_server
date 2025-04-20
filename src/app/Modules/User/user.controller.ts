@@ -48,6 +48,7 @@ const loginUser = catchAsync(async (req, res) => {
 });
 
 const updateUserData = catchAsync(async (req, res) => {
+  
   const files = req.files as Express.Multer.File[];
   const profileImage = files?.map((file) => `/uploads/${file.filename}`);
 
@@ -248,6 +249,24 @@ const sendEmailToUser = catchAsync(async (req, res) => {
   });
 });
 
+const sendProfileReportToTheAdmin = catchAsync(async (req, res) => {
+  const files = req.files as Express.Multer.File[];
+  const supportingFile = files?.map((file) => `/uploads/${file.filename}`);
+
+  const reportedData = {
+    ...req.body,
+    supportingFile : supportingFile[0]
+  };
+
+  const result = await UserServices.sendProfileReportToTheAdmin(reportedData); 
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Profile report placed successfully',
+    data: result,
+  });
+});
+
 
 
 export const userController = {
@@ -270,4 +289,5 @@ export const userController = {
   resetPassword,
   verifyOtpForResetPassword,
   sendEmailToUser,
+  sendProfileReportToTheAdmin
 };

@@ -1,6 +1,6 @@
 import { model, Schema } from "mongoose";
 import bcrypt from 'bcrypt';
-import { ITempUser, TAddressInfo, TPersonalInfo, TUser } from "./user.interface";
+import { ITempUser, TAddressInfo, TPersonalInfo, TReportProfile, TUser } from "./user.interface";
 
 const tempUserSchema = new Schema<ITempUser>(
   {
@@ -108,6 +108,34 @@ const userSchema = new Schema<TUser>(
     timestamps: true,
   }
 );
+
+const reportProfileSchema = new Schema<TReportProfile>(
+  {
+    reporterId: {
+      type: Schema.Types.ObjectId,
+      required: true,
+      ref: "User"
+    },
+    reportedId: {
+      type: Schema.Types.ObjectId,
+      required: true,
+      ref: "User"
+    },
+    reportType: {
+      type: String,
+      required: true,
+    },
+    supportingFile: {
+      type: String,
+      required: false,
+    },
+  },
+  {
+    timestamps: true, 
+  }
+);
+
+export const ReportProfile = model<TReportProfile>("ReportProfile", reportProfileSchema);
 
 
 userSchema.statics.isPasswordMatched = async function (
