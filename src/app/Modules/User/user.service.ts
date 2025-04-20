@@ -16,6 +16,7 @@ import QueryBuilder from "../../builder/QueryBuilder";
 import path from "path";
 import fs from "fs"
 import { sendEmail } from "../../utils/sendEmail";
+import { Review } from "../shared/shared.module";
 
 
 const createUserIntoDB = async (payload: TUser) => {
@@ -284,11 +285,19 @@ const getAllUserFromDB = async (query: Record<string, unknown>) => {
 
 
 const getSingleUserFromDB = async (userId: string) => {
-  console.log(userId);
-  
-  const result = await User.findById({ _id : userId })
-  return result
-}
+  const result = await User.findById({ _id: userId });
+  const allReview = await Review.find({ reviewerId: userId }).sort({ createdAt: -1 }).populate([
+    {
+      path: 'reviewerId',
+      select: 'first_name image email personalInfo'
+    },
+  ]);
+  return {
+    user: result,
+    reviews: allReview
+  };
+};
+
 
 const resetPasswordIntoDB = async (payload: any) => {
   const isUserExistsInUser = await User.findOne({ email: payload?.email });

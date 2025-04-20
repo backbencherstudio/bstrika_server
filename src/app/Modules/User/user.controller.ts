@@ -177,7 +177,8 @@ const getSingleUser = catchAsync(async (req, res) => {
     statusCode: httpStatus.OK,
     success: true,
     message: 'get single user',
-    data: result,
+    data: result.user,
+    reviews : result.reviews
   });
 });
 
