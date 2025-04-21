@@ -126,8 +126,17 @@ const getAllExchangeDataFromDB = async (id: string, isAccepted: string) => {
         isAccepted: false,
         reciverUserId: id
       };
+      
 
-  const result = await Exchange.find(query).populate("reciverUserId");
+  const result = await Exchange.find(query).populate([
+    // "senderUserId", "reciverUserId"
+    {
+      path: 'senderUserId'
+    },
+    {     
+      path: 'reciverUserId'
+    }
+  ]);
 
   return result;
 };
