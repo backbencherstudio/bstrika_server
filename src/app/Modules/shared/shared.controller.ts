@@ -59,9 +59,7 @@ export const findUsersBasedOnSubcategory = catchAsync(async (req, res) => {
   });
 
   //====>>> get chat data, filtered by "true ... for chat" "false for pending accept"
-  const getAllExchangeData = catchAsync(async (req, res) => {
-    console.log(req.query);
-    
+  const getAllExchangeData = catchAsync(async (req, res) => {    
     const result = await SharedServices.getAllExchangeDataFromDB(req.query.userId as string, req.query.isAccepted as string);
     sendResponse(res, {
       statusCode: httpStatus.OK,
