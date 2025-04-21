@@ -78,6 +78,10 @@ const exchangeSchema = new Schema<TExchange>(
       type: Boolean,
       default: false,
     },
+    my_service: {
+      type: [String],
+      required : true
+    },
    
   },
   {

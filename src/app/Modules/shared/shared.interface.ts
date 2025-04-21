@@ -19,6 +19,7 @@ export type TExchange = {
     reciverService ?: string;
     senderUserAccepted : boolean;
     reciverUserAccepted : boolean;
+    my_service:string[]
 }
 
 export type TReviewReport = {

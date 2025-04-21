@@ -374,9 +374,21 @@ const sendEmailToAllUser = async (payload: any) => {
 
 const sendProfileReportToTheAdmin = async(payload : TReportProfile )=>{
   const result = await ReportProfile.create(payload);
-  console.log(result);
+  return result  
+}
+
+const getAllReportByAdminFromDB = async () =>{
+  const result = await ReportProfile.find().populate([
+    {
+      path: 'reporterId',
+      select: 'first_name image email personalInfo'
+    },
+    {
+      path: 'reportedId',
+      select: 'first_name image email personalInfo'
+    }
+  ]);
   return result
-  
 }
 
 
@@ -400,5 +412,6 @@ export const UserServices = {
   resetPasswordIntoDB,
   refreshToken,
   sendEmailToAllUser,
-  sendProfileReportToTheAdmin
+  sendProfileReportToTheAdmin,
+  getAllReportByAdminFromDB
 };

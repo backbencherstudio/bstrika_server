@@ -5,6 +5,12 @@ import { userController } from './user.controller';
 const router = express.Router();
 
 router.get(
+  '/getProfileReport',
+  // Auth(User_Role.admin),
+  userController.getAllReportByAdmin,
+);
+
+router.get(
   '/allUsers',
   // Auth(User_Role.admin),
   userController.getAllUser,
@@ -89,5 +95,7 @@ router.post(
   upload.array('supportingFile', 1), 
   userController.sendProfileReportToTheAdmin,
 );
+
+
 
 export const UserRouter = router;
