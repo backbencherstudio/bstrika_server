@@ -269,6 +269,7 @@ const getALlReportsFromDBByAdmin = async () =>{
   return result
 }
 
+  
 
 
 export const SharedServices = {
@@ -278,7 +279,7 @@ export const SharedServices = {
   sendAndStoreExchangeRequest,
   getAllExchangeDataFromDB,
   ChatExchangeRequestAcceptOrDeclineAPI,
-  acceptExchange,
+  acceptExchange, 
   reportPlacedToAdmin,
   getALlReportsFromDBByAdmin,
   getSingleReportFromDB

@@ -383,12 +383,12 @@ const getAllReportByAdminFromDB = async () =>{
       path: 'reporterId',
       select: 'first_name image email personalInfo'
     },
-    {
+    {     
       path: 'reportedId',
       select: 'first_name image email personalInfo'
     }
   ]);
-  return result
+  return result 
 }
 
 
