@@ -10,7 +10,7 @@ import MessageModel from './app/Modules/messages/message.module';
 import MessageService from './app/Modules/messages/message.service';
 async function main() {
   try {
-    await mongoose.connect(config.database_url as string);
+    await mongoose.connect(process.env.DATABASE_URL as string);
     const messageService = new MessageService(io, MessageModel);
     io.on('connection', (socket) => {
       socket.on('join', (username) =>
