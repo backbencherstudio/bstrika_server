@@ -30,6 +30,7 @@ app.use(
       'http://localhost:5173',
       'http://localhost:3000',
       'http://192.168.4.42:3000',
+      'http://localhost:5000'
     ],
     credentials: true,
   }),
@@ -63,10 +64,25 @@ app.use('/uploads', express.static('uploads'));
 app.use('/api/v1', router);
 
 app.get('/chats', async (req, res) => {
+  console.log('chats');
   try {
-    const chats = await MessageModel.find().sort({ timestamp: -1 }).lean();
+    const { email } = req.query;
+    
+    if (!email) {
+      return res.status(400).json({ error: 'Email parameter is required' });
+    }
+
+    const chats = await MessageModel.find({
+      $or: [
+        { sender: email },
+        { recipient: email }
+      ]
+    }).sort({ timestamp: -1 }).lean();
+    
+    console.log(chats);
     res.json(chats);
   } catch (err) {
+    console.error('Error fetching messages:', err);
     res.status(500).json({ error: 'Error fetching messages' });
   }
 });

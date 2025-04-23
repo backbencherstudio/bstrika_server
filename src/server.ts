@@ -2,7 +2,17 @@ import app from './app';
 import { Server } from 'socket.io';
 import http from 'http';
 const httpServer = http.createServer(app);
-const io = new Server(httpServer);
+const io = new Server(httpServer, {
+  cors: {
+    origin: [
+      'http://localhost:5173',
+      'http://localhost:3000',
+      'http://192.168.4.42:3000',
+      'http://localhost:5000'
+    ],
+    credentials: true,
+  },
+});
 // Removed conflicting import of httpServer
 import config from './app/config';
 import mongoose from 'mongoose';
