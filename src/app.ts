@@ -63,7 +63,7 @@ app.use('/uploads', express.static('uploads'));
 
 app.use('/api/v1', router);
 
-app.get('/chats', async (req, res) => {
+app.get('/api/v1/chats', async (req, res) => {
   console.log('chats');
   try {
     const { email } = req.query;
@@ -87,7 +87,7 @@ app.get('/chats', async (req, res) => {
   }
 });
 
-app.post('/messages/mark-read', async (req, res) => {
+app.post('/api/v1/messages/mark-read', async (req, res) => {
   try {
     const { sender, recipient } = req.body;
     const result = await MessageModel.updateMany(
@@ -115,7 +115,7 @@ app.post('/messages/mark-read', async (req, res) => {
   }
 });
 
-app.get('/messages/unread/:userId', async (req, res) => {
+app.get('/api/v1/messages/unread/:userId', async (req, res) => {
   try {
     const { userId } = req.params;
     const unreadMessages = await MessageModel.find({
@@ -136,7 +136,7 @@ app.get('/messages/unread/:userId', async (req, res) => {
     res.status(500).json({ error: 'Error fetching unread messages' });
   }
 });
-app.get('/', (req, res) => {
+app.get('/api/v1', (req, res) => {
   res.send({ message: 'server running successfully' });
 });
 
