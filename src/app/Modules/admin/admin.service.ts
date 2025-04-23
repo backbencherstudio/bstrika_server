@@ -10,6 +10,7 @@ const createCategory = async (payload: TCategory) => {
   return await Category.create(payload);
 };
 
+
 const addSubCategory = async (
     categoryId: string,
     subCategoryData: { subCategory: string; categoryImage: string }
@@ -27,6 +28,8 @@ const addSubCategory = async (
     const updatedCategory = await category.save();  
     return updatedCategory;
   };
+  
+
   
 const getAllCategories = async () => {
   return await Category.find();

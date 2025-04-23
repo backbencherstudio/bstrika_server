@@ -126,6 +126,7 @@ const getAllExchangeDataFromDB = async (id: string, isAccepted: string) => {
         isAccepted: false,
         reciverUserId: id
       };
+      // console.log(query);
       
 
   const result = await Exchange.find(query).populate([
@@ -137,6 +138,7 @@ const getAllExchangeDataFromDB = async (id: string, isAccepted: string) => {
       path: 'reciverUserId'
     }
   ]);
+  
 
   return result;
 };

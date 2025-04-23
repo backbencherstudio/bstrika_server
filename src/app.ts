@@ -3,11 +3,13 @@
 import express, { Application } from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
+import { createServer } from 'http';
 import router from './app/routes';
 import globalErrorHandler from './app/middleware/globalErrorHandlear';
 import session from 'express-session';
-  
+
 const app: Application = express();
+const httpServer = createServer(app);
 
 app.use(express.json());
 app.use(cookieParser());
@@ -41,7 +43,7 @@ app.use(
     },
   })
 );
-
+ 
 
 app.use('/uploads', express.static('uploads'));  
   
@@ -55,4 +57,9 @@ app.get("/",(req, res)=>{
 
 app.use(globalErrorHandler);
 
+
+
 export default app;
+
+// Change the export to include httpServer
+export { app, httpServer };
