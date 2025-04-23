@@ -3,7 +3,6 @@
 import express, { Application } from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
-import { createServer } from 'http';
 import router from './app/routes';
 import globalErrorHandler from './app/middleware/globalErrorHandlear';
 import session from 'express-session';
