@@ -64,10 +64,15 @@ const userSchema = new Schema<TUser>(
     profileImage: {
       type: String,
     },
+    profileStatus: {
+      type: String,
+      enum: ['safe', 'suspend', 'remove'],
+      default: 'safe',
+    },
     role: {
       type: String,
       enum: ['admin', 'user'],
-      default: 'user',
+      default: 'user', 
     },
     isDeleted: {
       type: Boolean,

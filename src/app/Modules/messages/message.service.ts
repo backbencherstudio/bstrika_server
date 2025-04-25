@@ -78,7 +78,7 @@ class MessageService {
       const result = await this.MessageModel.updateMany(
         { sender, recipient, read: false },
         { $set: { read: true } }
-      );
+      ); 
 
       if (result.modifiedCount > 0) {
         this.io.emit('messages_read', { sender, recipient });

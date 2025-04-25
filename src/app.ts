@@ -17,6 +17,7 @@ const io = new Server(httpServer, {
       'http://localhost:5173',
       'http://localhost:3000',
       'http://192.168.4.42:3000',
+      'http://192.168.5.6:3000',
     ],
     credentials: true,
   },
@@ -29,7 +30,8 @@ app.use(
     origin: [
       'http://localhost:5173',
       'http://localhost:3000',
-      'http://192.168.4.42:3000',
+      'http://192.168.4.42:3000',      
+      'http://192.168.5.6:3000',
       'http://localhost:5000'
     ],
     credentials: true,
