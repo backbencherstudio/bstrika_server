@@ -157,6 +157,11 @@ const getAllExchangeDataFromDB = async (id: string, isAccepted: string) => {
 
 
  const ChatExchangeRequestAcceptOrDeclineAPI = async (exchangeId : string, payload : any  ) =>{
+
+  if(payload?.isAccepted === "false"){
+    const result = await Exchange.findByIdAndDelete({_id : payload?.exchangeId}, {runValidators : true, new : true})
+    return result
+  }  
   const result = await Exchange.findOneAndUpdate({_id : exchangeId, reciverUserId : payload?.reciverUserId }, {isAccepted : payload?.isAccepted}, {new : true, runValidators : true})
   return result  
  }
