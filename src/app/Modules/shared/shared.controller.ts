@@ -47,6 +47,27 @@ export const findUsersBasedOnSubcategory = catchAsync(async (req, res) => {
   });
 
 
+  const reviewLike = catchAsync(async (req, res) => {
+    const result = await SharedServices.reviewLike(req.params.reviewId);
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: 'You Like This Review',
+      data: result,
+    });
+  });
+
+  const reviewDisLike = catchAsync(async (req, res) => {
+    const result = await SharedServices.reviewDisLike(req.params.reviewId);
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: 'You Disike This Review',
+      data: result,
+    });
+  });
+
+
   // ============================================================== Exchange controllers Start =================================
   const sendAndStoreExchangeRequestController = catchAsync(async (req, res) => {
     const result = await SharedServices.sendAndStoreExchangeRequest(req.body);
@@ -140,6 +161,8 @@ export const SharedController = {
   createReview,
   sendAndStoreExchangeRequestController,
   getReviewsByUser,
+  reviewLike,
+  reviewDisLike,
   getAllExchangeData,
   chatexchangeRequestAcceptOrDeclineAPI,
   acceptExchangeController,

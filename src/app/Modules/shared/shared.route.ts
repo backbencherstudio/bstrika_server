@@ -14,6 +14,9 @@ router.get('/', getCategory);
 router.post('/review', SharedController.createReview);
 router.get('/review/:reciverId', SharedController.getReviewsByUser);
 
+router.patch('/likeReview/:reviewId', SharedController.reviewLike);
+router.patch('/disLinkreview/:reviewId', SharedController.reviewDisLike);
+
 router.post('/report', upload.array('document', 1), SharedController.reportPlacedToAdmin);
 router.get(
     '/report', 

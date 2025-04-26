@@ -88,6 +88,23 @@ const getReviewsByUser = async (reciverId: string) => {
   return await Review.find({ reciverId }).populate('reviewerId');
 };
 
+const reviewLike = async (reviewId: string) => {
+  return await Review.findByIdAndUpdate(
+    { _id: reviewId },
+    { $inc: { like: 1 } },   
+    { new: true } 
+  );
+};
+
+const reviewDisLike = async (reviewId: string) => {
+  return await Review.findByIdAndUpdate(
+    { _id: reviewId },
+    { $inc: { disLike: 1 } },   
+    { new: true } 
+  );
+};
+
+
  const deleteReview = async (id: string) => {
   return await Review.findByIdAndDelete(id);
 };
@@ -240,7 +257,7 @@ const acceptExchange = async (exchangeId: string, payload: any) => {
 
   const result = await Exchange.findByIdAndUpdate(
     { _id: exchangeId },
-    updateData,
+    updateData, 
     { new: true, runValidators: true }
   );
 
@@ -292,6 +309,8 @@ export const SharedServices = {
   createReviewIntoDB,
   getReviewsByUser,
   deleteReview,
+  reviewLike,
+  reviewDisLike,
   sendAndStoreExchangeRequest,
   getAllExchangeDataFromDB,
   ChatExchangeRequestAcceptOrDeclineAPI,
