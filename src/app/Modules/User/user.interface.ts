@@ -52,7 +52,8 @@ export interface TUser {
   portfolio : string;
   cartificate : string;
   rating ?: number;
-  review ?: number
+  review ?: number;
+  profileStatus : "safe" | "suspend" | "remove";
 }
 
 // ======================================>>>>>>>> Login Interface

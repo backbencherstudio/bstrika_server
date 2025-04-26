@@ -61,7 +61,7 @@ const exchangeSchema = new Schema<TExchange>(
     senderService: {
       type: String,
       required : true
-    },
+    }, 
     reciverService: {
       type: String
     },
