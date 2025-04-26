@@ -11,10 +11,18 @@ class MessageController {
 
   async getAllChats(req: Request, res: Response) {
     try {
-      const chats = await MessageModel
-        .find()
-        .sort({ timestamp: -1 })
-        .lean();
+      const { email, recipient } = req.query;
+      if (!email) {
+        return res.status(400).json({ error: 'Email parameter is required' });
+      }
+
+      const chats = await MessageModel.find({
+        $or: [
+          { sender: email, recipient: recipient },
+          { sender: recipient, recipient: email }
+        ]
+      }).sort({ timestamp: -1 }).lean();
+      
       res.json(chats);
     } catch (err) {
       res.status(500).json({ error: 'Error fetching messages' });
