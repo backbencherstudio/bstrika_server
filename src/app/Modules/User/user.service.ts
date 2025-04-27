@@ -17,6 +17,7 @@ import path from "path";
 import fs from "fs"
 import { sendEmail } from "../../utils/sendEmail";
 import { Review } from "../shared/shared.module";
+import { notificationMain } from "../../utils/notificationMain";
 
 
 const createUserIntoDB = async (payload: TUser) => {
@@ -386,42 +387,98 @@ const sendProfileReportToTheAdmin = async(payload : TReportProfile )=>{
   return result  
 }
 
-const actionProfileReportService = async (id : string, {action} : {action : string} )=>{
-  console.log(action);
+// const actionProfileReportService = async (id : string, {action} : {action : string} )=>{
 
-  if(action === "suspend"){
+//   if(action === "suspend"){    
+//     const existsData = await ReportProfile.findById({_id : id});
+//     const result = await ReportProfile.findByIdAndUpdate({_id : id}, {action}, {runValidators : true, new : true});
+//     await User.findByIdAndUpdate({_id : existsData?.reportedId}, {profileStatus : action }, {runValidators : true, new : true}); 
 
-    console.log(action);
-    
-    const blockedData = await ReportProfile.findById({_id : id})    
+//     await notificationMain(existsData?.email, "Suspended notification" , "Your account is currently suspended. You are unable to log in at this time. Access will be restored after the suspension period, typically within 7 to 10 days") 
 
-    const result = await ReportProfile.findByIdAndUpdate({_id : id}, {action}, {runValidators : true, new : true})
+//     return {
+//       message : "profile suspended successfully",
+//       result : result
+//     }
+//   }
+//   else{
+//     const existsData = await ReportProfile.findById({_id : id});
+//     await ReportProfile.findByIdAndUpdate({_id : id}, {action}, {runValidators : true, new : true});
+//     const userData = await User.findByIdAndUpdate({_id : existsData?.reportedId}, {profileStatus : action }, {runValidators : true, new : true});
 
-    const userData = await User.findByIdAndUpdate({_id : blockedData?.reportedId}, {profileStatus : action }, {runValidators : true, new : true}) 
-    
-    return {
-      message : "profile suspended successfully",
-      result : result
-    }
-  }
-  else{
-    // profileStatus
-    const blockedData = await ReportProfile.findById({_id : id})    
-    const userData = await User.findByIdAndUpdate({_id : blockedData?.reportedId}, {profileStatus : action }, {runValidators : true, new : true})    
+//     await notificationMain(existsData?.email, "Suspended notification" , "You have been permanently blocked by the admin. You will no longer be able to register or log in to this platform") 
 
-    console.log(395, userData);
-    
-
-    return {
-      message : "profile blocked permanently",
-      result : "result"
-    }
-
-  }
+//     return {
+//       message : "profile blocked permanently",
+//       result : userData
+//     }
+//   }
  
   
 
-}
+// }
+
+
+const actionProfileReportService = async (id: string, { action }: { action: string }) => {
+  const existsData = await ReportProfile.findById({ _id: id });
+
+  if (!existsData) {
+    throw new Error("Report not found");
+  }
+
+  const reportedUser = await User.findById(existsData?.reportedId);
+
+  if (!reportedUser) {
+    throw new Error("Reported user not found");
+  }
+
+  if (action === "suspend") {
+    const result = await ReportProfile.findByIdAndUpdate(
+      { _id: id },
+      { action },
+      { runValidators: true, new: true }
+    );
+    await User.findByIdAndUpdate(
+      { _id: existsData?.reportedId },
+      { profileStatus: action },
+      { runValidators: true, new: true }
+    );
+
+    await notificationMain(
+      reportedUser.email, 
+      "Suspended Notification",
+      "Your account is currently suspended. You are unable to log in at this time. Access will be restored after the suspension period, typically within 7 to 10 days."
+    );
+
+    return {
+      message: "Profile suspended successfully",
+      result: result,
+    };
+  } else {
+    await ReportProfile.findByIdAndUpdate(
+      { _id: id },
+      { action },
+      { runValidators: true, new: true }
+    );
+    const userData = await User.findByIdAndUpdate(
+      { _id: existsData?.reportedId },
+      { profileStatus: action },
+      { runValidators: true, new: true }
+    );
+
+    await notificationMain(
+      reportedUser.email, 
+      "Blocked Notification",
+      "You have been permanently blocked by the admin. You will no longer be able to register or log in to this platform."
+    );
+
+    return {
+      message: "Profile blocked permanently",
+      result: userData,
+    };
+  }
+};
+
 
 
 const getAllReportByAdminFromDB = async () =>{
