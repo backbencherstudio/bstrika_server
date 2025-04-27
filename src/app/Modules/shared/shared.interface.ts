@@ -27,4 +27,6 @@ export type TReviewReport = {
     reporterId : Schema.Types.ObjectId;
     document : string;
     reportDetails:string;
+    action : "pending" | "suspend" | "block";
+
 }

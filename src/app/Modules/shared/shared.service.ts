@@ -159,6 +159,9 @@ const getAllExchangeDataFromDB = async (id: string, isAccepted: string) => {
 
   return result;
 };
+
+
+
 // ===================== not remove this function now
 // const getAllExchangeDataFromDB = async (id: string, isAccepted: boolean) => {
 //   const result = await Exchange.find({

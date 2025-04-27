@@ -32,9 +32,6 @@ router.get('/exchange', SharedController.getAllExchangeData);  //====>>> get cha
 router.patch('/exchange/:exchangeId', SharedController.chatexchangeRequestAcceptOrDeclineAPI);
 router.patch('/acceptExchange/:exchangeId', SharedController.acceptExchangeController);
 
-     
-
-
 
 
 
