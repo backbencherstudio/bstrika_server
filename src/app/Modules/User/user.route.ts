@@ -96,6 +96,11 @@ router.post(
   userController.sendProfileReportToTheAdmin,
 );
 
+router.patch(
+  '/action/:reportId', 
+  userController.actionProfileReportService,
+);
+
 
 
 export const UserRouter = router;

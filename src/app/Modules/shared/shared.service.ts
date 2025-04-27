@@ -294,11 +294,11 @@ const getALlReportsFromDBByAdmin = async () =>{
     populate: [
       {
         path: 'reciverId',
-        select: 'first_name image email personalInfo'
+        select: 'first_name profileImage email personalInfo'
       },
       {
         path: 'reviewerId',
-        select: 'first_name image email personalInfo'
+        select: 'first_name profileImage email personalInfo'
       }
     ]
   });

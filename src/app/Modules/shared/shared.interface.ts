@@ -26,7 +26,5 @@ export type TReviewReport = {
     reviewId : Schema.Types.ObjectId;
     reporterId : Schema.Types.ObjectId;
     document : string;
-    reportDetails:string;
-    action : "pending" | "suspend" | "block";
-
+    reportDetails:string;  
 }

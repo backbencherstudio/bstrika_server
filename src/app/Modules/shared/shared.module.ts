@@ -108,12 +108,7 @@ export const reportSchema = new Schema<TReviewReport>({
   reportDetails : {
     type : String,
     required : true
-  },
-  action: {
-    type: String,
-    enum: ['pending', 'suspend', 'block'],
-    default: 'pending',
-  },
+  }
 })
 
 export const Review = model<TReviews>('Review', reviewSchema);

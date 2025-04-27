@@ -66,7 +66,7 @@ const userSchema = new Schema<TUser>(
     },
     profileStatus: {
       type: String,
-      enum: ['safe', 'suspend', 'remove'],
+      enum: ['safe', 'suspend', 'block'],
       default: 'safe',
     },
     role: {
@@ -134,6 +134,11 @@ const reportProfileSchema = new Schema<TReportProfile>(
       type: String,
       required: false,
     },
+    action: {
+        type: String,
+        enum: ['pending', 'suspend', 'block'],
+        default: 'pending',
+      },
   },
   {
     timestamps: true, 

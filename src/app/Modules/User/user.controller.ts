@@ -277,6 +277,17 @@ const getAllReportByAdmin = catchAsync(async (req, res) => {
   });
 });
 
+const actionProfileReportService = catchAsync(async (req, res) => {
+  const result = await UserServices.actionProfileReportService(req.params.reportId, req.body); 
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: result?.message,
+    data: result.result,
+  });
+});
+
 
 
 export const userController = {
@@ -300,5 +311,6 @@ export const userController = {
   verifyOtpForResetPassword,
   sendEmailToUser,
   sendProfileReportToTheAdmin,
-  getAllReportByAdmin
+  getAllReportByAdmin,
+  actionProfileReportService
 };
