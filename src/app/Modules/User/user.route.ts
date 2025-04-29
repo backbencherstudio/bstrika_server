@@ -11,6 +11,12 @@ router.get(
 );
 
 router.get(
+  '/action', 
+  userController.getAllSuspendedDataFromBD,
+);
+
+
+router.get(
   '/allUsers',
   // Auth(User_Role.admin),
   userController.getAllUser,
@@ -100,6 +106,7 @@ router.patch(
   '/action/:reportId', 
   userController.actionProfileReportService,
 );
+
 
 
 

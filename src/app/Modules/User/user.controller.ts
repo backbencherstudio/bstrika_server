@@ -185,26 +185,19 @@ const getSingleUser = catchAsync(async (req, res) => {
 
 const resetPassword = catchAsync(async (req, res) => {
   const result = await UserServices.resetPasswordIntoDB(req?.body); 
-  req.session.resetOTP = {
-    otp: result.otp,
-    email : result.email,
-    password: result.password ,
-  }
+  
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
     message: 'OTP send Your Email, reset password withen 2 minuts',
-    data: null,
+    data: result,
   });
 });
 
 const verifyOtpForResetPassword = catchAsync(async (req, res)=>{
   const getOtpData = req.body;  
-  const resetOtpData = req.session.resetOTP;
-  if(!resetOtpData){
-    throw new Error("OTP was expaired try again")
-  }
-  const result = await UserServices.updatePasswordWithOtpVerification(getOtpData, resetOtpData);
+  
+  const result = await UserServices.updatePasswordWithOtpVerification(getOtpData);
   req.session.destroy(() => {}); 
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -288,6 +281,17 @@ const actionProfileReportService = catchAsync(async (req, res) => {
   });
 });
 
+const getAllSuspendedDataFromBD = catchAsync(async (req, res) => {
+  const result = await UserServices.getAllSuspendedDataFromBD(req.query); 
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "get all suspend data successfully",
+    data: result,
+  });
+});
+
 
 
 export const userController = {
@@ -312,5 +316,6 @@ export const userController = {
   sendEmailToUser,
   sendProfileReportToTheAdmin,
   getAllReportByAdmin,
-  actionProfileReportService
+  actionProfileReportService,
+  getAllSuspendedDataFromBD
 };

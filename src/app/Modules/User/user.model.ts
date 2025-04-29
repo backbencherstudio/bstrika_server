@@ -136,11 +136,11 @@ const reportProfileSchema = new Schema<TReportProfile>(
     },
     action: {
         type: String,
-        enum: ['pending', 'suspend', 'block'],
+        enum: ['pending', 'suspend', 'block', 'safe'],
         default: 'pending',
       },
   },
-  {
+  { 
     timestamps: true, 
   }
 );

@@ -68,7 +68,7 @@ export type TReportProfile = {
   reportedId : Schema.Types.ObjectId,
   reportType : string,
   supportingFile : string,
-  action : "pending" | "suspend" | "block";
+  action : "pending" | "suspend" | "block" | 'safe';
 }
 
  

@@ -7,8 +7,8 @@ import httpStatus from "http-status";
 import { AppError } from "../../errors/AppErrors";
 import bcrypt from 'bcrypt';
 import config from "../../config";
-import {  ReportProfile, TempUser, User } from "./user.model";
-import {  TLoginUser, TReportProfile, TUser } from "./user.interface";
+import { ReportProfile, TempUser, User } from "./user.model";
+import { TLoginUser, TReportProfile, TUser } from "./user.interface";
 import { createToken, verifyToken } from "./user.utils";
 import { sendEmailToUser } from "../../utils/sendEmailToUser";
 import { filteredObject } from "../../utils/updateDataUtils";
@@ -29,9 +29,9 @@ const createUserIntoDB = async (payload: TUser) => {
   }
 
   if (isTempUserExistsInUser) {
-      const resetData =  await TempUser.findOneAndUpdate({email : payload.email}, { otp }, {runValidators : true, new : true})
-      await sendEmail(payload?.email, otp);  
-      return resetData;
+    const resetData = await TempUser.findOneAndUpdate({ email: payload.email }, { otp }, { runValidators: true, new: true })
+    await sendEmail(payload?.email, otp);
+    return resetData;
   }
 
   const tempUser = {
@@ -41,35 +41,35 @@ const createUserIntoDB = async (payload: TUser) => {
     password: payload.password,
     isDeleted: false,
     role: payload.role
-  }  
-  const setTempUser = await TempUser.create(tempUser)  
-   await sendEmail(payload?.email, otp);  
+  }
+  const setTempUser = await TempUser.create(tempUser)
+  await sendEmail(payload?.email, otp);
   return setTempUser;
 };
 
-const verifyOTPintoDB = async (otp: string, email : string) => {
-  const TempUserData = await TempUser.findOne({email});
+const verifyOTPintoDB = async (otp: string, email: string) => {
+  const TempUserData = await TempUser.findOne({ email });
   if (!TempUserData) {
-    throw new AppError(httpStatus.NOT_FOUND, "User not found")    
+    throw new AppError(httpStatus.NOT_FOUND, "User not found")
   }
   const isMatchedOTP = Number(TempUserData.otp) !== Number(otp)
   if (isMatchedOTP) {
-    throw new AppError(httpStatus.NOT_ACCEPTABLE, "OTP not match")    
+    throw new AppError(httpStatus.NOT_ACCEPTABLE, "OTP not match")
   }
 
-   
+
 
 
   const { first_name, isDeleted, role } = TempUserData;
   const hashedPassword = await bcrypt.hash(TempUserData?.password, 8);
   const updateData = {
-    first_name, isDeleted, role,email,
+    first_name, isDeleted, role, email,
     password: hashedPassword
   }
 
   const result = await User.create(updateData);
   if (result) {
-    await TempUser.findOneAndDelete({email})    
+    await TempUser.findOneAndDelete({ email })
   }
   return result
 };
@@ -82,13 +82,13 @@ const loginUserIntoDB = async (paylod: TLoginUser) => {
     throw new AppError(httpStatus.NOT_FOUND, 'User is not found');
   }
 
-  if (userData?.profileStatus === "suspend"  ) {
+  if (userData?.profileStatus === "suspend") {
     throw new AppError(httpStatus.NOT_FOUND, `Your account is currently suspended. You are unable to log in at this time. Access will be restored after the suspension period, typically within 7 to 10 days`);
   }
-  if (userData?.profileStatus === "block"  ) {
+  if (userData?.profileStatus === "block") {
     throw new AppError(httpStatus.NOT_FOUND, `You have been permanently blocked by the admin. You will no longer be able to register or log in to this platform.`);
   }
-  
+
   const res = await bcrypt.compare(paylod.password, userData.password)
   if (!res) {
     throw new AppError(httpStatus.FORBIDDEN, 'password is not matched');
@@ -149,7 +149,7 @@ const deleteFile = (filePath: string) => {
   }
 };
 
-const updateUserDataIntoDB = async (payload: Partial<TUser>) => { 
+const updateUserDataIntoDB = async (payload: Partial<TUser>) => {
   try {
     const userData = await User.findById(payload.userId).select("profileImage");
     if (userData?.profileImage) {
@@ -159,7 +159,7 @@ const updateUserDataIntoDB = async (payload: Partial<TUser>) => {
       }
     }
     const updatedPayload = filteredObject(payload);
-    
+
     const result = await User.findByIdAndUpdate(
       payload.userId,
       { $set: updatedPayload },
@@ -174,17 +174,17 @@ const updateUserDataIntoDB = async (payload: Partial<TUser>) => {
 };
 
 // =====================================================================  portfolio API Start ===============================
-const setPortfolioImageIntoDB = async (id : string, payload: any) => {
-  const userData = await User.findById({_id : id}).select("portfolio");  
+const setPortfolioImageIntoDB = async (id: string, payload: any) => {
+  const userData = await User.findById({ _id: id }).select("portfolio");
   if (userData?.portfolio) {
     const absoluteFilePath = getAbsoluteFilePath(userData.portfolio);
     if (absoluteFilePath) {
       deleteFile(absoluteFilePath);
     }
   }
-  
+
   const result = await User.findByIdAndUpdate(
-    {_id : id},
+    { _id: id },
     { $set: payload },
     { new: true, runValidators: true }
   );
@@ -192,18 +192,18 @@ const setPortfolioImageIntoDB = async (id : string, payload: any) => {
   return result;
 };
 
-const deletePortfolioImageFromDB = async (id : string) => {
-  const userData = await User.findById({_id : id}).select("portfolio");  
+const deletePortfolioImageFromDB = async (id: string) => {
+  const userData = await User.findById({ _id: id }).select("portfolio");
   if (userData?.portfolio) {
     const absoluteFilePath = getAbsoluteFilePath(userData?.portfolio);
     if (absoluteFilePath) {
       deleteFile(absoluteFilePath);
     }
   }
-  
+
   const result = await User.findByIdAndUpdate(
-    {_id : id},
-    { $set: { portfolio : "" } },
+    { _id: id },
+    { $set: { portfolio: "" } },
     { new: true, runValidators: true }
   );
 
@@ -213,8 +213,8 @@ const deletePortfolioImageFromDB = async (id : string) => {
 
 
 // =====================================================================  cartificate API start  =======================================
-const setCartificateIntoDB = async (id : string, payload: any) => {
-  const userData = await User.findById({_id : id}).select("cartificate");  
+const setCartificateIntoDB = async (id: string, payload: any) => {
+  const userData = await User.findById({ _id: id }).select("cartificate");
   if (userData?.cartificate) {
     const absoluteFilePath = getAbsoluteFilePath(userData.cartificate);
     if (absoluteFilePath) {
@@ -222,7 +222,7 @@ const setCartificateIntoDB = async (id : string, payload: any) => {
     }
   }
   const result = await User.findByIdAndUpdate(
-    {_id : id},
+    { _id: id },
     { $set: payload },
     { new: true, runValidators: true }
   );
@@ -231,8 +231,8 @@ const setCartificateIntoDB = async (id : string, payload: any) => {
 };
 
 
-const deleteCartificateFromDB = async (id : string) => {
-  const userData = await User.findById({_id : id}).select("cartificate");  
+const deleteCartificateFromDB = async (id: string) => {
+  const userData = await User.findById({ _id: id }).select("cartificate");
   if (userData?.cartificate) {
     const absoluteFilePath = getAbsoluteFilePath(userData.cartificate);
     if (absoluteFilePath) {
@@ -240,8 +240,8 @@ const deleteCartificateFromDB = async (id : string) => {
     }
   }
   const result = await User.findByIdAndUpdate(
-    {_id : id},
-    { $set: { cartificate : "" } },
+    { _id: id },
+    { $set: { cartificate: "" } },
     { new: true, runValidators: true }
   );
 
@@ -251,26 +251,26 @@ const deleteCartificateFromDB = async (id : string) => {
 
 
 // ======================================================================  Service API Start =========================
-const addServicesIntoDB = async(id : string, payload : { my_service : string[] })=>{
-  const result = await User.findByIdAndUpdate({_id : id}, {$set : payload}, {new : true, runValidators : true} )
+const addServicesIntoDB = async (id: string, payload: { my_service: string[] }) => {
+  const result = await User.findByIdAndUpdate({ _id: id }, { $set: payload }, { new: true, runValidators: true })
   return result
 }
 
-const deleteServicesFromDB = async(id : string)=>{
-  const result = await User.findByIdAndUpdate({_id : id}, {$set : {my_service : []}}, {new : true, runValidators : true} )
+const deleteServicesFromDB = async (id: string) => {
+  const result = await User.findByIdAndUpdate({ _id: id }, { $set: { my_service: [] } }, { new: true, runValidators: true })
   return result
 }
 // =======================================================================  Service API end  =======================
 
 
 // =======================================================================  extra_skills API Start =========================
-const addExtraSkillsIntoDB = async(id : string, payload : { extra_skills : string[] })=>{
-  const result = await User.findByIdAndUpdate({_id : id}, {$set : payload}, {new : true, runValidators : true} )
+const addExtraSkillsIntoDB = async (id: string, payload: { extra_skills: string[] }) => {
+  const result = await User.findByIdAndUpdate({ _id: id }, { $set: payload }, { new: true, runValidators: true })
   return result
 }
 
-const deleteExtraSkillsFromDB = async(id : string)=>{
-  const result = await User.findByIdAndUpdate({_id : id}, {$set : {extra_skills : []}}, {new : true, runValidators : true} )
+const deleteExtraSkillsFromDB = async (id: string) => {
+  const result = await User.findByIdAndUpdate({ _id: id }, { $set: { extra_skills: [] } }, { new: true, runValidators: true })
   return result
 }
 // ========================================================================  extra_skills API end  =======================
@@ -278,23 +278,24 @@ const deleteExtraSkillsFromDB = async(id : string)=>{
 
 
 
-const getAllUserFromDB = async (query: Record<string, unknown>) => {  
-  const userQuery = new QueryBuilder(User.find({profileStatus : "safe"}), query)
+const getAllUserFromDB = async (query: Record<string, unknown>) => {
+  const userQuery = new QueryBuilder(User.find({ profileStatus: "safe" }), query)
     .search([
+      // "my_service",
       "addressInfo.zipCode",
       "addressInfo.city",
       "addressInfo.country"
     ])
     .filter();
 
-    const result = await userQuery.modelQuery.select(
-      'first_name email profileImage rating my_service portfolio review'
-    );
-  
-    return result;
-}; 
+  const result = await userQuery.modelQuery.select(
+    'first_name email profileImage rating my_service portfolio review addressInfo'
+  );
 
-      
+  return result;
+};
+
+
 const getSingleUserFromDB = async (userId: string) => {
   const result = await User.findById({ _id: userId });
   const allReview = await Review.find({ reviewerId: userId }).sort({ createdAt: -1 }).populate([
@@ -310,28 +311,76 @@ const getSingleUserFromDB = async (userId: string) => {
 };
 
 
+// const resetPasswordIntoDB = async (payload: any) => {
+//   const isUserExistsInUser = await User.findOne({ email: payload?.email });
+//   if (!isUserExistsInUser) {
+//     throw new AppError(httpStatus.NOT_FOUND, "User Not Found")
+//   }
+//   const otp = Math.floor(100000 + Math.random() * 900000).toString();
+
+//   // await sendEmail(payload?.email, otp);
+
+//   console.log(otp);
+
+//   const result = {
+//     first_name:"dummyname",
+//     otp,
+//     email: payload.email,
+//     password: payload.password
+//   }
+
+//   console.log(331, result);
+
+//   const createOtp = await TempUser.create(result);
+  
+//   console.log(createOtp);
+  
+  
+//   return result
+// }
+
 const resetPasswordIntoDB = async (payload: any) => {
   const isUserExistsInUser = await User.findOne({ email: payload?.email });
   if (!isUserExistsInUser) {
-    throw new AppError(httpStatus.NOT_FOUND, "User Not Found")
+    throw new AppError(httpStatus.NOT_FOUND, "User Not Found");
   }
   const otp = Math.floor(100000 + Math.random() * 900000).toString();
-  await sendEmail(payload?.email, otp);
   const result = {
+    first_name: "dummyname",
     otp,
     email: payload.email,
     password: payload.password
+  };
+
+
+  const createOrUpdateOtp = await TempUser.findOneAndUpdate(
+    { email: payload.email }, 
+    result,                   
+    { upsert: true, new: true } 
+  );
+
+  await sendEmail(payload?.email, otp);
+
+  return createOrUpdateOtp;
+};
+
+
+const updatePasswordWithOtpVerification = async (getOtpData: any) => {
+  const existsData = await TempUser.findOne({email : getOtpData?.email});
+  if (!existsData) {
+    return new AppError(httpStatus.NOT_FOUND,"Data not found")    
   }
-  return result
-}
-
-const updatePasswordWithOtpVerification = async (getOtpData: any, resetOtpData: any) => {
-
-  if (parseInt(getOtpData?.otp) !== parseInt(resetOtpData.otp)) {
+  if (parseInt(getOtpData?.otp) !== parseInt(existsData.otp)) {
     throw new AppError(httpStatus.NOT_ACCEPTABLE, "OTP not match")
+  } 
+
+  const hashedPassword = await bcrypt.hash(existsData?.password, 8);
+  const result = await User.findOneAndUpdate({ email: getOtpData.email }, { password: hashedPassword }, { new: true, runValidators: true })
+
+  if(result){
+    await TempUser.findOneAndDelete({email  : existsData?.email})
   }
-  const hashedPassword = await bcrypt.hash(resetOtpData?.password, 8);
-  const result = await User.findOneAndUpdate({ email: resetOtpData.email }, { password: hashedPassword }, { new: true, runValidators: true })
+
   return result
 }
 
@@ -382,9 +431,9 @@ const sendEmailToAllUser = async (payload: any) => {
   return result;
 }
 
-const sendProfileReportToTheAdmin = async(payload : TReportProfile )=>{
+const sendProfileReportToTheAdmin = async (payload: TReportProfile) => {
   const result = await ReportProfile.create(payload);
-  return result  
+  return result
 }
 
 // const actionProfileReportService = async (id : string, {action} : {action : string} )=>{
@@ -413,8 +462,8 @@ const sendProfileReportToTheAdmin = async(payload : TReportProfile )=>{
 //       result : userData
 //     }
 //   }
- 
-  
+
+
 
 // }
 
@@ -445,7 +494,7 @@ const actionProfileReportService = async (id: string, { action }: { action: stri
     );
 
     await notificationMain(
-      reportedUser.email, 
+      reportedUser.email,
       "Suspended Notification",
       "Your account is currently suspended. You are unable to log in at this time. Access will be restored after the suspension period, typically within 7 to 10 days."
     );
@@ -467,7 +516,7 @@ const actionProfileReportService = async (id: string, { action }: { action: stri
     );
 
     await notificationMain(
-      reportedUser.email, 
+      reportedUser.email,
       "Blocked Notification",
       "You have been permanently blocked by the admin. You will no longer be able to register or log in to this platform."
     );
@@ -480,19 +529,23 @@ const actionProfileReportService = async (id: string, { action }: { action: stri
 };
 
 
-
-const getAllReportByAdminFromDB = async () =>{
+const getAllReportByAdminFromDB = async () => {
   const result = await ReportProfile.find().populate([
     {
       path: 'reporterId',
       select: 'first_name profileImage email personalInfo'
     },
-    {     
+    {
       path: 'reportedId',
       select: 'first_name profileImage email personalInfo'
     }
   ]);
-  return result 
+  return result
+}
+
+const getAllSuspendedDataFromBD = async (query : any ) =>{  
+  const result = await ReportProfile.find({ action: "suspend" }).populate("reportedId")
+  return result
 }
 
 
@@ -505,7 +558,7 @@ export const UserServices = {
   addServicesIntoDB,
   deleteServicesFromDB,
   addExtraSkillsIntoDB,
-  deleteExtraSkillsFromDB,  
+  deleteExtraSkillsFromDB,
   getSingleUserFromDB,
   updateUserDataIntoDB,
   createUserIntoDB,
@@ -518,5 +571,6 @@ export const UserServices = {
   sendEmailToAllUser,
   sendProfileReportToTheAdmin,
   getAllReportByAdminFromDB,
-  actionProfileReportService
+  actionProfileReportService,
+  getAllSuspendedDataFromBD
 };

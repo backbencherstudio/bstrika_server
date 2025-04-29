@@ -14,7 +14,7 @@ class QueryBuilder<T> {
     const searchTerm = this?.query?.searchTerm;
 
     console.log(searchableFields);
-    console.log(searchTerm);
+    console.log(17, searchTerm);
 
 
     if (searchTerm) {
