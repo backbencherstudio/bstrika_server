@@ -366,6 +366,7 @@ const resetPasswordIntoDB = async (payload: any) => {
 
 
 const updatePasswordWithOtpVerification = async (getOtpData: any) => {
+  
   const existsData = await TempUser.findOne({email : getOtpData?.email});
   if (!existsData) {
     return new AppError(httpStatus.NOT_FOUND,"Data not found")    
