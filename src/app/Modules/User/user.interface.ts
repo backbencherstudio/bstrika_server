@@ -53,7 +53,7 @@ export interface TUser {
   cartificate : string;
   rating ?: number;
   review ?: number;
-  profileStatus : "safe" | "suspend" | "block";
+  profileStatus : "safe" | "suspend" | "blocked";
 }
 
 // ======================================>>>>>>>> Login Interface
@@ -68,7 +68,7 @@ export type TReportProfile = {
   reportedId : Schema.Types.ObjectId,
   reportType : string,
   supportingFile : string,
-  action : "pending" | "suspend" | "block" | 'safe';
+  action : "pending" | "suspend" | "blocked" | 'safe';
 }
 
  
