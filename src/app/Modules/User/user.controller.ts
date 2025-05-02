@@ -272,7 +272,6 @@ const getAllReportByAdmin = catchAsync(async (req, res) => {
 
 const actionProfileReportService = catchAsync(async (req, res) => {
   const result = await UserServices.actionProfileReportService(req.params.reportId, req.body); 
-
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
@@ -282,8 +281,7 @@ const actionProfileReportService = catchAsync(async (req, res) => {
 });
 
 const getAllSuspendedDataFromBD = catchAsync(async (req, res) => {
-  const result = await UserServices.getAllSuspendedDataFromBD(req.query); 
-
+  const result = await UserServices.getAllSuspendedDataFromBD(); 
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,

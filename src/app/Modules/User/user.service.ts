@@ -561,7 +561,6 @@ const actionProfileReportService = async (
 ) => {
   const report = await ReportProfile.findById(id);
   if (!report) throw new Error("Report not found");
-
   const user = await User.findById(report.reportedId);
   if (!user) throw new Error("Reported user not found");
 
@@ -598,7 +597,7 @@ const actionProfileReportService = async (
   );
 
   const { subject, message } = statusMessages[status];
-  await notificationMain(user.email, subject, message);
+  // await notificationMain(user.email, subject, message);
 
   return {
     message: `Profile ${status} successfully`,
@@ -608,7 +607,7 @@ const actionProfileReportService = async (
 
 
 const getAllReportByAdminFromDB = async () => {
-  const result = await ReportProfile.find().populate([
+  const result = await ReportProfile.find({action: { $in: ["pending", "blocked"] }}).populate([
     {
       path: 'reporterId',
       select: 'first_name profileImage email personalInfo'
@@ -621,8 +620,19 @@ const getAllReportByAdminFromDB = async () => {
   return result
 }
 
-const getAllSuspendedDataFromBD = async (query : any ) =>{  
-  const result = await ReportProfile.find({ action: "suspend" }).populate("reportedId")
+const getAllSuspendedDataFromBD = async () =>{  
+
+  const result = await ReportProfile.find( {action : "suspend"} ).populate([
+    {
+      path: 'reporterId',
+      select: 'first_name profileImage email personalInfo'
+    },
+    {
+      path: 'reportedId',
+      select: 'first_name profileImage email personalInfo'
+    }
+  ])
+  
   return result
 }
 
