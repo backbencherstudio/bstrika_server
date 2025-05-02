@@ -85,7 +85,7 @@ const loginUserIntoDB = async (paylod: TLoginUser) => {
   if (userData?.profileStatus === "suspend") {
     throw new AppError(httpStatus.NOT_FOUND, `Your account is currently suspended. You are unable to log in at this time. Access will be restored after the suspension period, typically within 7 to 10 days`);
   }
-  if (userData?.profileStatus === "block") {
+  if (userData?.profileStatus === "blocked") {
     throw new AppError(httpStatus.NOT_FOUND, `You have been permanently blocked by the admin. You will no longer be able to register or log in to this platform.`);
   }
 
