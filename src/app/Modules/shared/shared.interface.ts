@@ -26,5 +26,6 @@ export type TReviewReport = {
     reviewId : Schema.Types.ObjectId;
     reporterId : Schema.Types.ObjectId;
     document : string;
-    reportDetails:string;  
+    reportDetails:string;
+    status : "pending" | "reject" | "accept"
 }

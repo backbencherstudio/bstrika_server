@@ -115,11 +115,9 @@ const reviewDisLike = async (reviewId: string) => {
 // ====================================== Exchange API,s Start =============================
 
 const sendAndStoreExchangeRequest = async (payload : any)=>{
-
   const emailArray = payload.map((item: { email: any; }) => item.email);
   // await sendExchangeRequestEmail(emailArray)
-
-  const result = await Exchange.create(payload)
+  const result = await Exchange.create(payload)  
   return result  
 }
 
