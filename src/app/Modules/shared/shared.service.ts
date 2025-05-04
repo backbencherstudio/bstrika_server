@@ -273,6 +273,8 @@ const acceptExchange = async (exchangeId: string, payload: any) => {
  
 // ======================== report API's Start ========================
 const reportPlacedToAdmin = async (payload : TReviewReport)=>{ 
+  console.log(276, payload);
+  
   const result = await Report.create(payload)
   if(result){
     await Review.findByIdAndUpdate({_id : payload.reviewId}, {report : true}, {new : true, runValidators : true})

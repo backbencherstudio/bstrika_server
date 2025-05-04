@@ -283,17 +283,15 @@ const deleteExtraSkillsFromDB = async (id: string) => {
 const getAllUserFromDB = async (query: Record<string, unknown>) => {
   const userQuery = new QueryBuilder(User.find({ profileStatus: "safe" }), query)
     .search([
-      // "my_service",
+      "my_service",
       "addressInfo.zipCode",
       "addressInfo.city",
       "addressInfo.country"
     ])
     .filter();
-
   const result = await userQuery.modelQuery.select(
     'first_name email profileImage rating my_service portfolio review addressInfo'
-  );
-
+  );  
   return result;
 };
 
