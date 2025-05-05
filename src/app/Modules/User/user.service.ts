@@ -659,8 +659,6 @@ const getAllDataOverviewByUser = async(id : string ) =>{
 
 // const exchangeHistorybyUser = async(id : string, date : any) =>{
 //   console.log(date);
-  
-
 //   const exchangeHistory = await Exchange.find({
 //     $or: [
 //       { reciverUserId: id },
@@ -669,57 +667,9 @@ const getAllDataOverviewByUser = async(id : string ) =>{
 //     reciverUserAccepted: true,
 //     senderUserAccepted: true
 //   })
-
 //   console.log(exchangeHistory);
-  
-  
 // }
 
-// const exchangeHistorybyUser = async (id: string, year?: string) => {
-//   console.log(year);
-  
-//   // Validate year or use current year
-//   const targetYear = year && /^\d{4}$/.test(year) ? year : new Date().getFullYear().toString();
-  
-//   // Create proper ISO date strings for filtering
-//   const startDate = new Date(Date.UTC(parseInt(targetYear), 0, 1)); // Jan 1 of target year
-//   const endDate = new Date(Date.UTC(parseInt(targetYear), 11, 31, 23, 59, 59, 999)); // Dec 31 of target year
-
-//   try {
-//     const exchanges = await Exchange.find({
-//       $or: [
-//         { reciverUserId: id },
-//         { senderUserId: id }
-//       ],
-//       reciverUserAccepted: true,
-//       senderUserAccepted: true,
-//       createdAt: {
-//         $gte: startDate,
-//         $lte: endDate
-//       }
-//     });
-
-//     const monthlyCounts = Array(12).fill(0);
-
-//     exchanges.forEach(exchange => {
-//       const month = exchange.createdAt.getUTCMonth(); // Use UTC month
-//       monthlyCounts[month]++;
-//     });
-
-//     const monthNames = ["January", "February", "March", "April", "May", "June", 
-//                        "July", "August", "September", "October", "November", "December"];
-    
-//     return monthlyCounts.map((count, index) => ({
-//       month: monthNames[index],
-//       year: targetYear,
-//       count
-//     }));
-
-//   } catch (error) {
-//     console.error("Error fetching exchange history:", error);
-//     throw error;
-//   }
-// };
 
 const exchangeHistorybyUser = async (id: string, inputYear?: string | number) => {
   let targetYear: number;
@@ -737,7 +687,6 @@ const exchangeHistorybyUser = async (id: string, inputYear?: string | number) =>
 
   const startDate = new Date(Date.UTC(targetYear, 0, 1)); 
   const endDate = new Date(Date.UTC(targetYear, 11, 31, 23, 59, 59, 999));
-
 
   try {
     const exchanges = await Exchange.find({
