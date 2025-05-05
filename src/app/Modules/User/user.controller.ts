@@ -301,7 +301,7 @@ const getAllDataOverviewByUser = catchAsync(async (req, res) => {
 });
 
 const exchangeHistorybyUser = catchAsync(async (req, res) => {
-  const result = await UserServices.exchangeHistorybyUser(req.params.userId); 
+  const result = await UserServices.exchangeHistorybyUser(req.params.userId, req.query.date as number | string ); 
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,

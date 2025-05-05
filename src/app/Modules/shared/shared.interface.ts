@@ -19,7 +19,9 @@ export type TExchange = {
     reciverService ?: string;
     senderUserAccepted : boolean;
     reciverUserAccepted : boolean;
-    my_service:string[]
+    my_service:string[];
+    createdAt: Date;   
+  updatedAt: Date; 
 }
 
 export type TReviewReport = {

@@ -657,7 +657,9 @@ const getAllDataOverviewByUser = async(id : string ) =>{
   }
 }
 
-// const exchangeHistorybyUser = async(id : string) =>{
+// const exchangeHistorybyUser = async(id : string, date : any) =>{
+//   console.log(date);
+  
 
 //   const exchangeHistory = await Exchange.find({
 //     $or: [
@@ -673,49 +675,115 @@ const getAllDataOverviewByUser = async(id : string ) =>{
   
 // }
 
+// const exchangeHistorybyUser = async (id: string, year?: string) => {
+//   console.log(year);
+  
+//   // Validate year or use current year
+//   const targetYear = year && /^\d{4}$/.test(year) ? year : new Date().getFullYear().toString();
+  
+//   // Create proper ISO date strings for filtering
+//   const startDate = new Date(Date.UTC(parseInt(targetYear), 0, 1)); // Jan 1 of target year
+//   const endDate = new Date(Date.UTC(parseInt(targetYear), 11, 31, 23, 59, 59, 999)); // Dec 31 of target year
 
-const exchangeHistorybyUser = async (id: string) => {
-  const exchangeHistory = await Exchange.aggregate([
-    {
-      $match: {
-        $or: [
-          { reciverUserId: new mongoose.Types.ObjectId(id) },
-          { senderUserId: new mongoose.Types.ObjectId(id) }
-        ],
-        reciverUserAccepted: true,
-        senderUserAccepted: true
-      }
-    },
-    {
-      $addFields: {
-        monthNumber: { $month: "$createdAt" }
-      }
-    },
-    {
-      $group: {
-        _id: "$monthNumber",
-        count: { $sum: 1 }
-      }
-    },
-    {
-      $sort: { _id: 1 }
+//   try {
+//     const exchanges = await Exchange.find({
+//       $or: [
+//         { reciverUserId: id },
+//         { senderUserId: id }
+//       ],
+//       reciverUserAccepted: true,
+//       senderUserAccepted: true,
+//       createdAt: {
+//         $gte: startDate,
+//         $lte: endDate
+//       }
+//     });
+
+//     const monthlyCounts = Array(12).fill(0);
+
+//     exchanges.forEach(exchange => {
+//       const month = exchange.createdAt.getUTCMonth(); // Use UTC month
+//       monthlyCounts[month]++;
+//     });
+
+//     const monthNames = ["January", "February", "March", "April", "May", "June", 
+//                        "July", "August", "September", "October", "November", "December"];
+    
+//     return monthlyCounts.map((count, index) => ({
+//       month: monthNames[index],
+//       year: targetYear,
+//       count
+//     }));
+
+//   } catch (error) {
+//     console.error("Error fetching exchange history:", error);
+//     throw error;
+//   }
+// };
+
+const exchangeHistorybyUser = async (id: string, inputYear?: string | number) => {
+  let targetYear: number;
+  
+  if (inputYear) {
+    const yearNum = typeof inputYear === 'string' ? parseInt(inputYear) : inputYear;
+    if (!isNaN(yearNum) && yearNum.toString().length === 4) {
+      targetYear = yearNum;
+    } else {
+      throw new Error("Invalid year format. Please provide a 4-digit year.");
     }
-  ]);
+  } else {
+    targetYear = new Date().getFullYear();
+  }
 
-  // Convert month numbers to readable month names
-  const monthNames = [
-    "", "January", "February", "March", "April", "May", "June",
-    "July", "August", "September", "October", "November", "December"
-  ];
+  const startDate = new Date(Date.UTC(targetYear, 0, 1)); 
+  const endDate = new Date(Date.UTC(targetYear, 11, 31, 23, 59, 59, 999));
 
-  const result = exchangeHistory.map(item => ({
-    month: monthNames[item._id],
-    count: item.count
-  }));
 
-  console.log(result);
-  return result;
+  try {
+    const exchanges = await Exchange.find({
+      $or: [
+        { reciverUserId: id },
+        { senderUserId: id }
+      ],
+      reciverUserAccepted: true,
+      senderUserAccepted: true,
+      createdAt: {
+        $gte: startDate,
+        $lte: endDate
+      }
+    }).lean();
+
+    const monthlyCounts = Array(12).fill(0);    
+    exchanges.forEach(exchange => {
+      const date = new Date(exchange.createdAt );
+      if (date.getUTCFullYear() === targetYear) {
+        monthlyCounts[date.getUTCMonth()]++;
+      } else {
+        console.warn(`WARNING: Found date outside filter range: ${date.toISOString()}`);
+      }
+    });
+
+    const monthNames = ["January", "February", "March", "April", "May", "June", 
+                       "July", "August", "September", "October", "November", "December"];
+    
+    return monthlyCounts.map((count, index) => ({
+      month: monthNames[index],
+      year: targetYear,
+      count
+    }));
+
+  } catch (error) {
+    console.error("Database error:", error);
+    throw new Error("Failed to fetch exchange history");
+  }
 };
+
+
+
+
+
+
+
 
 
 
