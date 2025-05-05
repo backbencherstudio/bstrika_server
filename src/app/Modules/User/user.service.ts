@@ -16,7 +16,7 @@ import QueryBuilder from "../../builder/QueryBuilder";
 import path from "path";
 import fs from "fs"
 import { sendEmail } from "../../utils/sendEmail";
-import { Review } from "../shared/shared.module";
+import { Exchange, Review } from "../shared/shared.module";
 import { notificationMain } from "../../utils/notificationMain";
 
 
@@ -637,6 +637,27 @@ const getAllSuspendedDataFromBD = async () =>{
 }
 
 
+const getAllDataOverviewByUser = async(id : string ) =>{
+  const exchangeRequest = await Exchange.find({reciverUserId : id, isAccepted : "false"}).countDocuments()
+  const confirmExchange = await Exchange.find({
+    $or: [
+      { reciverUserId: id },
+      { senderUserId: id }
+    ],
+    reciverUserAccepted: true,
+    senderUserAccepted: true
+  }).countDocuments();
+  const totalReview = await Review.find({reciverId : id}).countDocuments();
+
+  return{
+    exchangeRequest,
+    confirmExchange,
+    totalReview
+  }  
+}
+
+
+
 export const UserServices = {
   getAllUserFromDB,
   setPortfolioImageIntoDB,
@@ -660,5 +681,6 @@ export const UserServices = {
   sendProfileReportToTheAdmin,
   getAllReportByAdminFromDB,
   actionProfileReportService,
-  getAllSuspendedDataFromBD
+  getAllSuspendedDataFromBD,
+  getAllDataOverviewByUser
 };

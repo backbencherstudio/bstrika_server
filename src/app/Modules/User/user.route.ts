@@ -107,6 +107,13 @@ router.patch(
   userController.actionProfileReportService,
 );
 
+router.get(
+  '/getAllDataOverviewByUser/:userId', 
+  userController.getAllDataOverviewByUser,
+);
+
+
+
 
 
 

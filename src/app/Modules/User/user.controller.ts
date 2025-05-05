@@ -290,6 +290,16 @@ const getAllSuspendedDataFromBD = catchAsync(async (req, res) => {
   });
 });
 
+const getAllDataOverviewByUser = catchAsync(async (req, res) => {
+  const result = await UserServices.getAllDataOverviewByUser(req.params.userId); 
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "get overview data successfully",
+    data: result,
+  });
+});
+
 
 
 export const userController = {
@@ -315,5 +325,6 @@ export const userController = {
   sendProfileReportToTheAdmin,
   getAllReportByAdmin,
   actionProfileReportService,
-  getAllSuspendedDataFromBD
+  getAllSuspendedDataFromBD,
+  getAllDataOverviewByUser
 };
