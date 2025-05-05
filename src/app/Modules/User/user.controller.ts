@@ -309,7 +309,7 @@ const exchangeHistorybyUser = catchAsync(async (req, res) => {
     data: result,
   });
 });
-
+ 
 
 
 export const userController = {
@@ -338,5 +338,5 @@ export const userController = {
   getAllSuspendedDataFromBD,
   getAllDataOverviewByUser,
   exchangeHistorybyUser
-};
- 
+}; 
+
