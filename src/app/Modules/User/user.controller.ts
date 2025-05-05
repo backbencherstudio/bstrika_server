@@ -300,6 +300,16 @@ const getAllDataOverviewByUser = catchAsync(async (req, res) => {
   });
 });
 
+const exchangeHistorybyUser = catchAsync(async (req, res) => {
+  const result = await UserServices.exchangeHistorybyUser(req.params.userId); 
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "get all Confirmed Exchange History data successfully",
+    data: result,
+  });
+});
+
 
 
 export const userController = {
@@ -326,5 +336,7 @@ export const userController = {
   getAllReportByAdmin,
   actionProfileReportService,
   getAllSuspendedDataFromBD,
-  getAllDataOverviewByUser
+  getAllDataOverviewByUser,
+  exchangeHistorybyUser
 };
+ 

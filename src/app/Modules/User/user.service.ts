@@ -18,6 +18,7 @@ import fs from "fs"
 import { sendEmail } from "../../utils/sendEmail";
 import { Exchange, Review } from "../shared/shared.module";
 import { notificationMain } from "../../utils/notificationMain";
+import mongoose from "mongoose";
 
 
 const createUserIntoDB = async (payload: TUser) => {
@@ -652,9 +653,71 @@ const getAllDataOverviewByUser = async(id : string ) =>{
   return{
     exchangeRequest,
     confirmExchange,
-    totalReview
-  }  
+    totalReview 
+  }
 }
+
+// const exchangeHistorybyUser = async(id : string) =>{
+
+//   const exchangeHistory = await Exchange.find({
+//     $or: [
+//       { reciverUserId: id },
+//       { senderUserId: id }
+//     ],
+//     reciverUserAccepted: true,
+//     senderUserAccepted: true
+//   })
+
+//   console.log(exchangeHistory);
+  
+  
+// }
+
+
+const exchangeHistorybyUser = async (id: string) => {
+  const exchangeHistory = await Exchange.aggregate([
+    {
+      $match: {
+        $or: [
+          { reciverUserId: new mongoose.Types.ObjectId(id) },
+          { senderUserId: new mongoose.Types.ObjectId(id) }
+        ],
+        reciverUserAccepted: true,
+        senderUserAccepted: true
+      }
+    },
+    {
+      $addFields: {
+        monthNumber: { $month: "$createdAt" }
+      }
+    },
+    {
+      $group: {
+        _id: "$monthNumber",
+        count: { $sum: 1 }
+      }
+    },
+    {
+      $sort: { _id: 1 }
+    }
+  ]);
+
+  // Convert month numbers to readable month names
+  const monthNames = [
+    "", "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"
+  ];
+
+  const result = exchangeHistory.map(item => ({
+    month: monthNames[item._id],
+    count: item.count
+  }));
+
+  console.log(result);
+  return result;
+};
+
+
 
 
 
@@ -682,5 +745,6 @@ export const UserServices = {
   getAllReportByAdminFromDB,
   actionProfileReportService,
   getAllSuspendedDataFromBD,
-  getAllDataOverviewByUser
+  getAllDataOverviewByUser,
+  exchangeHistorybyUser
 };

@@ -8,26 +8,25 @@ import { Exchange, Report, Review } from "./shared.module";
 import { AppError } from "../../errors/AppErrors";
 import { NOT_ACCEPTABLE } from "http-status";
 
-export const findUsersBasedOnSubcategoryFromDB = async (subCategory: string) => {
+export const findUsersBasedOnSubcategoryFromDB = async (subCategory: any) => {
     const users = await User.find({
       my_service: { $in: [subCategory] }, 
       isDeleted: false,
     }).select("email first_name my_service extra_skills portfolio certificate");
-  
     return users;
   };
-  
+
 
   export const getCategorieFromDB = async (category: string) => {
     if (category === "all") {
       const categories = await Category.find().select("subCategories");
       const allSubCategories = categories.flatMap(cat => cat.subCategories);  
       return allSubCategories;
-    }  
-    const selectedCategory = await Category.findOne({ category_name: category }).select("subCategories");  
+    }
+    const selectedCategory = await Category.findOne({ category_name: category }).select("subCategories");
     return selectedCategory?.subCategories || [];
   };
-    
+
 
 
 // ====================================== Review API,s Start =============================
@@ -39,7 +38,7 @@ export const findUsersBasedOnSubcategoryFromDB = async (subCategory: string) => 
 
 //   const result = await Review.create(data)
 
-  
+
 //   await User.findByIdAndUpdate({_id : data.reciverId}, {review : userData?.review + 1 });  
 //   const allRatingAvarageValue = await Review.find({reciverId : data.reciverId})
 

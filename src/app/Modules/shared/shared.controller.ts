@@ -5,7 +5,7 @@ import sendResponse from "../../utils/sendResponse";
 import { findUsersBasedOnSubcategoryFromDB, getCategorieFromDB, SharedServices } from "./shared.service";
 
 export const findUsersBasedOnSubcategory = catchAsync(async (req, res) => {    
-    const result = await findUsersBasedOnSubcategoryFromDB(req?.body?.subCategory);
+    const result = await findUsersBasedOnSubcategoryFromDB(req?.query?.subCategory);
     sendResponse(res, {
       statusCode: httpStatus.OK,
       success: true,
