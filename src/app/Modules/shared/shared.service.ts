@@ -287,6 +287,28 @@ const getSingleReportFromDB = async (reportId : string)=>{
 }
 
 
+
+const reportAcceptOrRejectByAdmin = async (reportId : string, status : any )=>{
+  const reportData = await Report.findById({_id : reportId })  
+  
+  if (status === "reject") {
+     await Review.findByIdAndUpdate({_id : reportData?.reviewId}, {report : false}, {runValidators : true, new : true})
+     const result = await Report.findByIdAndUpdate({_id : reportId}, {status}, {runValidators : true, new : true})
+    return result
+  }
+  
+  else{
+     await Review.findByIdAndUpdate({_id : reportData?.reviewId}, {report : true}, {runValidators : true, new : true})
+     const result =  await Report.findByIdAndUpdate({_id : reportId}, {status}, {runValidators : true, new : true})
+    return result
+  }   
+
+}
+
+
+
+
+
 const getALlReportsFromDBByAdmin = async () =>{
   const result = await Report.find().populate({
     path: 'reviewId',
@@ -319,6 +341,7 @@ export const SharedServices = {
   acceptExchange, 
   reportPlacedToAdmin,
   getALlReportsFromDBByAdmin,
+  reportAcceptOrRejectByAdmin,
   getSingleReportFromDB
 }
 

@@ -24,6 +24,7 @@ router.get(
     SharedController.getALlReportsFromDBByAdmin
   );
 router.get('/report/:id',SharedController.getSingleReportFromDB );
+router.patch('/reportAcceptOrRejectByAdmin/:reportId',SharedController.reportAcceptOrRejectByAdmin );
 
 
 router.post('/exchange', SharedController.sendAndStoreExchangeRequestController);

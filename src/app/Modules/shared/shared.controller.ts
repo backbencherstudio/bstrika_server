@@ -143,6 +143,17 @@ export const findUsersBasedOnSubcategory = catchAsync(async (req, res) => {
     });
   });
 
+  const reportAcceptOrRejectByAdmin = catchAsync(async (req, res) => {
+
+    const result = await SharedServices.reportAcceptOrRejectByAdmin(req.params.reportId, req.query.status);
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: 'report status update successfully',
+      data: result,
+    });
+  });
+
   
   const getSingleReportFromDB = catchAsync(async (req, res) => {
 
@@ -168,7 +179,8 @@ export const SharedController = {
   acceptExchangeController,
   reportPlacedToAdmin,
   getALlReportsFromDBByAdmin,
-  getSingleReportFromDB
+  getSingleReportFromDB,
+  reportAcceptOrRejectByAdmin
 }
 
 
