@@ -158,6 +158,27 @@ const getAllExchangeDataFromDB = async (id: string, isAccepted: string) => {
 };
 
 
+const getAllExchangeDataFromDBForEachUser = async (id: string) => {
+  const query =  {    
+        $or: [
+          { senderUserId: id },
+          { reciverUserId: id }
+        ]
+      }
+
+  const result = await Exchange.find(query).populate([
+    {
+      path: 'senderUserId'
+    },
+    {     
+      path: 'reciverUserId'
+    }
+  ]);
+
+  return result;
+};
+
+
 
 // ===================== not remove this function now
 // const getAllExchangeDataFromDB = async (id: string, isAccepted: boolean) => {
@@ -301,12 +322,8 @@ const reportAcceptOrRejectByAdmin = async (reportId : string, status : any )=>{
      await Review.findByIdAndUpdate({_id : reportData?.reviewId}, {report : true}, {runValidators : true, new : true})
      const result =  await Report.findByIdAndUpdate({_id : reportId}, {status}, {runValidators : true, new : true})
     return result
-  }   
-
+  }
 }
-
-
-
 
 
 const getALlReportsFromDBByAdmin = async () =>{
@@ -337,6 +354,7 @@ export const SharedServices = {
   reviewDisLike,
   sendAndStoreExchangeRequest,
   getAllExchangeDataFromDB,
+  getAllExchangeDataFromDBForEachUser,
   ChatExchangeRequestAcceptOrDeclineAPI,
   acceptExchange, 
   reportPlacedToAdmin,

@@ -14,6 +14,16 @@ export const createCategory = catchAsync(async (req, res) => {
   });
 });
 
+export const updateCategory = catchAsync(async (req, res) => {
+  const result = await CategoryService.updateCategory(req.params.categoryId, req.body);
+  sendResponse(res, {
+    statusCode: httpStatus.CREATED,
+    success: true,
+    message: 'Category update successfully',
+    data: result,
+  });
+});
+
 
 export const addSubCategory = catchAsync(async (req, res) => {
     const files = req.files as Express.Multer.File[];

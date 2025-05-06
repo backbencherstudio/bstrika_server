@@ -30,6 +30,8 @@ router.patch('/reportAcceptOrRejectByAdmin/:reportId',SharedController.reportAcc
 router.post('/exchange', SharedController.sendAndStoreExchangeRequestController);
 router.get('/exchange', SharedController.getAllExchangeData);  //====>>> get chat data, filtered by "true ... for chat" "false for pending accept"
 
+router.get('/exchange/:userId', SharedController.getAllExchangeDataFromDBForEachUser); // for user dashboard
+
 router.patch('/exchange/:exchangeId', SharedController.chatexchangeRequestAcceptOrDeclineAPI);
 router.patch('/acceptExchange/:exchangeId', SharedController.acceptExchangeController);
 

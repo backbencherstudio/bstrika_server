@@ -91,6 +91,17 @@ export const findUsersBasedOnSubcategory = catchAsync(async (req, res) => {
     });
   });
 
+  const getAllExchangeDataFromDBForEachUser = catchAsync(async (req, res) => {  
+    
+    const result = await SharedServices.getAllExchangeDataFromDBForEachUser(req.params.userId as string);
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: 'Exchange data get successfully for dashboard',
+      data: result,
+    });
+  });
+
   const chatexchangeRequestAcceptOrDeclineAPI = catchAsync(async (req, res) => {
     const result = await SharedServices.ChatExchangeRequestAcceptOrDeclineAPI(req.params.exchangeId, req.body);
     sendResponse(res, {
@@ -176,6 +187,7 @@ export const SharedController = {
   reviewDisLike,
   getAllExchangeData,
   chatexchangeRequestAcceptOrDeclineAPI,
+  getAllExchangeDataFromDBForEachUser,
   acceptExchangeController,
   reportPlacedToAdmin,
   getALlReportsFromDBByAdmin,

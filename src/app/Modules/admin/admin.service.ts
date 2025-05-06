@@ -10,6 +10,10 @@ const createCategory = async (payload: TCategory) => {
   return await Category.create(payload);
 };
 
+const updateCategory = async (categoryId : string, payload: TCategory) => {
+  return await Category.findByIdAndUpdate({_id : categoryId}, payload, {runValidators : true, new : true});
+};
+
 
 const addSubCategory = async (
     categoryId: string,
@@ -120,6 +124,7 @@ const removeSubCategory = async (
 
 export const CategoryService = {
     createCategory,
+    updateCategory,
     addSubCategory,
     getAllCategories,
     removeSubCategory,
