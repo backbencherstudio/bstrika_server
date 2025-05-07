@@ -76,8 +76,6 @@ const verifyOTPintoDB = async (otp: string, email: string) => {
 };
 
 const loginUserIntoDB = async (paylod: TLoginUser) => {
-  console.log(78, paylod);
-  
 
   const userData = await User.findOne({ email: paylod.email });
 
@@ -281,7 +279,7 @@ const deleteExtraSkillsFromDB = async (id: string) => {
 
 
 
-const getAllUserFromDB = async (query: Record<string, unknown>) => {
+const getAllUserFromDB = async (query: Record<string, unknown>) => {  
   const userQuery = new QueryBuilder(User.find({ profileStatus: "safe" }), query)
     .search([
       "my_service",

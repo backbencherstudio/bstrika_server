@@ -12,11 +12,6 @@ class QueryBuilder<T> {
 
   search(searchableFields: string[]) {
     const searchTerm = this?.query?.searchTerm;
-
-    console.log(searchableFields);
-    console.log(17, searchTerm);
-
-
     if (searchTerm) {
       this.modelQuery = this.modelQuery.find({
         $or: searchableFields.map(
@@ -36,18 +31,6 @@ class QueryBuilder<T> {
   //   const excluedeFields = ['searchTerm', 'sort', 'limit', 'page', 'fields'];
   //   excluedeFields.forEach((el) => delete queryObj[el]); 
   //   this.modelQuery = this.modelQuery.find(queryObj as FilterQuery<T>);
-  //   return this;
-  // }
-
-  // filter() {
-  //   const queryObj = { ...this.query };
-  //   const excluedeFields = ['searchTerm', 'sort', 'limit', 'page', 'fields'];
-  //   excluedeFields.forEach((el) => delete queryObj[el]);
-  //   if (queryObj.role && queryObj.role !== 'all') {
-  //     this.modelQuery = this.modelQuery.find({ role: queryObj.role, subscriptionStatus: queryObj.subscriptionStatus } as FilterQuery<T>);
-  //   } else {
-  //     this.modelQuery = this.modelQuery.find();
-  //   }
   //   return this;
   // }
 
