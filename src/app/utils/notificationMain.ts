@@ -74,7 +74,7 @@ export const notificationMain = async (to: string, sub: string, message: string)
       user: config.sender_email,
       pass: config.email_pass,
     },
-  });
+  }); 
 
   const { bgColor, borderColor } = getStatusStyles(sub);
 
