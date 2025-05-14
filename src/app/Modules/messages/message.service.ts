@@ -13,41 +13,49 @@ class MessageService {
     this.MessageModel = MessageModel;
   }
 
-  async handleJoin(socket: Socket, username: string) {
-    this.users[socket.id] = username;
-    this.onlineUsers.set(username, true);
-    console.log(`${username} joined the chat.`);
 
-    try {
-      const chats = await this.MessageModel
-        .find()
-        .sort({ timestamp: 1 })
-        .lean();
-      
-      socket.emit('message history', chats);
-      this.io.emit('online_users', Object.fromEntries(this.onlineUsers));
-      this.io.emit('user list', Object.values(this.users));
-    } catch (err) {
-      console.error('Error fetching message history:', err);
-    }
+  async handleJoin(socket: Socket, username: string) {
+  this.users[socket.id] = username;
+  this.onlineUsers.set(username, true);
+  socket.join(username); // user-specific room
+  
+
+  try {
+    const chats = await this.MessageModel.find().sort({ timestamp: 1 }).lean();
+    const unread = await this.getUnreadMessages(username); // ✅ fetch unread messages
+
+    socket.emit('message history', chats);
+    socket.emit('unread_messages', unread); // ✅ send unread count
+
+    this.io.emit('online_users', Object.fromEntries(this.onlineUsers));
+    this.io.emit('user list', Object.values(this.users));
+  } catch (err) {
+    console.error('Error fetching message history:', err);
   }
+}
 
   async handleMessage({ recipient, content, sender, timestamp }: IChatMessage) {
-    const chatMessage = {
-      sender,
-      recipient,
-      content,
-      timestamp,
-      read: false,
-    };
+  const chatMessage = {
+    sender,
+    recipient,
+    content,
+    timestamp,
+    read: false,
+  };
 
-    try {
-      const newMessage = await this.MessageModel.create(chatMessage);
-      this.io.emit('message', newMessage);
-    } catch (err) {
-      console.error('Error saving message:', err);
-    }
+  try {
+    const newMessage = await this.MessageModel.create(chatMessage);
+
+    // Notify recipient only
+    const unread = await this.getUnreadMessages(recipient);
+    this.io.to(recipient).emit('unread_messages', unread); // ✅ send only to recipient
+
+    this.io.emit('message', newMessage);
+  } catch (err) {
+    console.error('Error saving message:', err);
   }
+}
+
 
   handleDisconnect(socket: Socket) {
     const username = this.users[socket.id];
@@ -73,23 +81,24 @@ class MessageService {
     }
   }
 
+
   async markMessagesAsRead(sender: string, recipient: string) {
-    try {
-      const result = await this.MessageModel.updateMany(
-        { sender, recipient, read: false },
-        { $set: { read: true } }
-      ); 
+  try {
+    const result = await this.MessageModel.updateMany(
+      { sender, recipient, read: false },
+      { $set: { read: true } }
+    );
 
-      if (result.modifiedCount > 0) {
-        this.io.emit('messages_read', { sender, recipient });
-      }
+    const unread = await this.getUnreadMessages(recipient); // update live
+    this.io.to(recipient).emit('unread_messages', unread); // ✅ update client
 
-      return result.modifiedCount;
-    } catch (err) {
-      console.error('Error marking messages as read:', err);
-      throw err;
-    }
+    return result.modifiedCount;
+  } catch (err) {
+    console.error('Error marking messages as read:', err);
+    throw err;
   }
+}
+
 
   async getUnreadMessages(userId: string) {
     try {
@@ -119,6 +128,9 @@ class MessageService {
     }
     this.io.emit('online_users', Object.fromEntries(this.onlineUsers));
   }
+
+
+
 }
 
 export default MessageService;
