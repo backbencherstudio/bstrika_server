@@ -5,6 +5,8 @@ const httpServer = http.createServer(app);
 const io = new Server(httpServer, {
   cors: {
     origin: [
+      'https://ollivu.com',
+      'https://www.ollivu.com',
       'http://localhost:5173',
       'http://localhost:3000',
       'http://192.168.4.42:3000',
@@ -22,7 +24,7 @@ import { seedAdmin } from './app/DB/admin';
 async function main() {
   try {
     await mongoose.connect(process.env.DATABASE_URL as string);
-     seedAdmin()
+    seedAdmin()
     const messageService = new MessageService(io, MessageModel);
     io.on('connection', (socket) => {
       socket.on('join', (username) =>
