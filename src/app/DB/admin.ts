@@ -1,20 +1,20 @@
-import { User_Role } from "../Modules/User/user.constent";
-import { User } from "../Modules/User/user.model";
+
 import bcrypt from "bcrypt";
+import { User } from "../Modules/User/user.model";
 
 const hashPassword = async (pass: number) => {
   return await bcrypt.hash(pass.toString(), 8); 
 };
 
 export const seedAdmin = async () => {
-  const isSuperAdminExists = await User.findOne({ role: User_Role.admin , email : "austinknapp88@yahoo.com" });
+  const isSuperAdminExists = await User.findOne({ role: "admin" , email : "admin@gmail.com" });
 
   if (!isSuperAdminExists) {
     const admin = {
-      name: "need update",
-      email: "austinknapp88@yahoo.com",
-      password: await hashPassword(123456), 
-      role: User_Role.admin,
+      first_name: "need update",
+      email: "admin@gmail.com",
+      password: await hashPassword(12345678), 
+      role: "admin",
       isDeleted: false,
     };
 

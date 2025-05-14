@@ -18,9 +18,11 @@ import config from './app/config';
 import mongoose from 'mongoose';
 import MessageModel from './app/Modules/messages/message.module';
 import MessageService from './app/Modules/messages/message.service';
+import { seedAdmin } from './app/DB/admin';
 async function main() {
   try {
     await mongoose.connect(process.env.DATABASE_URL as string);
+     seedAdmin()
     const messageService = new MessageService(io, MessageModel);
     io.on('connection', (socket) => {
       socket.on('join', (username) =>
