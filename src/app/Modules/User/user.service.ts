@@ -596,7 +596,7 @@ const actionProfileReportService = async (
   );
 
   const { subject, message } = statusMessages[status];
-  // await notificationMain(user.email, subject, message);
+  await notificationMain(user.email, subject, message);
 
   return {
     message: `Profile ${status} successfully`,

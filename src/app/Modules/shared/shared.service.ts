@@ -7,6 +7,7 @@ import { TReviewReport, TReviews } from "./shared.interface";
 import { Exchange, Report, Review } from "./shared.module";
 import { AppError } from "../../errors/AppErrors";
 import { NOT_ACCEPTABLE } from "http-status";
+import { sendExchangeRequestEmail } from "../../utils/sendExchangeRequestEmail";
 
 export const findUsersBasedOnSubcategoryFromDB = async (subCategory: any) => {
     const users = await User.find({
@@ -115,7 +116,7 @@ const reviewDisLike = async (reviewId: string) => {
 
 const sendAndStoreExchangeRequest = async (payload : any)=>{
   const emailArray = payload.map((item: { email: any; }) => item.email);
-  // await sendExchangeRequestEmail(emailArray)
+  await sendExchangeRequestEmail(emailArray)
   const result = await Exchange.create(payload)  
   return result  
 }
