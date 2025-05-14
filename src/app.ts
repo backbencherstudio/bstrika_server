@@ -19,6 +19,7 @@ const io = new Server(httpServer, {
   cors: {
     origin: [
       'https://ollivu.com',
+      'https://www.ollivu.com',
       'http://localhost:5173',
       'http://localhost:3000',
       'http://192.168.4.42:3000',
@@ -31,6 +32,7 @@ const io = new Server(httpServer, {
 app.use(cors({
   origin: [
     'https://ollivu.com',
+    'https://www.ollivu.com',
     'http://localhost:5173',
     'http://localhost:3000',
     'http://192.168.4.42:3000',
