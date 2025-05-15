@@ -61,11 +61,11 @@ app.use(
 
 app.use('/uploads', express.static('uploads'));
 
-// Initialize message service and controller
+
 const messageService = new MessageService(io, MessageModel);
 const messageController = new MessageController(messageService);
 
-// Use all routes
+
 app.use('/api/v1', router);
 app.use('/api/v1', messageRoutes(messageController));
 
