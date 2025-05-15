@@ -115,10 +115,7 @@ const reviewDisLike = async (reviewId: string) => {
 // ====================================== Exchange API,s Start =============================
 
 const sendAndStoreExchangeRequest = async (payload : any)=>{
-  const emailArray = payload.map((item: { selectedEmail: any; }) => item.selectedEmail);
-
-  console.log(emailArray);
-  
+  const emailArray = payload.map((item: { selectedEmail: any; }) => item.selectedEmail); 
   await sendExchangeRequestEmail(emailArray)
   const result = await Exchange.create(payload)  
   return result  
