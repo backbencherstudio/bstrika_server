@@ -58,6 +58,10 @@ const exchangeSchema = new Schema<TExchange>(
       type: String,
       required: true,
     },
+    selectedEmail: {
+      type: String,
+      required: true,
+    },
     senderService: {
       type: String,
       required : true
