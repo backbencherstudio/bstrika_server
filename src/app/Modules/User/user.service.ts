@@ -637,6 +637,7 @@ const getAllSuspendedDataFromBD = async () =>{
 
 
 const getAllDataOverviewByUser = async(id : string ) =>{
+  
   const exchangeRequest = await Exchange.find({reciverUserId : id, isAccepted : "false"}).countDocuments()
   const confirmExchange = await Exchange.find({
     $or: [
