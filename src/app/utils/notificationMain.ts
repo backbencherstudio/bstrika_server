@@ -96,9 +96,10 @@ export const notificationMain = async (to: string, sub: string, message: string)
       </div>
       
       <!-- Footer -->
-      <div style="background-color: #f5f5f5; padding: 15px; text-align: center; font-size: 12px; color: #777;">
-        © 2025 Your Platform Name. All rights reserved.<br>
-        This is an automated notification. Please do not reply to this email.
+     <div style="background-color: #f5f5f5; padding: 15px; text-align: center; font-size: 12px; color: #777;">
+        © 2025 Ollivu. All rights reserved.<br>
+        This is an automated notification. Please do not reply to this email.<br>
+        If you have any questions, email <a href="mailto:info@ollivu.com" style="color: #3366cc; text-decoration: none;">info@ollivu.com</a>
       </div>
     </div>
   `;
