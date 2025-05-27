@@ -20,7 +20,7 @@ router.patch('/updateCategory/:categoryId',
     updateCategory);
 
 router.delete(
-    '/category/:categoryId',
+    '/:categoryId',
     Auth(User_Role.admin),
     deleteCategoryByAdmin
 );
