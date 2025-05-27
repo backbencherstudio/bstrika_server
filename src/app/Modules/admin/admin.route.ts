@@ -1,5 +1,5 @@
 import express from 'express';
-import { addSubCategory, createCategory, getAllCategories, getAllExchangeDatabyAdmin, removeSubCategory, updateCategory } from './admin.controller';
+import { addSubCategory, createCategory, deleteCategoryByAdmin, getAllCategories, getAllExchangeDatabyAdmin, removeSubCategory, updateCategory } from './admin.controller';
 import { Auth } from '../../middleware/auth';
 import { User_Role } from '../User/user.constent';
 import { upload } from '../../middleware/upload';
@@ -18,6 +18,12 @@ router.patch(
 router.patch('/updateCategory/:categoryId',
     // Auth(User_Role.admin),
     updateCategory);
+
+router.delete(
+    '/updateCategory/:categoryId',
+    Auth(User_Role.admin),
+    deleteCategoryByAdmin
+);
 
 router.patch('/remove-subcategory/:categoryId', Auth(User_Role.admin), removeSubCategory);
 

@@ -63,6 +63,16 @@ export const getAllCategories = catchAsync(async (req, res) => {
   });
 });
 
+export const deleteCategoryByAdmin = catchAsync(async (req, res) => {
+  const result = await CategoryService.deleteCategoriesByAdmin(req.params.categoryId);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'category delete successfully',
+    data: result,
+  });
+});
+
 export const getAllExchangeDatabyAdmin = catchAsync(async (req, res) => {
   const result = await CategoryService.getAllExchangeDataFromDBbyAdmin();
   sendResponse(res, {

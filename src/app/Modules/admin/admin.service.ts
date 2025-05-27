@@ -39,6 +39,11 @@ const getAllCategories = async () => {
   return await Category.find();
 };
 
+const deleteCategoriesByAdmin = async (categoryId : string)=>{
+  const result = await Category.findByIdAndDelete({_id : categoryId})
+  return result
+}
+
 const getAbsoluteFilePath = (dbPath: string) => {
   try {
     const relativePath = dbPath
@@ -119,7 +124,7 @@ const removeSubCategory = async (
     return exchangeData
   }
 
-  
+   
 
 
 export const CategoryService = {
@@ -127,6 +132,7 @@ export const CategoryService = {
     updateCategory,
     addSubCategory,
     getAllCategories,
+    deleteCategoriesByAdmin,
     removeSubCategory,
     getAllExchangeDataFromDBbyAdmin
 }

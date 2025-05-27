@@ -338,6 +338,8 @@ const getSingleUserFromDB = async (userId: string) => {
 //   return result
 // }
 
+
+
 const resetPasswordIntoDB = async (payload: any) => {
   const isUserExistsInUser = await User.findOne({ email: payload?.email });
   if (!isUserExistsInUser) {
@@ -383,6 +385,8 @@ const updatePasswordWithOtpVerification = async (getOtpData: any) => {
 
   return result
 }
+
+
 
 const userDeleteIntoDB = async (payload: any) => {
   const isUserExists = await User.findOne({ email: payload });
