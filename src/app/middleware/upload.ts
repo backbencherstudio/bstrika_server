@@ -5,8 +5,6 @@ import fs from "fs";
 
 const uploadPath = path.join(__dirname, '../../../uploads');
 if (!fs.existsSync(uploadPath)) {
-  console.log(uploadPath);
-  
   fs.mkdirSync(uploadPath);
 }
 

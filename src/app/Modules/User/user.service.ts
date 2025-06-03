@@ -153,6 +153,7 @@ const deleteFile = (filePath: string) => {
 const updateUserDataIntoDB = async (payload: Partial<TUser>) => {
   try {
     const userData = await User.findById(payload.userId).select("profileImage");
+    
     if (userData?.profileImage) {
       const absoluteFilePath = getAbsoluteFilePath(userData.profileImage);
       if (absoluteFilePath) {
