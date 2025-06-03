@@ -29,7 +29,7 @@ export const sendEmail = async (to: string, otp: string) => {
     </div>
     <p style="color: #777; font-size: 14px; margin-top: 25px;">If you don't need this code, please ignore this email.</p>
     <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee;">
-      <p style="color: #999; font-size: 13px; margin: 0;">© ${year} Bstrika . All rights reserved.</p>
+      <p style="color: #999; font-size: 13px; margin: 0;">© ${year} Ollivu . All rights reserved.</p>
     </div>
   </div>
 </div>` ,

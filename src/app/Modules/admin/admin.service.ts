@@ -113,6 +113,7 @@ const removeSubCategory = async (
   };
 
   const getAllExchangeDataFromDBbyAdmin = async () =>{
+
     const exchangeData = await Exchange.find({reciverUserAccepted: true, senderUserAccepted : true  }).populate([{
       path: 'senderUserId',
       select: 'first_name image email personalInfo'
@@ -121,7 +122,11 @@ const removeSubCategory = async (
       path: 'reciverUserId',
       select: 'first_name image email personalInfo'
     }])
-    return exchangeData
+
+    const acceptedData = await Exchange.find({isAccepted : true})
+    
+    
+    return {exchangeData, acceptedData}
   }
 
    
