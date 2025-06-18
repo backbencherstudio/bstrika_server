@@ -35,6 +35,8 @@ router.get('/exchange/:userId', SharedController.getAllExchangeDataFromDBForEach
 router.patch('/exchange/:exchangeId', SharedController.chatexchangeRequestAcceptOrDeclineAPI);
 router.patch('/acceptExchange/:exchangeId', SharedController.acceptExchangeController);
 
+router.patch('/updateExchangeUpdateDateForSerial', SharedController.updateExchangeUpdateDateForSerial);
+
 
 
 

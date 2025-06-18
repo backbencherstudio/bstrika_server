@@ -46,6 +46,8 @@ class MessageService {
   try {
     const newMessage = await this.MessageModel.create(chatMessage);
 
+    // Update exchanges collection updatedAt field
+    
     // Notify recipient only
     const unread = await this.getUnreadMessages(recipient);
     this.io.to(recipient).emit('unread_messages', unread); // ✅ send only to recipient

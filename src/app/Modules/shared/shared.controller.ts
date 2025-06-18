@@ -167,12 +167,21 @@ export const findUsersBasedOnSubcategory = catchAsync(async (req, res) => {
 
   
   const getSingleReportFromDB = catchAsync(async (req, res) => {
-
     const result = await SharedServices.getSingleReportFromDB(req.params.id);
     sendResponse(res, {
       statusCode: httpStatus.OK,
       success: true,
       message: 'get single report successfully',
+      data: result,
+    });
+  });
+  
+  const updateExchangeUpdateDateForSerial = catchAsync(async (req, res) => {
+    const result = await SharedServices.updateExchangeUpdateDateForSerial(req.body);
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: 'serial update',
       data: result,
     });
   });
@@ -192,7 +201,8 @@ export const SharedController = {
   reportPlacedToAdmin,
   getALlReportsFromDBByAdmin,
   getSingleReportFromDB,
-  reportAcceptOrRejectByAdmin
+  reportAcceptOrRejectByAdmin,
+  updateExchangeUpdateDateForSerial
 }
 
 

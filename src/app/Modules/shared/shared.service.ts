@@ -152,14 +152,15 @@ const getAllExchangeDataFromDB = async (id: string, isAccepted: string) => {
     {     
       path: 'reciverUserId'
     }
-  ]);
-  
-
+  ]).sort("-updatedAt");
+ 
   return result;
 };
 
 
 const getAllExchangeDataFromDBForEachUser = async (id: string) => {
+  console.log("hiiitittt");
+  
   const query =  {    
         $or: [
           { senderUserId: id },
@@ -174,11 +175,24 @@ const getAllExchangeDataFromDBForEachUser = async (id: string) => {
     {     
       path: 'reciverUserId'
     }
-  ]);
+  ]);  
 
   return result;
 };
 
+
+const updateExchangeUpdateDateForSerial = async (payload : any) =>{
+  const { sender, recipient } = payload;
+     await Exchange.updateOne(
+      {
+        $or: [
+          { email: sender, selectedEmail: recipient },
+          { email: recipient, selectedEmail: sender },
+        ],
+      },
+      { $set: { updatedAt: new Date() } }
+    );  
+}
 
 
 // ===================== not remove this function now
@@ -250,6 +264,8 @@ const getAllExchangeDataFromDBForEachUser = async (id: string) => {
 
 
 const acceptExchange = async (exchangeId: string, payload: any) => {
+  // console.log(exchangeId, payload);
+  
   const exchangeData = await Exchange.findOne({
     _id: exchangeId,
     $or: [
@@ -281,8 +297,10 @@ const acceptExchange = async (exchangeId: string, payload: any) => {
     { _id: exchangeId },
     updateData, 
     { new: true, runValidators: true }
-  );
+  ).sort("-updateAt");
 
+  console.log(result);
+  
   return result;
 };
 
@@ -354,6 +372,7 @@ export const SharedServices = {
   sendAndStoreExchangeRequest,
   getAllExchangeDataFromDB,
   getAllExchangeDataFromDBForEachUser,
+  updateExchangeUpdateDateForSerial,
   ChatExchangeRequestAcceptOrDeclineAPI,
   acceptExchange, 
   reportPlacedToAdmin,
