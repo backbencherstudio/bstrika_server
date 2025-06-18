@@ -159,7 +159,6 @@ const getAllExchangeDataFromDB = async (id: string, isAccepted: string) => {
 
 
 const getAllExchangeDataFromDBForEachUser = async (id: string) => {
-  console.log("hiiitittt");
   
   const query =  {    
         $or: [
