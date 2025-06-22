@@ -122,6 +122,15 @@ export const findUsersBasedOnSubcategory = catchAsync(async (req, res) => {
       data: result,
     });
   });
+  const getIsAcceptNotificationUnReadDataForEachUserIsAcceptTrue = catchAsync(async (req, res) => {
+    const result = await SharedServices.getIsAcceptNotificationUnReadDataForEachUserIsAcceptTrue(req.params.senderUserId);
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: 'get Is Accept Notification **Read** Data for each user ',
+      data: result,
+    });
+  });
 
   const acceptExchangeController = catchAsync(async (req, res) => {
     const result = await SharedServices.acceptExchange(req.params.exchangeId, req.body);
@@ -209,6 +218,7 @@ export const SharedController = {
   getAllExchangeDataFromDBForEachUser,
   acceptExchangeController,
   getIsAcceptNotificationUnReadDataForEachUser,
+  getIsAcceptNotificationUnReadDataForEachUserIsAcceptTrue,
   reportPlacedToAdmin,
   getALlReportsFromDBByAdmin,
   getSingleReportFromDB,

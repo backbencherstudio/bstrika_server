@@ -257,8 +257,14 @@ const ChatExchangeRequestAcceptOrDeclineAPI = async (exchangeId: string, payload
 
 
 
-const getIsAcceptNotificationUnReadDataForEachUser = (senderUserId: string) => {
-  console.log(senderUserId);
+const getIsAcceptNotificationUnReadDataForEachUser = async (senderUserId: string) => {
+  const result = await ExchangeAccepted.find({senderUserId, isAcceptNotificationRead : false})
+  return result
+}
+
+const getIsAcceptNotificationUnReadDataForEachUserIsAcceptTrue = async (senderUserId: string) => {
+  const result = await ExchangeAccepted.updateMany ({senderUserId}, {isAcceptNotificationRead : true}, {new : true, runValidators : true} )
+  return result
 }
 
 
@@ -417,6 +423,7 @@ export const SharedServices = {
   updateExchangeUpdateDateForSerial,
   ChatExchangeRequestAcceptOrDeclineAPI,
   getIsAcceptNotificationUnReadDataForEachUser,
+  getIsAcceptNotificationUnReadDataForEachUserIsAcceptTrue,
   acceptExchange,
   reportPlacedToAdmin,
   getALlReportsFromDBByAdmin,
