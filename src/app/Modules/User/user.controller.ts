@@ -8,12 +8,12 @@ import config from '../../config';
 
 
 const createUser = catchAsync(async (req, res) => {
-    const result = await UserServices.createUserIntoDB(req.body);
+  const result = await UserServices.createUserIntoDB(req.body);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
     message: 'OTP sent, please check your email.',
-    data: result,  
+    data: result,
   });
 });
 
@@ -26,16 +26,16 @@ const verifyOTP = catchAsync(async (req, res) => {
     message: 'User registered successfully!',
     data: result,
   });
-}); 
+});
 
-const loginUser = catchAsync(async (req, res) => {  
+const loginUser = catchAsync(async (req, res) => {
   const result = await UserServices.loginUserIntoDB(req.body);
 
   const { refreshToken, accessToken } = result;
   res.cookie('refreshToken', refreshToken, {
     secure: config.NODE_ENV === 'development',
     httpOnly: true,
-    sameSite : 'none',    
+    sameSite: 'none',
   });
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -48,15 +48,15 @@ const loginUser = catchAsync(async (req, res) => {
 });
 
 const updateUserData = catchAsync(async (req, res) => {
-  
+
   const files = req.files as Express.Multer.File[];
   const profileImage = files?.map((file) => `/uploads/${file.filename}`);
 
   const profileData = {
     ...req.body,
-    profileImage : profileImage[0]
+    profileImage: profileImage[0]
   };
-    
+
   const result = await UserServices.updateUserDataIntoDB(profileData);
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -72,9 +72,9 @@ const setPortfolioImage = catchAsync(async (req, res) => {
   const portfolioImage = files?.map((file) => `/uploads/${file.filename}`);
 
   const profileData = {
-    portfolio : portfolioImage[0]
-  };  
-  const result = await UserServices.setPortfolioImageIntoDB(req?.params.id,  profileData);
+    portfolio: portfolioImage[0]
+  };
+  const result = await UserServices.setPortfolioImageIntoDB(req?.params.id, profileData);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
@@ -83,7 +83,7 @@ const setPortfolioImage = catchAsync(async (req, res) => {
   });
 });
 
-const deletePortfolioImage = catchAsync(async (req, res) => {  
+const deletePortfolioImage = catchAsync(async (req, res) => {
   const result = await UserServices.deletePortfolioImageFromDB(req?.params.id);
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -98,9 +98,9 @@ const setCartificate = catchAsync(async (req, res) => {
   const cartificateImage = files?.map((file) => `/uploads/${file.filename}`);
 
   const cartificateData = {
-    cartificate : cartificateImage[0]
-  };  
-  const result = await UserServices.setCartificateIntoDB(req?.params.id,  cartificateData);
+    cartificate: cartificateImage[0]
+  };
+  const result = await UserServices.setCartificateIntoDB(req?.params.id, cartificateData);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
@@ -110,7 +110,7 @@ const setCartificate = catchAsync(async (req, res) => {
 });
 
 
-const deleteCertificate = catchAsync(async (req, res) => {  
+const deleteCertificate = catchAsync(async (req, res) => {
   const result = await UserServices.deleteCartificateFromDB(req?.params.id);
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -120,7 +120,7 @@ const deleteCertificate = catchAsync(async (req, res) => {
   });
 });
 
-const addServices = catchAsync(async (req, res) => {  
+const addServices = catchAsync(async (req, res) => {
   const result = await UserServices.addServicesIntoDB(req?.params.id, req?.body);
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -130,7 +130,7 @@ const addServices = catchAsync(async (req, res) => {
   });
 });
 
-const deleteServices = catchAsync(async (req, res) => {  
+const deleteServices = catchAsync(async (req, res) => {
   const result = await UserServices.deleteServicesFromDB(req?.params.id);
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -141,7 +141,7 @@ const deleteServices = catchAsync(async (req, res) => {
 });
 
 
-const addExtraSkills = catchAsync(async (req, res) => {  
+const addExtraSkills = catchAsync(async (req, res) => {
   const result = await UserServices.addExtraSkillsIntoDB(req?.params.id, req.body);
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -151,7 +151,7 @@ const addExtraSkills = catchAsync(async (req, res) => {
   });
 });
 
-const deleteExtraSkills = catchAsync(async (req, res) => {  
+const deleteExtraSkills = catchAsync(async (req, res) => {
   const result = await UserServices.deleteExtraSkillsFromDB(req?.params.id);
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -179,13 +179,13 @@ const getSingleUser = catchAsync(async (req, res) => {
     success: true,
     message: 'get single user',
     data: result.user,
-    reviews : result.reviews
+    reviews: result.reviews
   });
 });
 
 const resetPassword = catchAsync(async (req, res) => {
-  const result = await UserServices.resetPasswordIntoDB(req?.body); 
-  
+  const result = await UserServices.resetPasswordIntoDB(req?.body);
+
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
@@ -194,11 +194,11 @@ const resetPassword = catchAsync(async (req, res) => {
   });
 });
 
-const verifyOtpForResetPassword = catchAsync(async (req, res)=>{
-  const getOtpData = req.body;  
-  
+const verifyOtpForResetPassword = catchAsync(async (req, res) => {
+  const getOtpData = req.body;
+
   const result = await UserServices.updatePasswordWithOtpVerification(getOtpData);
-  req.session.destroy(() => {}); 
+  req.session.destroy(() => { });
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
@@ -206,7 +206,7 @@ const verifyOtpForResetPassword = catchAsync(async (req, res)=>{
     data: result,
   });
 
-} )
+})
 
 const refreshToken = catchAsync(async (req, res) => {
   const { refreshToken } = req.cookies;
@@ -233,7 +233,7 @@ const userDelete = catchAsync(async (req, res) => {
 
 
 const sendEmailToUser = catchAsync(async (req, res) => {
-  const result = await UserServices.sendEmailToAllUser(req.body); 
+  const result = await UserServices.sendEmailToAllUser(req.body);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
@@ -248,10 +248,10 @@ const sendProfileReportToTheAdmin = catchAsync(async (req, res) => {
 
   const reportedData = {
     ...req.body,
-    supportingFile : supportingFile[0]
+    supportingFile: supportingFile[0]
   };
 
-  const result = await UserServices.sendProfileReportToTheAdmin(reportedData); 
+  const result = await UserServices.sendProfileReportToTheAdmin(reportedData);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
@@ -261,7 +261,7 @@ const sendProfileReportToTheAdmin = catchAsync(async (req, res) => {
 });
 
 const getAllReportByAdmin = catchAsync(async (req, res) => {
-  const result = await UserServices.getAllReportByAdminFromDB(); 
+  const result = await UserServices.getAllReportByAdminFromDB();
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
@@ -271,7 +271,7 @@ const getAllReportByAdmin = catchAsync(async (req, res) => {
 });
 
 const actionProfileReportService = catchAsync(async (req, res) => {
-  const result = await UserServices.actionProfileReportService(req.params.reportId, req.body); 
+  const result = await UserServices.actionProfileReportService(req.params.reportId, req.body);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
@@ -281,7 +281,7 @@ const actionProfileReportService = catchAsync(async (req, res) => {
 });
 
 const getAllSuspendedDataFromBD = catchAsync(async (req, res) => {
-  const result = await UserServices.getAllSuspendedDataFromBD(); 
+  const result = await UserServices.getAllSuspendedDataFromBD();
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
@@ -291,7 +291,7 @@ const getAllSuspendedDataFromBD = catchAsync(async (req, res) => {
 });
 
 const getAllDataOverviewByUser = catchAsync(async (req, res) => {
-  const result = await UserServices.getAllDataOverviewByUser(req.params.userId); 
+  const result = await UserServices.getAllDataOverviewByUser(req.params.userId);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
@@ -301,7 +301,7 @@ const getAllDataOverviewByUser = catchAsync(async (req, res) => {
 });
 
 const exchangeHistorybyUser = catchAsync(async (req, res) => {
-  const result = await UserServices.exchangeHistorybyUser(req.params.userId, req.query.date as number | string ); 
+  const result = await UserServices.exchangeHistorybyUser(req.params.userId, req.query.date as number | string);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
@@ -309,7 +309,21 @@ const exchangeHistorybyUser = catchAsync(async (req, res) => {
     data: result,
   });
 });
- 
+
+
+const changePassword = catchAsync(async (req, res) => {
+  const oldPass = req.body.oldPass;
+  const newPass = req.body.newPass;
+  const userId = req.params.userId;
+  const result = await UserServices.changePassword(userId, oldPass, newPass);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "password change successfully",
+    data: result,
+  });
+});
+
 
 
 export const userController = {
@@ -337,6 +351,7 @@ export const userController = {
   actionProfileReportService,
   getAllSuspendedDataFromBD,
   getAllDataOverviewByUser,
-  exchangeHistorybyUser
-}; 
+  exchangeHistorybyUser,
+  changePassword
+};
 

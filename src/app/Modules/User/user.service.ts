@@ -735,11 +735,10 @@ const exchangeHistorybyUser = async (id: string, inputYear?: string | number) =>
 
 
 const changePassword = async (userId: string, oldPass: string, newPass: string) => {
-  // const 
-  const userData = await User.findById({ _id: userId }).select("email")
+  const userData = await User.findById({ _id: userId })
   if (!userData) throw new AppError(httpStatus.NOT_FOUND, "user not found ")
 
-  const res = await bcrypt.compare(oldPass, userData?.password as string)
+  const res = await bcrypt.compare(oldPass, userData?.password)
   if (!res) throw new AppError(httpStatus.FORBIDDEN, 'password is not matched');
 
   const hashedPassword = await bcrypt.hash(newPass, 8);
@@ -768,8 +767,6 @@ const deleteUser = async (userId: string) => {
 
   try {
     session.startTransaction();
-
-    // Step 1: Get user email
     const userData = await User.findById(userId).select("email").session(session);
 
     if (!userData?.email) {
@@ -828,5 +825,6 @@ export const UserServices = {
   actionProfileReportService,
   getAllSuspendedDataFromBD,
   getAllDataOverviewByUser,
-  exchangeHistorybyUser
+  exchangeHistorybyUser,
+  changePassword
 };

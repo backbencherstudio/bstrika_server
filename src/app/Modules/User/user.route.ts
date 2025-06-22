@@ -111,9 +111,15 @@ router.get(
   '/getAllDataOverviewByUser/:userId', 
   userController.getAllDataOverviewByUser,
 );
+
 router.get(
   '/exchangeHistorybyUser/:userId', 
   userController.exchangeHistorybyUser,
+);
+
+router.patch(
+  '/changePassword/:userId', 
+  userController.changePassword,
 );
 
 
