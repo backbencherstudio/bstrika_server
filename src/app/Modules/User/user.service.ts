@@ -1,3 +1,4 @@
+import { Exchange } from './../shared/shared.module';
 /* eslint-disable no-undef */
 /* eslint-disable prefer-const */
 /* eslint-disable @typescript-eslint/no-unused-vars */
@@ -16,7 +17,7 @@ import QueryBuilder from "../../builder/QueryBuilder";
 import path from "path";
 import fs from "fs"
 import { sendEmail } from "../../utils/sendEmail";
-import { Exchange, Review } from "../shared/shared.module";
+import { Review } from "../shared/shared.module";
 import { notificationMain } from "../../utils/notificationMain";
 import mongoose from "mongoose";
 
@@ -153,7 +154,7 @@ const deleteFile = (filePath: string) => {
 const updateUserDataIntoDB = async (payload: Partial<TUser>) => {
   try {
     const userData = await User.findById(payload.userId).select("profileImage");
-    
+
     if (userData?.profileImage) {
       const absoluteFilePath = getAbsoluteFilePath(userData.profileImage);
       if (absoluteFilePath) {
@@ -280,7 +281,7 @@ const deleteExtraSkillsFromDB = async (id: string) => {
 
 
 
-const getAllUserFromDB = async (query: Record<string, unknown>) => {  
+const getAllUserFromDB = async (query: Record<string, unknown>) => {
   const userQuery = new QueryBuilder(User.find({ profileStatus: "safe" }), query)
     .search([
       "my_service",
@@ -291,7 +292,7 @@ const getAllUserFromDB = async (query: Record<string, unknown>) => {
     .filter();
   const result = await userQuery.modelQuery.select(
     'first_name email profileImage rating my_service portfolio review addressInfo'
-  );  
+  );
   return result;
 };
 
@@ -332,10 +333,10 @@ const getSingleUserFromDB = async (userId: string) => {
 //   console.log(331, result);
 
 //   const createOtp = await TempUser.create(result);
-  
+
 //   console.log(createOtp);
-  
-  
+
+
 //   return result
 // }
 
@@ -356,9 +357,9 @@ const resetPasswordIntoDB = async (payload: any) => {
 
 
   const createOrUpdateOtp = await TempUser.findOneAndUpdate(
-    { email: payload.email }, 
-    result,                   
-    { upsert: true, new: true } 
+    { email: payload.email },
+    result,
+    { upsert: true, new: true }
   );
 
   await sendEmail(payload?.email, otp);
@@ -368,20 +369,20 @@ const resetPasswordIntoDB = async (payload: any) => {
 
 
 const updatePasswordWithOtpVerification = async (getOtpData: any) => {
-  
-  const existsData = await TempUser.findOne({email : getOtpData?.email});
+
+  const existsData = await TempUser.findOne({ email: getOtpData?.email });
   if (!existsData) {
-    return new AppError(httpStatus.NOT_FOUND,"Data not found")    
+    return new AppError(httpStatus.NOT_FOUND, "Data not found")
   }
   if (parseInt(getOtpData?.otp) !== parseInt(existsData.otp)) {
     throw new AppError(httpStatus.NOT_ACCEPTABLE, "OTP not match")
-  } 
+  }
 
   const hashedPassword = await bcrypt.hash(existsData?.password, 8);
   const result = await User.findOneAndUpdate({ email: getOtpData.email }, { password: hashedPassword }, { new: true, runValidators: true })
 
-  if(result){
-    await TempUser.findOneAndDelete({email  : existsData?.email})
+  if (result) {
+    await TempUser.findOneAndDelete({ email: existsData?.email })
   }
 
   return result
@@ -611,7 +612,7 @@ const actionProfileReportService = async (
 
 
 const getAllReportByAdminFromDB = async () => {
-  const result = await ReportProfile.find({action: { $in: ["pending", "blocked"] }}).populate([
+  const result = await ReportProfile.find({ action: { $in: ["pending", "blocked"] } }).populate([
     {
       path: 'reporterId',
       select: 'first_name profileImage email personalInfo'
@@ -624,9 +625,9 @@ const getAllReportByAdminFromDB = async () => {
   return result
 }
 
-const getAllSuspendedDataFromBD = async () =>{  
+const getAllSuspendedDataFromBD = async () => {
 
-  const result = await ReportProfile.find( {action : "suspend"} ).populate([
+  const result = await ReportProfile.find({ action: "suspend" }).populate([
     {
       path: 'reporterId',
       select: 'first_name profileImage email personalInfo'
@@ -636,14 +637,14 @@ const getAllSuspendedDataFromBD = async () =>{
       select: 'first_name profileImage email personalInfo'
     }
   ])
-  
+
   return result
 }
 
 
-const getAllDataOverviewByUser = async(id : string ) =>{
-  
-  const exchangeRequest = await Exchange.find({reciverUserId : id, isAccepted : "false"}).countDocuments()
+const getAllDataOverviewByUser = async (id: string) => {
+
+  const exchangeRequest = await Exchange.find({ reciverUserId: id, isAccepted: "false" }).countDocuments()
   const confirmExchange = await Exchange.find({
     $or: [
       { reciverUserId: id },
@@ -652,12 +653,12 @@ const getAllDataOverviewByUser = async(id : string ) =>{
     reciverUserAccepted: true,
     senderUserAccepted: true
   }).countDocuments();
-  const totalReview = await Review.find({reciverId : id}).countDocuments();
+  const totalReview = await Review.find({ reciverId: id }).countDocuments();
 
-  return{
+  return {
     exchangeRequest,
     confirmExchange,
-    totalReview 
+    totalReview
   }
 }
 
@@ -677,7 +678,7 @@ const getAllDataOverviewByUser = async(id : string ) =>{
 
 const exchangeHistorybyUser = async (id: string, inputYear?: string | number) => {
   let targetYear: number;
-  
+
   if (inputYear) {
     const yearNum = typeof inputYear === 'string' ? parseInt(inputYear) : inputYear;
     if (!isNaN(yearNum) && yearNum.toString().length === 4) {
@@ -689,7 +690,7 @@ const exchangeHistorybyUser = async (id: string, inputYear?: string | number) =>
     targetYear = new Date().getFullYear();
   }
 
-  const startDate = new Date(Date.UTC(targetYear, 0, 1)); 
+  const startDate = new Date(Date.UTC(targetYear, 0, 1));
   const endDate = new Date(Date.UTC(targetYear, 11, 31, 23, 59, 59, 999));
 
   try {
@@ -706,9 +707,9 @@ const exchangeHistorybyUser = async (id: string, inputYear?: string | number) =>
       }
     }).lean();
 
-    const monthlyCounts = Array(12).fill(0);    
+    const monthlyCounts = Array(12).fill(0);
     exchanges.forEach(exchange => {
-      const date = new Date(exchange.createdAt );
+      const date = new Date(exchange.createdAt);
       if (date.getUTCFullYear() === targetYear) {
         monthlyCounts[date.getUTCMonth()]++;
       } else {
@@ -716,9 +717,9 @@ const exchangeHistorybyUser = async (id: string, inputYear?: string | number) =>
       }
     });
 
-    const monthNames = ["January", "February", "March", "April", "May", "June", 
-                       "July", "August", "September", "October", "November", "December"];
-    
+    const monthNames = ["January", "February", "March", "April", "May", "June",
+      "July", "August", "September", "October", "November", "December"];
+
     return monthlyCounts.map((count, index) => ({
       month: monthNames[index],
       year: targetYear,
@@ -733,11 +734,71 @@ const exchangeHistorybyUser = async (id: string, inputYear?: string | number) =>
 
 
 
+const changePassword = async (userId: string, oldPass: string, newPass: string) => {
+  // const 
+  const userData = await User.findById({ _id: userId }).select("email")
+  if (!userData) throw new AppError(httpStatus.NOT_FOUND, "user not found ")
+
+  const res = await bcrypt.compare(oldPass, userData?.password as string)
+  if (!res) throw new AppError(httpStatus.FORBIDDEN, 'password is not matched');
+
+  const hashedPassword = await bcrypt.hash(newPass, 8);
+
+  const result = await User.findOneAndUpdate({ email: userData.email }, { password: hashedPassword }, { new: true, runValidators: true });
+  return result
+}
 
 
+// const deleteUser = async (userId: string) => {
+//   const userData = await User.findById({ _id: userId }).select("email");
 
+//   await User.findOneAndDelete({ email: userData?.email })
 
+//   await Exchange.deleteMany({
+//     $or: [
+//       { email: userData?.email },
+//       { selectedEmail: userData?.email },
+//     ]
+//   })
 
+// }
+
+const deleteUser = async (userId: string) => {
+  const session = await mongoose.startSession();
+
+  try {
+    session.startTransaction();
+
+    // Step 1: Get user email
+    const userData = await User.findById(userId).select("email").session(session);
+
+    if (!userData?.email) {
+      throw new Error("User not found");
+    }
+
+    const userEmail = userData.email;
+
+    await User.findOneAndDelete({ email: userEmail }).session(session);
+
+    await Exchange.deleteMany({
+      $or: [
+        { email: userEmail },
+        { selectedEmail: userEmail },
+      ]
+    }).session(session);
+
+    await session.commitTransaction();
+    console.log("✅ Successfully deleted user and related exchange data");
+
+    return { success: true };
+  } catch (error : any) {
+    await session.abortTransaction();
+    console.error("❌ Deletion failed:", error);
+    return { success: false, error: error.message };
+  } finally {
+    session.endSession();
+  }
+};
 
 
 
