@@ -26,24 +26,24 @@ export const updateCategory = catchAsync(async (req, res) => {
 
 
 export const addSubCategory = catchAsync(async (req, res) => {
-    const files = req.files as Express.Multer.File[];
-    const categoryImage = files?.map((file) => `/uploads/${file.filename}`)[0];
-  
-    const categoryData = {
-      subCategory: req.body.subCategory,
-      categoryImage,
-    };
-      const result = await CategoryService.addSubCategory(req.params.categoryId, categoryData);  
-    sendResponse(res, {
-      statusCode: httpStatus.OK,
-      success: true,
-      message: 'Subcategory added successfully',
-      data: result,
-    });
-  });
-  
+  const files = req.files as Express.Multer.File[];
+  const categoryImage = files?.map((file) => `/uploads/${file.filename}`)[0];
 
-export const removeSubCategory = catchAsync(async (req, res) => {  
+  const categoryData = {
+    subCategory: req.body.subCategory,
+    categoryImage,
+  };
+  const result = await CategoryService.addSubCategory(req.params.categoryId, categoryData);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Subcategory added successfully',
+    data: result,
+  });
+});
+
+
+export const removeSubCategory = catchAsync(async (req, res) => {
   const result = await CategoryService.removeSubCategory(req.params.categoryId, req.body.subCategorieId);
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -79,6 +79,18 @@ export const getAllExchangeDatabyAdmin = catchAsync(async (req, res) => {
     statusCode: httpStatus.OK,
     success: true,
     message: 'get all exchange data by admin',
+    data: result,
+  });
+});
+
+export const showALlReportMessageDataFromDBByAdmin = catchAsync(async (req, res) => {
+  const reporterId = req.body.reporterId;
+  const reportedId = req.body.reportedId;
+  const result = await CategoryService.showALlReportMessageDataFromDBByAdmin(reporterId, reportedId);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'get all message data by admin',
     data: result,
   });
 });

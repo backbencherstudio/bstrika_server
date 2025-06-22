@@ -5,42 +5,44 @@ import fs from "fs"
 import { TCategory } from "./admin.interface";
 import { Category } from "./admin.module";
 import { Exchange } from "../shared/shared.module";
+import { User } from "../User/user.model";
+import MessageModel from "../messages/message.module";
 
 const createCategory = async (payload: TCategory) => {
   return await Category.create(payload);
 };
 
-const updateCategory = async (categoryId : string, payload: TCategory) => {
-  return await Category.findByIdAndUpdate({_id : categoryId}, payload, {runValidators : true, new : true});
+const updateCategory = async (categoryId: string, payload: TCategory) => {
+  return await Category.findByIdAndUpdate({ _id: categoryId }, payload, { runValidators: true, new: true });
 };
 
 
 const addSubCategory = async (
-    categoryId: string,
-    subCategoryData: { subCategory: string; categoryImage: string }
-  ) => {    
-    const category = await Category.findById({_id : categoryId});  
-    if (!category) throw new Error("Category not found");  
-    const isDuplicate = category.subCategories.some(
-      (item) =>
-        item?.subCategory?.toLowerCase() === subCategoryData?.subCategory.toLowerCase()
-    );  
-    if (isDuplicate) {
-      throw new Error("Subcategory already exists");
-    }  
-    category.subCategories.push(subCategoryData);
-    const updatedCategory = await category.save();  
-    return updatedCategory;
-  };
-  
+  categoryId: string,
+  subCategoryData: { subCategory: string; categoryImage: string }
+) => {
+  const category = await Category.findById({ _id: categoryId });
+  if (!category) throw new Error("Category not found");
+  const isDuplicate = category.subCategories.some(
+    (item) =>
+      item?.subCategory?.toLowerCase() === subCategoryData?.subCategory.toLowerCase()
+  );
+  if (isDuplicate) {
+    throw new Error("Subcategory already exists");
+  }
+  category.subCategories.push(subCategoryData);
+  const updatedCategory = await category.save();
+  return updatedCategory;
+};
 
-  
+
+
 const getAllCategories = async () => {
   return await Category.find();
 };
 
-const deleteCategoriesByAdmin = async (categoryId : string)=>{
-  const result = await Category.findByIdAndDelete({_id : categoryId})
+const deleteCategoriesByAdmin = async (categoryId: string) => {
+  const result = await Category.findByIdAndDelete({ _id: categoryId })
   return result
 }
 
@@ -78,66 +80,99 @@ const deleteFile = (filePath: string) => {
 };
 
 const removeSubCategory = async (
-    categoryId: string,
-    subCategoryId: string
-  ) => {
-    const categoryData = await Category.findById(categoryId).select("subCategories");
-  
-    if (!categoryData) throw new Error("Category not found");
-  
-    const subCategoryObj = categoryData.subCategories.find(
-      (item) => item._id.toString() === subCategoryId
-    );
-  
-    if (!subCategoryObj) throw new Error("Subcategory not found");
-  
-    const imagePath = subCategoryObj.categoryImage;
-  
-    const absolutePath = getAbsoluteFilePath(imagePath);
-    
-    if (absolutePath) {
-      deleteFile(absolutePath);
-    }
-    
-    const updatedCategory = await Category.findByIdAndUpdate(
-      categoryId,
-      {
-        $pull: {
-          subCategories: { _id: subCategoryId },
-        },
-      },
-      { new: true, runValidators : true }
-    );
-  
-    return updatedCategory;
-  };
+  categoryId: string,
+  subCategoryId: string
+) => {
+  const categoryData = await Category.findById(categoryId).select("subCategories");
 
-  const getAllExchangeDataFromDBbyAdmin = async () =>{
+  if (!categoryData) throw new Error("Category not found");
 
-    const exchangeData = await Exchange.find({reciverUserAccepted: true, senderUserAccepted : true  }).populate([{
-      path: 'senderUserId',
-      select: 'first_name image email personalInfo'
-    },
-    {
-      path: 'reciverUserId',
-      select: 'first_name image email personalInfo'
-    }])
+  const subCategoryObj = categoryData.subCategories.find(
+    (item) => item._id.toString() === subCategoryId
+  );
 
-    const acceptedData = await Exchange.find({isAccepted : true})
-    
-    
-    return {exchangeData, acceptedData}
+  if (!subCategoryObj) throw new Error("Subcategory not found");
+
+  const imagePath = subCategoryObj.categoryImage;
+
+  const absolutePath = getAbsoluteFilePath(imagePath);
+
+  if (absolutePath) {
+    deleteFile(absolutePath);
   }
 
-   
+  const updatedCategory = await Category.findByIdAndUpdate(
+    categoryId,
+    {
+      $pull: {
+        subCategories: { _id: subCategoryId },
+      },
+    },
+    { new: true, runValidators: true }
+  );
+
+  return updatedCategory;
+};
+
+const getAllExchangeDataFromDBbyAdmin = async () => {
+
+  const exchangeData = await Exchange.find({ reciverUserAccepted: true, senderUserAccepted: true }).populate([{
+    path: 'senderUserId',
+    select: 'first_name image email personalInfo'
+  },
+  {
+    path: 'reciverUserId',
+    select: 'first_name image email personalInfo'
+  }])
+
+  const acceptedData = await Exchange.find({ isAccepted: true })
+
+
+  return { exchangeData, acceptedData }
+}
+
+
+// const showALlReportMessageDataFromDBByAdmin = async (reporterId: string, reportedId: string) => {
+//   console.log(reporterId, reportedId);
+
+//     const users = await User.find({
+//     _id: { $in: [reporterId, reportedId] }
+//   }).select("email");
+
+//   console.log(users);
+  
+// }
+
+
+const showALlReportMessageDataFromDBByAdmin = async (reporterId: string, reportedId: string) => {
+  const users = await User.find({
+    _id: { $in: [reporterId, reportedId] }
+  }).select("email");
+
+  if (users.length !== 2) {
+    throw new Error("Both users not found");
+  }
+
+  const [email1, email2] = users.map(user => user.email);
+
+  const messages = await MessageModel.find({
+    $or: [
+      { sender: email1, recipient: email2 },
+      { sender: email2, recipient: email1 }
+    ]
+  }).sort({ timestamp: 1 }); 
+
+  return messages;
+};
 
 
 export const CategoryService = {
-    createCategory,
-    updateCategory,
-    addSubCategory,
-    getAllCategories,
-    deleteCategoriesByAdmin,
-    removeSubCategory,
-    getAllExchangeDataFromDBbyAdmin
+  createCategory,
+  updateCategory,
+  addSubCategory,
+  getAllCategories,
+  deleteCategoriesByAdmin,
+  removeSubCategory,
+  getAllExchangeDataFromDBbyAdmin,
+  showALlReportMessageDataFromDBByAdmin
 }
