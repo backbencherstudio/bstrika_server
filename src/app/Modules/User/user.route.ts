@@ -122,6 +122,11 @@ router.patch(
   userController.changePassword,
 );
 
+router.delete(
+  '/deleteUser/:userId', 
+  userController.deleteUser,
+);
+
 
 
 

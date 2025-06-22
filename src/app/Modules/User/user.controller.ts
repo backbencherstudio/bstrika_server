@@ -324,6 +324,17 @@ const changePassword = catchAsync(async (req, res) => {
   });
 });
 
+const deleteUser = catchAsync(async (req, res) => {
+  const userId = req.params.userId;
+  const result = await UserServices.deleteUser(userId);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "delete successfull",
+    data: result,
+  });
+});
+
 
 
 export const userController = {
@@ -352,6 +363,7 @@ export const userController = {
   getAllSuspendedDataFromBD,
   getAllDataOverviewByUser,
   exchangeHistorybyUser,
-  changePassword
+  changePassword,
+  deleteUser
 };
 

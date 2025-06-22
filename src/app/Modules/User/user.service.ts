@@ -1,4 +1,4 @@
-import { Exchange } from './../shared/shared.module';
+import { Exchange, ExchangeAccepted } from './../shared/shared.module';
 /* eslint-disable no-undef */
 /* eslint-disable prefer-const */
 /* eslint-disable @typescript-eslint/no-unused-vars */
@@ -784,11 +784,18 @@ const deleteUser = async (userId: string) => {
       ]
     }).session(session);
 
+    await ExchangeAccepted.deleteMany({
+      $or: [
+        { email: userEmail },
+        { selectedEmail: userEmail },
+      ]
+    }).session(session);
+
     await session.commitTransaction();
     console.log("✅ Successfully deleted user and related exchange data");
 
     return { success: true };
-  } catch (error : any) {
+  } catch (error: any) {
     await session.abortTransaction();
     console.error("❌ Deletion failed:", error);
     return { success: false, error: error.message };
@@ -826,5 +833,6 @@ export const UserServices = {
   getAllSuspendedDataFromBD,
   getAllDataOverviewByUser,
   exchangeHistorybyUser,
-  changePassword
+  changePassword,
+  deleteUser
 };
