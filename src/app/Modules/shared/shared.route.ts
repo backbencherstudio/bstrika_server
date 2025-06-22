@@ -27,6 +27,7 @@ router.get('/report/:id',SharedController.getSingleReportFromDB );
 router.patch('/reportAcceptOrRejectByAdmin/:reportId',SharedController.reportAcceptOrRejectByAdmin );
 
 
+router.get('/isReadExchange/:senderUserId', SharedController.getIsAcceptNotificationUnReadDataForEachUser);
 router.post('/exchange', SharedController.sendAndStoreExchangeRequestController);
 router.get('/exchange', SharedController.getAllExchangeData);  //====>>> get chat data, filtered by "true ... for chat" "false for pending accept"
 

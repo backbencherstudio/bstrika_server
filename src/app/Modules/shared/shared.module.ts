@@ -1,6 +1,6 @@
 // review.schema.ts
 import { Schema, model } from 'mongoose';
-import { TExchange, TReviewReport, TReviews } from './shared.interface';
+import { TExchange, TExchangeAcceptedData, TReviewReport, TReviews } from './shared.interface';
 
 const reviewSchema = new Schema<TReviews>(
   {
@@ -94,6 +94,62 @@ const exchangeSchema = new Schema<TExchange>(
   }
 );
 
+const exchangeAcceptedSchema = new Schema<TExchangeAcceptedData>(
+  {
+    senderUserId: {
+      type: Schema.Types.ObjectId,
+      required: true,
+      ref: 'User',
+    },
+    reciverUserId: {
+      type: Schema.Types.ObjectId,
+      required: true,
+      ref: 'User',
+    },
+    email: {
+      type: String,
+      required: true,
+    },
+    selectedEmail: {
+      type: String,
+      required: true,
+    },
+    senderService: {
+      type: String,
+      required : true
+    }, 
+    reciverService: {
+      type: String
+    },
+    isAccepted: {
+      type: String,
+      enum: ['true', 'false', 'decline'],
+      default: 'false',
+    },
+    reciverUserAccepted: {
+      type: Boolean,
+      default: false,
+    },
+    senderUserAccepted: {
+      type: Boolean,
+      default: false,
+    },
+    isAcceptNotificationRead: {
+      type: Boolean,
+      default: false,
+    },
+    my_service: {
+      type: [String],
+      required : true
+    },
+   
+  },
+  {
+    timestamps: true, 
+    versionKey : false
+  }
+);
+
 export const reportSchema = new Schema<TReviewReport>({
   reviewId : {
     type : Schema.Types.ObjectId,
@@ -123,6 +179,8 @@ export const reportSchema = new Schema<TReviewReport>({
 export const Review = model<TReviews>('Review', reviewSchema);
 
 export const Exchange = model<TExchange>('Exchange', exchangeSchema);
+
+export const ExchangeAccepted = model<TExchangeAcceptedData>('exchangeAccepted', exchangeAcceptedSchema);
 
 export const Report = model<TReviewReport>('Report', reportSchema);
 
