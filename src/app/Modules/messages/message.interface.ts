@@ -5,6 +5,8 @@ export interface IMessage extends Document {
   recipient: string;
   content: string;
   timestamp: Date;
+  senderService: string;
+  reciverService: string;
   read: boolean;
   hiddenFor?: string[];
 }
@@ -18,4 +20,6 @@ export interface IChatMessage {
   content: string;
   sender: string;
   timestamp: Date;
+  senderService: string;
+  reciverService: string;
 }

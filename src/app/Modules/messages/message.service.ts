@@ -34,12 +34,14 @@ class MessageService {
     }
   }
 
-  async handleMessage({ recipient, content, sender, timestamp }: IChatMessage) {
+  async handleMessage({ recipient, content, sender, timestamp, senderService, reciverService }: IChatMessage) {
     const chatMessage = {
       sender,
       recipient,
       content,
       timestamp,
+      senderService, 
+      reciverService,
       read: false,
     };
 
