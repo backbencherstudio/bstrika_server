@@ -158,6 +158,7 @@ const getAllExchangeDataFromDB = async (id: string, isAccepted: string) => {
 };
 
 
+
 const getAllExchangeDataFromDBForEachUser = async (id: string) => {
 
   const query = {
