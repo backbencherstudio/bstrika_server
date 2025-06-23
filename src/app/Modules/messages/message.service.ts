@@ -40,8 +40,8 @@ class MessageService {
       recipient,
       content,
       timestamp,
-      senderService, 
-      reciverService,
+      senderService, // need to add those two data from frontend 
+      reciverService, // need to add those two data from frontend 
       read: false,
     };
 
