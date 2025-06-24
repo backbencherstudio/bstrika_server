@@ -264,12 +264,17 @@ const getALlAcceptedDataForEachUser = async (userId: string) =>{
 
 
 const getIsAcceptNotificationUnReadDataForEachUser = async (senderUserId: string) => {
-  const result = await ExchangeAccepted.find({senderUserId, isAcceptNotificationRead : false})
+  const result = await ExchangeAccepted.find({ senderUserId, isAcceptNotificationRead: false })
   return result
 }
 
 const getIsAcceptNotificationUnReadDataForEachUserIsAcceptTrue = async (senderUserId: string) => {
-  const result = await ExchangeAccepted.updateMany ({senderUserId}, {isAcceptNotificationRead : true}, {new : true, runValidators : true} )
+  const result = await ExchangeAccepted.updateMany({ senderUserId }, { isAcceptNotificationRead: true }, { new: true, runValidators: true })
+  return result
+}
+
+const getAcceptedDataForNav = async (senderUserId: string) => {
+  const result = await ExchangeAccepted.find({ senderUserId })
   return result
 }
 
@@ -431,6 +436,7 @@ export const SharedServices = {
   getALlAcceptedDataForEachUser,
   getIsAcceptNotificationUnReadDataForEachUser,
   getIsAcceptNotificationUnReadDataForEachUserIsAcceptTrue,
+  getAcceptedDataForNav,
   acceptExchange,
   reportPlacedToAdmin,
   getALlReportsFromDBByAdmin,
