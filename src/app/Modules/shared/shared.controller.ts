@@ -112,13 +112,23 @@ export const findUsersBasedOnSubcategory = catchAsync(async (req, res) => {
     });
   });
 
-
   const getIsAcceptNotificationUnReadDataForEachUser = catchAsync(async (req, res) => {
-    const result = await SharedServices.getIsAcceptNotificationUnReadDataForEachUser(req.params.senderUserId);
+    const result = await SharedServices.ChatExchangeRequestAcceptOrDeclineAPI(req.params.exchangeId, req.body);
     sendResponse(res, {
       statusCode: httpStatus.OK,
       success: true,
-      message: 'get Is Accept Notification UnRead Data For Each User',
+      message: 'You accepted the request. Now you may begin communicating with each other.',
+      data: result,
+    });
+  });
+
+
+  const getALlAcceptedDataForEachUser = catchAsync(async (req, res) => {
+    const result = await SharedServices.getALlAcceptedDataForEachUser(req.params.userId);
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: 'get all accepted data for each user',
       data: result,
     });
   });
@@ -218,6 +228,7 @@ export const SharedController = {
   getAllExchangeDataFromDBForEachUser,
   acceptExchangeController,
   getIsAcceptNotificationUnReadDataForEachUser,
+  getALlAcceptedDataForEachUser,
   getIsAcceptNotificationUnReadDataForEachUserIsAcceptTrue,
   reportPlacedToAdmin,
   getALlReportsFromDBByAdmin,

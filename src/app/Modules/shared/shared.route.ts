@@ -29,6 +29,8 @@ router.patch('/reportAcceptOrRejectByAdmin/:reportId',SharedController.reportAcc
 
 router.get('/isReadExchange/:senderUserId', SharedController.getIsAcceptNotificationUnReadDataForEachUser); //====> ( this api length need to concat to the nav bar get request length  )
 
+router.get('/getALlAcceptedDataForEachUser/:userId', SharedController.getALlAcceptedDataForEachUser); //====> ( this api length need to concat to the nav bar get request length  )
+
 router.patch('/isReadExchange/:senderUserId', SharedController.getIsAcceptNotificationUnReadDataForEachUserIsAcceptTrue);
 router.post('/exchange', SharedController.sendAndStoreExchangeRequestController);
 router.get('/exchange', SharedController.getAllExchangeData);  //====>>> get chat data, filtered by "true ... for chat" "false for pending accept"

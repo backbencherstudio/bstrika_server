@@ -255,6 +255,11 @@ const ChatExchangeRequestAcceptOrDeclineAPI = async (exchangeId: string, payload
 }
 
 
+const getALlAcceptedDataForEachUser = async (userId: string) =>{
+  const result = await ExchangeAccepted.find({senderUserId : userId});
+  return result
+}
+
 
 
 
@@ -423,6 +428,7 @@ export const SharedServices = {
   getAllExchangeDataFromDBForEachUser,
   updateExchangeUpdateDateForSerial,
   ChatExchangeRequestAcceptOrDeclineAPI,
+  getALlAcceptedDataForEachUser,
   getIsAcceptNotificationUnReadDataForEachUser,
   getIsAcceptNotificationUnReadDataForEachUserIsAcceptTrue,
   acceptExchange,
