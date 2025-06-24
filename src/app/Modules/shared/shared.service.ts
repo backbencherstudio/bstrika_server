@@ -269,7 +269,7 @@ const getIsAcceptNotificationUnReadDataForEachUserIsAcceptTrue = async (senderUs
 }
 
 const getAcceptedDataForNav = async (senderUserId: string) => {
-  const result = await ExchangeAccepted.find({ senderUserId })
+  const result = await ExchangeAccepted.find({ senderUserId})
   return result
 }
 
