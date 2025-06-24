@@ -27,6 +27,7 @@ router.get('/report/:id',SharedController.getSingleReportFromDB );
 router.patch('/reportAcceptOrRejectByAdmin/:reportId',SharedController.reportAcceptOrRejectByAdmin );
 
 
+router.get('/getAcceptedDataForNav/:senderUserId', SharedController.getAcceptedDataForNav); //====> ( this api data show on the nav notification list )
 router.get('/isReadExchange/:senderUserId', SharedController.getIsAcceptNotificationUnReadDataForEachUser); //====> ( this api length need to concat to the nav bar get request length  )
 
 router.patch('/isReadExchange/:senderUserId', SharedController.getIsAcceptNotificationUnReadDataForEachUserIsAcceptTrue);
