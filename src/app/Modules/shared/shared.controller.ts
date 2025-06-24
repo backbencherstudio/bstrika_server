@@ -148,7 +148,7 @@ export const findUsersBasedOnSubcategory = catchAsync(async (req, res) => {
     sendResponse(res, {
       statusCode: httpStatus.OK,
       success: true,
-      message: 'get all accepted data for each user ',
+      message: 'get all accepted data for each userrrrrrrrr ',
       data: result,
     });
   });
