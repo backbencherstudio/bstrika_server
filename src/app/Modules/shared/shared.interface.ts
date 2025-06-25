@@ -17,6 +17,7 @@ export type TExchange = {
     selectedEmail: string;
     isAccepted: 'true' | 'false' | 'decline';
     senderImage: string;
+    reciverImage: string;
     senderService: string;
     reciverService?: string;
     senderUserAccepted: boolean;
@@ -32,6 +33,7 @@ export type TExchangeAcceptedData = {
     email: string;
     selectedEmail: string;
     senderImage: string;
+    reciverImage: string;
     isAccepted: 'true' | 'false' | 'decline';
     senderService: string;
     reciverService?: string;

@@ -231,7 +231,8 @@ const ChatExchangeRequestAcceptOrDeclineAPI = async (exchangeId: string, payload
       reciverUserAccepted,
       senderUserAccepted,
       my_service,
-      senderImage
+      senderImage,
+      reciverImage
     } = data;
 
     const acceptData = {
@@ -245,7 +246,8 @@ const ChatExchangeRequestAcceptOrDeclineAPI = async (exchangeId: string, payload
       reciverUserAccepted,
       senderUserAccepted,
       my_service,
-      senderImage
+      senderImage,
+      reciverImage
     };
 
     await ExchangeAccepted.create(acceptData);

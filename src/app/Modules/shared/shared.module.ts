@@ -66,6 +66,10 @@ const exchangeSchema = new Schema<TExchange>(
       type: String,
       required: true
     },
+    reciverImage: {
+      type: String,
+      required: true
+    },
     senderService: {
       type: String,
       required: true
@@ -119,6 +123,10 @@ const exchangeAcceptedSchema = new Schema<TExchangeAcceptedData>(
       required: true,
     },
     senderImage: {
+      type: String,
+      required: true
+    },
+    reciverImage: {
       type: String,
       required: true
     },
