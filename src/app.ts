@@ -12,6 +12,7 @@ import messageRoutes from './app/Modules/messages/message.route';
 import MessageController from './app/Modules/messages/message.controller';
 import MessageService from './app/Modules/messages/message.service';
 import MessageModel from './app/Modules/messages/message.module';
+import { seedAdmin } from './app/DB/admin';
 
 const app: Application = express();
 const httpServer = createServer(app);
@@ -66,6 +67,7 @@ const messageService = new MessageService(io, MessageModel);
 const messageController = new MessageController(messageService);
 
 
+app.use('/createAdmin',  seedAdmin);
 app.use('/api/v1', router);
 app.use('/api/v1', messageRoutes(messageController));
 

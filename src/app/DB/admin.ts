@@ -7,17 +7,18 @@ const hashPassword = async (pass: number) => {
 };
 
 export const seedAdmin = async () => {
-  const isSuperAdminExists = await User.findOne({ role: "admin" , email : "admin@gmail.com" });
+  const isSuperAdminExists = await User.findOne({ role: "admin" , email : "info@ollivu.com" });
 
   if (!isSuperAdminExists) {
     const admin = {
       first_name: "need update",
-      email: "admin@gmail.com",
+      email: "info@ollivu.com",
       password: await hashPassword(12345678), 
       role: "admin",
       isDeleted: false,
     };
 
     await User.create(admin);
+    
   }
 };
