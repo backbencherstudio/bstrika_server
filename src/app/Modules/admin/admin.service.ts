@@ -1,7 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable no-undef */
 import path from "path";
 import fs from "fs"
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { TCategory } from "./admin.interface";
 import { Category } from "./admin.module";
 import { Exchange } from "../shared/shared.module";
@@ -130,19 +130,6 @@ const getAllExchangeDataFromDBbyAdmin = async () => {
 
   return { exchangeData, acceptedData }
 }
-
-
-// const showALlReportMessageDataFromDBByAdmin = async (reporterId: string, reportedId: string) => {
-//   console.log(reporterId, reportedId);
-
-//     const users = await User.find({
-//     _id: { $in: [reporterId, reportedId] }
-//   }).select("email");
-
-//   console.log(users);
-  
-// }
-
 
 const showALlReportMessageDataFromDBByAdmin = async (reporterId: string, reportedId: string) => {
   const users = await User.find({

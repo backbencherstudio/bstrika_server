@@ -312,36 +312,6 @@ const getSingleUserFromDB = async (userId: string) => {
 };
 
 
-// const resetPasswordIntoDB = async (payload: any) => {
-//   const isUserExistsInUser = await User.findOne({ email: payload?.email });
-//   if (!isUserExistsInUser) {
-//     throw new AppError(httpStatus.NOT_FOUND, "User Not Found")
-//   }
-//   const otp = Math.floor(100000 + Math.random() * 900000).toString();
-
-//   // await sendEmail(payload?.email, otp);
-
-//   console.log(otp);
-
-//   const result = {
-//     first_name:"dummyname",
-//     otp,
-//     email: payload.email,
-//     password: payload.password
-//   }
-
-//   console.log(331, result);
-
-//   const createOtp = await TempUser.create(result);
-
-//   console.log(createOtp);
-
-
-//   return result
-// }
-
-
-
 const resetPasswordIntoDB = async (payload: any) => {
   const isUserExistsInUser = await User.findOne({ email: payload?.email });
   if (!isUserExistsInUser) {
@@ -441,124 +411,6 @@ const sendProfileReportToTheAdmin = async (payload: TReportProfile) => {
   const result = await ReportProfile.create(payload);
   return result
 }
-
-// const actionProfileReportService = async (id : string, {action} : {action : string} )=>{
-
-//   if(action === "suspend"){    
-//     const existsData = await ReportProfile.findById({_id : id});
-//     const result = await ReportProfile.findByIdAndUpdate({_id : id}, {action}, {runValidators : true, new : true});
-//     await User.findByIdAndUpdate({_id : existsData?.reportedId}, {profileStatus : action }, {runValidators : true, new : true}); 
-
-//     await notificationMain(existsData?.email, "Suspended notification" , "Your account is currently suspended. You are unable to log in at this time. Access will be restored after the suspension period, typically within 7 to 10 days") 
-
-//     return {
-//       message : "profile suspended successfully",
-//       result : result
-//     }
-//   }
-//   else{
-//     const existsData = await ReportProfile.findById({_id : id});
-//     await ReportProfile.findByIdAndUpdate({_id : id}, {action}, {runValidators : true, new : true});
-//     const userData = await User.findByIdAndUpdate({_id : existsData?.reportedId}, {profileStatus : action }, {runValidators : true, new : true});
-
-//     await notificationMain(existsData?.email, "Suspended notification" , "You have been permanently blocked by the admin. You will no longer be able to register or log in to this platform") 
-
-//     return {
-//       message : "profile blocked permanently",
-//       result : userData
-//     }
-//   }
-
-
-
-// }
-
-
-// const actionProfileReportService = async (id: string, { action }: { action: string }) => {
-//   const existsData = await ReportProfile.findById({ _id: id });
-
-//   if (!existsData) {
-//     throw new Error("Report not found");
-//   }
-
-//   const reportedUser = await User.findById(existsData?.reportedId);
-
-//   if (!reportedUser) {
-//     throw new Error("Reported user not found");
-//   }
-
-//   if (action === "suspend") {
-//     const result = await ReportProfile.findByIdAndUpdate(
-//       { _id: id },
-//       { action },
-//       { runValidators: true, new: true }
-//     );
-//     await User.findByIdAndUpdate(
-//       { _id: existsData?.reportedId },
-//       { profileStatus: action },
-//       { runValidators: true, new: true }
-//     );
-
-//     await notificationMain(
-//       reportedUser.email,
-//       "Suspended Notification",
-//       "Your account is currently suspended. You are unable to log in at this time. Access will be restored after the suspension period, typically within 7 to 10 days."
-//     );
-
-//     return {
-//       message: "Profile suspended successfully",
-//       result: result,
-//     };
-//   }
-//   else if(
-//     action === "safe"
-//   ){
-//     const result = await ReportProfile.findByIdAndUpdate(
-//       { _id: id },
-//       { action },
-//       { runValidators: true, new: true }
-//     );
-//     await User.findByIdAndUpdate(
-//       { _id: existsData?.reportedId },
-//       { profileStatus: action },
-//       { runValidators: true, new: true }
-//     );
-
-//     await notificationMain(
-//       reportedUser.email,
-//       "safe Notification",
-//       "Your account is currently safe. You are unable to log in at this time. Access will be restored after the suspension period, typically within 7 to 10 days."
-//     );
-
-//     return {
-//       message: "Profile safe successfully",
-//       result: result,
-//     };
-//   }
-//    else {
-//     await ReportProfile.findByIdAndUpdate(
-//       { _id: id },
-//       { action },
-//       { runValidators: true, new: true }
-//     );
-//     const userData = await User.findByIdAndUpdate(
-//       { _id: existsData?.reportedId },
-//       { profileStatus: action },
-//       { runValidators: true, new: true }
-//     );
-
-//     await notificationMain(
-//       reportedUser.email,
-//       "Blocked Notification",
-//       "You have been permanently blocked by the admin. You will no longer be able to register or log in to this platform."
-//     );
-
-//     return {
-//       message: "Profile blocked permanently",
-//       result: userData,
-//     };
-//   }
-// };
 
 const actionProfileReportService = async (
   id: string,
@@ -662,20 +514,6 @@ const getAllDataOverviewByUser = async (id: string) => {
   }
 }
 
-// const exchangeHistorybyUser = async(id : string, date : any) =>{
-//   console.log(date);
-//   const exchangeHistory = await Exchange.find({
-//     $or: [
-//       { reciverUserId: id },
-//       { senderUserId: id }
-//     ],
-//     reciverUserAccepted: true,
-//     senderUserAccepted: true
-//   })
-//   console.log(exchangeHistory);
-// }
-
-
 const exchangeHistorybyUser = async (id: string, inputYear?: string | number) => {
   let targetYear: number;
 
@@ -747,20 +585,6 @@ const changePassword = async (userId: string, oldPass: string, newPass: string) 
   return result
 }
 
-
-// const deleteUser = async (userId: string) => {
-//   const userData = await User.findById({ _id: userId }).select("email");
-
-//   await User.findOneAndDelete({ email: userData?.email })
-
-//   await Exchange.deleteMany({
-//     $or: [
-//       { email: userData?.email },
-//       { selectedEmail: userData?.email },
-//     ]
-//   })
-
-// }
 
 const deleteUser = async (userId: string) => {
   const session = await mongoose.startSession();

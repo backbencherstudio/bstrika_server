@@ -32,24 +32,6 @@ export const getCategorieFromDB = async (category: string) => {
 
 // ====================================== Review API,s Start =============================
 
-//  const createReviewIntoDB = async (data: TReviews) => {
-//   console.log(data);
-//   const userData = await User.findById({_id : data?.reciverId}).select('review')
-//   console.log(userData);
-
-//   const result = await Review.create(data)
-
-
-//   await User.findByIdAndUpdate({_id : data.reciverId}, {review : userData?.review + 1 });  
-//   const allRatingAvarageValue = await Review.find({reciverId : data.reciverId})
-
-
-//   return result
-
-
-// };
-
-
 const createReviewIntoDB = async (data: TReviews) => {
 
   const result = await Review.create(data);
@@ -195,20 +177,6 @@ const updateExchangeUpdateDateForSerial = async (payload: any) => {
 }
 
 
-// ===================== not remove this function now
-// const getAllExchangeDataFromDB = async (id: string, isAccepted: boolean) => {
-//   const result = await Exchange.find({
-//     isAccepted,
-//     $or: [
-//       { senderUserId: id }, 
-//       { reciverUserId: id }
-//     ]
-//   }).populate("reciverUserId");
-
-//   return result;
-// };
-
-
 const ChatExchangeRequestAcceptOrDeclineAPI = async (exchangeId: string, payload: any) => {
 
   if (payload?.isAccepted === "false") {
@@ -278,52 +246,7 @@ const getAcceptedDataForNav = async (senderUserId: string) => {
 }
 
 
-//  const acceptExchange = async (exchangeId : string, payload : any) =>{
-
-//   console.log(payload);
-//   console.log(exchangeId);
-//   const exchangeData = await Exchange.findById({ _id : exchangeId, $or : [{ sendderUserId : payload.userId }, {reciverUserId : payload.userId}]  })
-//   console.log(exchangeData);
-
-
-
-
-//   // const result = await Exchange.findByIdAndUpdate({_id : exchangeId}, {isExchange : true}, {new : true, runValidators : true})
-//   // return result  
-
-//  }
-
-
-
-// const acceptExchange = async (exchangeId: string, payload: any) => {
-//   const exchangeData = await Exchange.findOne({
-//     _id: exchangeId,
-//     $or: [
-//       { senderUserId: payload.userId },
-//       { reciverUserId: payload.userId }
-//     ]
-//   });
-
-//   if (!exchangeData) {
-//     return { success: false, message: "No exchange found for this user." };
-//   }
-//   if(exchangeData?.isAccepted !== "true"){
-//     throw new AppError(NOT_ACCEPTABLE, "At First need to accept the request")
-//   }
-
-//   // Determine which field matched
-//   const matchedField =
-//     exchangeData.senderUserId.toString() === payload.userId
-//     ? "senderUserAccepted"
-//     : "reciverUserAccepted";      
-//       const result = await Exchange.findByIdAndUpdate({_id : exchangeId}, {[matchedField] : true }, {new : true, runValidators : true});
-//       return result  
-// };
-
-
 const acceptExchange = async (exchangeId: string, payload: any) => {
-  // console.log(exchangeId, payload);
-
   const exchangeData = await Exchange.findOne({
     _id: exchangeId,
     $or: [

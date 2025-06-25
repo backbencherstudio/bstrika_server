@@ -59,9 +59,6 @@ async function main() {
         }
       });
     });
-    // app.listen(config.port, () => {
-    //   console.log(`Example app listening on PORT === ${config.port}`);
-    // });
     httpServer.listen(config.port, () => {
       console.log(`Server is running on PORT === ${config.port}`);
     });
