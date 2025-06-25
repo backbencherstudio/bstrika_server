@@ -13,7 +13,7 @@ export const findUsersBasedOnSubcategoryFromDB = async (subCategory: any) => {
   const users = await User.find({
     my_service: { $in: [subCategory] },
     isDeleted: false,
-  }).select("email first_name my_service extra_skills portfolio certificate");
+  }).select("email first_name my_service extra_skills portfolio certificate senderImage reciverImage");
   return users;
 };
 
