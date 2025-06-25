@@ -16,6 +16,7 @@ export type TExchange = {
     email: string;
     selectedEmail: string;
     isAccepted: 'true' | 'false' | 'decline';
+    senderImage: string;
     senderService: string;
     reciverService?: string;
     senderUserAccepted: boolean;
@@ -30,6 +31,7 @@ export type TExchangeAcceptedData = {
     reciverUserId: Schema.Types.ObjectId;
     email: string;
     selectedEmail: string;
+    senderImage: string;
     isAccepted: 'true' | 'false' | 'decline';
     senderService: string;
     reciverService?: string;

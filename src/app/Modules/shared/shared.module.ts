@@ -62,10 +62,14 @@ const exchangeSchema = new Schema<TExchange>(
       type: String,
       required: true,
     },
+    senderImage: {
+      type: String,
+      required: true
+    },
     senderService: {
       type: String,
-      required : true
-    }, 
+      required: true
+    },
     reciverService: {
       type: String
     },
@@ -84,13 +88,13 @@ const exchangeSchema = new Schema<TExchange>(
     },
     my_service: {
       type: [String],
-      required : true
+      required: true
     },
-   
+
   },
   {
-    timestamps: true, 
-    versionKey : false
+    timestamps: true,
+    versionKey: false
   }
 );
 
@@ -114,10 +118,14 @@ const exchangeAcceptedSchema = new Schema<TExchangeAcceptedData>(
       type: String,
       required: true,
     },
+    senderImage: {
+      type: String,
+      required: true
+    },
     senderService: {
       type: String,
-      required : true
-    }, 
+      required: true
+    },
     reciverService: {
       type: String
     },
@@ -140,41 +148,41 @@ const exchangeAcceptedSchema = new Schema<TExchangeAcceptedData>(
     },
     my_service: {
       type: [String],
-      required : true
+      required: true
     },
-   
+
   },
   {
-    timestamps: true, 
-    versionKey : false
+    timestamps: true,
+    versionKey: false
   }
 );
 
 export const reportSchema = new Schema<TReviewReport>({
-  reviewId : {
-    type : Schema.Types.ObjectId,
-    required : true,
-    ref : "Review"
+  reviewId: {
+    type: Schema.Types.ObjectId,
+    required: true,
+    ref: "Review"
   },
-  reporterId : {
-    type : Schema.Types.ObjectId,
-    required : true,
-    ref : "User"
+  reporterId: {
+    type: Schema.Types.ObjectId,
+    required: true,
+    ref: "User"
   },
-  document : {
-    type : String,
-    required : true
+  document: {
+    type: String,
+    required: true
   },
-  reportDetails : {
-    type : String,
-    required : true
+  reportDetails: {
+    type: String,
+    required: true
   },
-  status : {
-    type : String,
-    enum : ['pending', 'reject', 'accept'],
-    default : 'pending',
+  status: {
+    type: String,
+    enum: ['pending', 'reject', 'accept'],
+    default: 'pending',
   }
-}) 
+})
 
 export const Review = model<TReviews>('Review', reviewSchema);
 
