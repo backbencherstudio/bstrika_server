@@ -64,11 +64,11 @@ const exchangeSchema = new Schema<TExchange>(
     },
     senderImage: {
       type: String,
-      required: true
+      // required: true
     },
     reciverImage: {
       type: String,
-      required: true
+      // required: true
     },
     senderService: {
       type: String,
