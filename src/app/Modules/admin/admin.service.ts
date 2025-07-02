@@ -118,11 +118,11 @@ const getAllExchangeDataFromDBbyAdmin = async () => {
 
   const exchangeData = await Exchange.find({ reciverUserAccepted: true, senderUserAccepted: true }).populate([{
     path: 'senderUserId',
-    select: 'first_name image email personalInfo'
+    select: 'first_name profileImage email personalInfo'
   },
   {
     path: 'reciverUserId',
-    select: 'first_name image email personalInfo'
+    select: 'first_name profileImage email personalInfo'
   }])
 
   const acceptedData = await Exchange.find({ isAccepted: true })
