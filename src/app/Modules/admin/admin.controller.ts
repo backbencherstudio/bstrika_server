@@ -95,4 +95,16 @@ export const showALlReportMessageDataFromDBByAdmin = catchAsync(async (req, res)
   });
 });
 
+export const showALlExchangeServiceUserMessageDataFromDBByAdmin = catchAsync(async (req, res) => {
+  const email1 = req.query.email1;
+  const email2 = req.query.email2;  
+  const result = await CategoryService.showALlExchangeServiceUserMessageDataFromDBByAdmin(email1 as string, email2 as string);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'get all message data by admin exchange user message ',
+    data: result,
+  });
+});
+
 

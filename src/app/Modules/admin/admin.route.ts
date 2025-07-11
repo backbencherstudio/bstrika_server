@@ -1,5 +1,5 @@
 import express from 'express';
-import { addSubCategory, createCategory, deleteCategoryByAdmin, getAllCategories, getAllExchangeDatabyAdmin, removeSubCategory, showALlReportMessageDataFromDBByAdmin, updateCategory } from './admin.controller';
+import { addSubCategory, createCategory, deleteCategoryByAdmin, getAllCategories, getAllExchangeDatabyAdmin, removeSubCategory, showALlExchangeServiceUserMessageDataFromDBByAdmin, showALlReportMessageDataFromDBByAdmin, updateCategory } from './admin.controller';
 import { Auth } from '../../middleware/auth';
 import { User_Role } from '../User/user.constent';
 import { upload } from '../../middleware/upload';
@@ -36,6 +36,10 @@ router.get('/allExchangeData',
 router.get('/getALlMessageData',
     // Auth(User_Role.admin),     /// need to uncoment it in last moment of the work
     showALlReportMessageDataFromDBByAdmin);
+
+router.get('/showALlExchangeServiceUserMessageDataFromDBByAdmin',
+    // Auth(User_Role.admin),     /// need to uncoment it in last moment of the work
+    showALlExchangeServiceUserMessageDataFromDBByAdmin);
 
 
 export const categoryRoutes = router;

@@ -153,6 +153,23 @@ const showALlReportMessageDataFromDBByAdmin = async (reporterId: string, reporte
 };
 
 
+const showALlExchangeServiceUserMessageDataFromDBByAdmin = async (email1: string, email2: string) => {
+
+  console.log(email1);
+  console.log(email2);
+  
+
+  const messages = await MessageModel.find({
+    $or: [
+      { sender: email1, recipient: email2 },
+      { sender: email2, recipient: email1 }
+    ]
+  }).sort({ timestamp: 1 }); 
+
+  return messages;
+};
+
+
 export const CategoryService = {
   createCategory,
   updateCategory,
@@ -161,5 +178,6 @@ export const CategoryService = {
   deleteCategoriesByAdmin,
   removeSubCategory,
   getAllExchangeDataFromDBbyAdmin,
-  showALlReportMessageDataFromDBByAdmin
+  showALlReportMessageDataFromDBByAdmin,
+  showALlExchangeServiceUserMessageDataFromDBByAdmin
 }
