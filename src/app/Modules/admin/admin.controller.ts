@@ -85,7 +85,7 @@ export const getAllExchangeDatabyAdmin = catchAsync(async (req, res) => {
 
 export const showALlReportMessageDataFromDBByAdmin = catchAsync(async (req, res) => {
   const reporterId = req.query.reporterId;
-  const reportedId = req.query.reportedId;  
+  const reportedId = req.query.reportedId;
   const result = await CategoryService.showALlReportMessageDataFromDBByAdmin(reporterId as string, reportedId as string);
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -97,7 +97,7 @@ export const showALlReportMessageDataFromDBByAdmin = catchAsync(async (req, res)
 
 export const showALlExchangeServiceUserMessageDataFromDBByAdmin = catchAsync(async (req, res) => {
   const email1 = req.query.email1;
-  const email2 = req.query.email2;  
+  const email2 = req.query.email2;
   const result = await CategoryService.showALlExchangeServiceUserMessageDataFromDBByAdmin(email1 as string, email2 as string);
   sendResponse(res, {
     statusCode: httpStatus.OK,
