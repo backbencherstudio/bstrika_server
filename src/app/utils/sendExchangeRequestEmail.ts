@@ -1,7 +1,16 @@
 import axios from 'axios';
 
+const appConfig = {
+  tenantId: process.env.TENANT_ID as string ,
+  clientId: process.env.CLIENT_ID as string ,
+  clientSecret: process.env.CLIENT_SECRET as string ,
+  senderEmail: process.env.SENDER_EMAIL as string ,
+};
+
+
 
 const getAccessToken = async () => {
+  
   const tokenUrl = `https://login.microsoftonline.com/${appConfig.tenantId}/oauth2/v2.0/token`;
 
   const params = new URLSearchParams({
