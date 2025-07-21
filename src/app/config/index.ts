@@ -22,3 +22,10 @@ export default {
   stripe_webhook_secret_key:process.env.STRIPE_WEBHOOK_SECRET_KEY,
   frontend_url:process.env.FRONTEND_URL
 };
+
+export const appConfig = {
+  tenantId: process.env.TENANT_ID as string ,
+  clientId: process.env.CLIENT_ID as string ,
+  clientSecret: process.env.CLIENT_SECRET as string ,
+  senderEmail: process.env.SENDER_EMAIL as string ,
+};
