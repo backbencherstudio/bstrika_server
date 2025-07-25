@@ -30,17 +30,6 @@ async function main() {
     const messageService = new MessageService(io, MessageModel);
     io.on('connection', (socket) => {
 
-      // socket.on('join', (userId) => {
-      //   if (userId) {
-      //     socket.join(String(userId));
-      //     console.log(`👤 User ${userId} joined their room`);
-      //   }
-      // });
-
-      // socket.on('join', (username) =>
-      //   messageService.handleJoin(socket, username),
-      // );
-
       socket.on('join', (username: string) => {
         userSocketMap.set(username, socket.id);
         console.log(`✅ User joined: ${username}, Socket ID: ${socket.id}`);
