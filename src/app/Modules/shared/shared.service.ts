@@ -149,7 +149,7 @@ export const sendAndStoreExchangeRequest = async (payload: any[]) => {
   const emailArray = updatedPayload.map(item => item.selectedEmail);
 
   // Optionally send emails
-  // await sendExchangeRequestEmail(emailArray);
+  await sendExchangeRequestEmail(emailArray);
 
   const result = await Exchange.create(updatedPayload);
   return result;
