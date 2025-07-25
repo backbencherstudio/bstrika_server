@@ -80,7 +80,7 @@ class MessageService {
   }
 
   async markMessagesAsRead(senderSerialNumber: string, reciverSerialNumber: string, recipientEmail: string) {
-    try {
+      try {
       const result = await this.MessageModel.updateMany(
         {
           senderSerialNumber,
@@ -100,6 +100,26 @@ class MessageService {
       throw err;
     }
   }
+
+  // async getUnreadMessages(userId: string) {
+  //   try {
+  //     const unreadMessages = await this.MessageModel.find({
+  //       recipient: userId,
+  //       read: false,
+  //     }).lean();
+
+  //     const unreadCounts: { [key: string]: number } = {};
+  //     unreadMessages.forEach((msg) => {
+  //       const key = `${msg.senderSerialNumber}--${msg.reciverSerialNumber}`;
+  //       unreadCounts[key] = (unreadCounts[key] || 0) + 1;
+  //     });
+
+  //     return unreadCounts;
+  //   } catch (err) {
+  //     console.error('Error fetching unread messages:', err);
+  //     throw err;
+  //   }
+  // }
 
   async getUnreadMessages(userId: string) {
     try {

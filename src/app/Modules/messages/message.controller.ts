@@ -22,7 +22,7 @@ class MessageController {
           { sender: recipient, recipient: email }
         ]
       }).sort({ timestamp: -1 }).lean();
-      
+
       res.json(chats);
     } catch (err) {
       res.status(500).json({ error: 'Error fetching messages' });
@@ -31,9 +31,15 @@ class MessageController {
 
   async markMessagesAsRead(req: Request, res: Response) {
     try {
-      const { sender, recipient } = req.body;
-      const modifiedCount = await this.messageService.markMessagesAsRead(sender, recipient);
-      
+      const { senderSerialNumber,
+        reciverSerialNumber,
+        recipientEmail, } = req.body;
+      const modifiedCount = await this.messageService.markMessagesAsRead(
+        senderSerialNumber,
+        reciverSerialNumber,
+        recipientEmail);
+      // const modifiedCount = await this.messageService.markMessagesAsRead(sender, recipient);
+
       res.json({
         success: true,
         modifiedCount,
