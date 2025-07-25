@@ -8,6 +8,7 @@ import { Exchange, ExchangeAccepted, Report, Review } from "./shared.module";
 import { AppError } from "../../errors/AppErrors";
 import { NOT_ACCEPTABLE } from "http-status";
 import { sendExchangeRequestEmail } from "../../utils/sendExchangeRequestEmail";
+import crypto from 'crypto';
 
 export const findUsersBasedOnSubcategoryFromDB = async (subCategory: any) => {
   const users = await User.find({
@@ -96,12 +97,66 @@ const deleteReview = async (id: string) => {
 
 // ====================================== Exchange API,s Start =============================
 
-const sendAndStoreExchangeRequest = async (payload: any) => {
-  const emailArray = payload.map((item: { selectedEmail: any; }) => item.selectedEmail);
-  await sendExchangeRequestEmail(emailArray)
-  const result = await Exchange.create(payload)
-  return result
-}
+// const sendAndStoreExchangeRequest = async (payload: any) => {
+//   const emailArray = payload.map((item: { selectedEmail: any; }) => item.selectedEmail);
+//   await sendExchangeRequestEmail(emailArray)
+//   const result = await Exchange.create(payload)
+//   return result
+// }
+
+
+const generateUniqueSerial = async (): Promise<string> => {
+  let isUnique = false;
+  let serial = '';
+
+  while (!isUnique) {
+    // Generate a random 8-digit alphanumeric serial
+    serial = crypto.randomBytes(4).toString('hex').toUpperCase(); // e.g., "A3F4B2C9"
+
+    // Check if serial already exists in either field
+    const exists = await Exchange.findOne({
+      $or: [
+        { senderSerialNumber: serial },
+        { reciverSerialNumber: serial }
+      ]
+    });
+
+    if (!exists) isUnique = true;
+  }
+
+  return serial;
+};
+
+export const sendAndStoreExchangeRequest = async (payload: any[]) => {
+  console.log(payload);
+
+  const updatedPayload = await Promise.all(payload.map(async (item) => {
+    const senderSerialNumber = await generateUniqueSerial();
+    const reciverSerialNumber = await generateUniqueSerial();
+
+    return {
+      ...item,
+      senderSerialNumber,
+      reciverSerialNumber,
+      isAccepted: 'false',
+      senderUserAccepted: false,
+      reciverUserAccepted: false,
+      createdAt: new Date(),
+      updatedAt: new Date()
+    };
+  }));
+
+  const emailArray = updatedPayload.map(item => item.selectedEmail);
+
+  // Optionally send emails
+  // await sendExchangeRequestEmail(emailArray);
+
+  const result = await Exchange.create(updatedPayload);
+  return result;
+};
+
+
+
 
 //====>>> get chat data, filtered by "true ... for chat" "false for pending accept"
 //=====>>> jokhon All connections a click korbe tokhon true send korbe,,, 

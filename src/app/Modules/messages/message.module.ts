@@ -5,11 +5,14 @@ const messageSchema = new mongoose.Schema<IMessage>({
   sender: { type: String, required: true },
   recipient: { type: String, required: true },
   content: { type: String, required: true },
+  senderSerialNumber: { type: String, required: true },
+  reciverSerialNumber: { type: String, required: true },
   reciverService: { type: String, required: true },
   senderService: { type: String, required: true },
   timestamp: { type: Date, default: Date.now },
   read: { type: Boolean, default: false },
-  hiddenFor: [{ type: String }]
+  hiddenFor: [{ type: String }],
+  
 });
 
 const MessageModel = mongoose.model<IMessage>('Message', messageSchema);

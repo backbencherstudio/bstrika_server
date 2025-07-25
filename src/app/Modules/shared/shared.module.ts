@@ -54,6 +54,14 @@ const exchangeSchema = new Schema<TExchange>(
       required: true,
       ref: 'User',
     },
+    senderSerialNumber: {
+      type: String,
+      required: true,
+    },
+    reciverSerialNumber: {
+      type: String,
+      required: true,
+    },
     email: {
       type: String,
       required: true,

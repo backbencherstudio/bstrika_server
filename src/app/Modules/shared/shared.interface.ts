@@ -13,6 +13,8 @@ export type TReviews = {
 export type TExchange = {
     senderUserId: Schema.Types.ObjectId;
     reciverUserId: Schema.Types.ObjectId;
+    senderSerialNumber: string;
+    reciverSerialNumber: string;
     email: string;
     selectedEmail: string;
     isAccepted: 'true' | 'false' | 'decline';
