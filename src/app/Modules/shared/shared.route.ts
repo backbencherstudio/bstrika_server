@@ -35,6 +35,7 @@ router.post('/exchange', SharedController.sendAndStoreExchangeRequestController)
 router.get('/exchange', SharedController.getAllExchangeData);  //====>>> get chat data, filtered by "true ... for chat" "false for pending accept"
 
 router.get('/exchange/:userId', SharedController.getAllExchangeDataFromDBForEachUser); // for user dashboard ( also show this data in nav bar )
+router.get('/singleExchangeData/:exchangeId', SharedController.getSingleExchangeDataFromDBByUser); // for user dashboard ( also show this data in nav bar )
 
 router.patch('/exchange/:exchangeId', SharedController.chatexchangeRequestAcceptOrDeclineAPI);
 router.patch('/acceptExchange/:exchangeId', SharedController.acceptExchangeController);

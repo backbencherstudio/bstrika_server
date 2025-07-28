@@ -91,6 +91,16 @@ export const findUsersBasedOnSubcategory = catchAsync(async (req, res) => {
     });
   });
 
+  const getSingleExchangeDataFromDBByUser = catchAsync(async (req, res) => {      
+    const result = await SharedServices.getSingleExchangeDataFromDBByUser(req.params.exchangeId as string);
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: 'Single Exchange data get successfully',
+      data: result,
+    });
+  });
+
   const getAllExchangeDataFromDBForEachUser = catchAsync(async (req, res) => {  
     
     const result = await SharedServices.getAllExchangeDataFromDBForEachUser(req.params.userId as string);
@@ -226,6 +236,7 @@ export const SharedController = {
   reviewDisLike,
   getAllExchangeData,
   chatexchangeRequestAcceptOrDeclineAPI,
+  getSingleExchangeDataFromDBByUser,
   getAllExchangeDataFromDBForEachUser,
   getAcceptedDataForNav,
   acceptExchangeController,

@@ -158,6 +158,9 @@ export const sendAndStoreExchangeRequest = async (payload: any[]) => {
 
 
 
+
+
+
 //====>>> get chat data, filtered by "true ... for chat" "false for pending accept"
 //=====>>> jokhon All connections a click korbe tokhon true send korbe,,, 
 //=====>>> jokhon Request a click korbe tokhon false send korbe,,, 
@@ -194,6 +197,10 @@ const getAllExchangeDataFromDB = async (id: string, isAccepted: string) => {
   return result;
 };
 
+const getSingleExchangeDataFromDBByUser = async (exchangeId : string)=>{
+  const result = await Exchange.findById({_id : exchangeId});
+  return result
+} 
 
 
 const getAllExchangeDataFromDBForEachUser = async (id: string) => {
@@ -216,6 +223,8 @@ const getAllExchangeDataFromDBForEachUser = async (id: string) => {
 
   return result;
 };
+
+
 
 
 const updateExchangeUpdateDateForSerial = async (payload: any) => {
@@ -407,6 +416,7 @@ export const SharedServices = {
   reviewDisLike,
   sendAndStoreExchangeRequest,
   getAllExchangeDataFromDB,
+  getSingleExchangeDataFromDBByUser,
   getAllExchangeDataFromDBForEachUser,
   updateExchangeUpdateDateForSerial,
   ChatExchangeRequestAcceptOrDeclineAPI,
