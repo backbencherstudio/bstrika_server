@@ -83,6 +83,9 @@ const loginUserIntoDB = async (paylod: TLoginUser) => {
   if (!userData) {
     throw new AppError(httpStatus.NOT_FOUND, 'User is not found');
   }
+  if (userData?.isDeleted) {
+    throw new AppError(httpStatus.NOT_FOUND, 'User is not found');
+  }
 
   if (userData?.profileStatus === "suspend") {
     throw new AppError(httpStatus.NOT_FOUND, `Your account is currently suspended. You are unable to log in at this time. Access will be restored after the suspension period, typically within 7 to 10 days`);
@@ -599,14 +602,15 @@ const deleteUser = async (userId: string) => {
 
     const userEmail = userData.email;
 
-    await User.findOneAndDelete({ email: userEmail }).session(session);
+    await User.findByIdAndUpdate({ email: userEmail }, { isDeleted: true }, { runValidators: true, new: true });
+    // await User.findOneAndDelete({ email: userEmail }).session(session);
 
-    await Exchange.deleteMany({
-      $or: [
-        { email: userEmail },
-        { selectedEmail: userEmail },
-      ]
-    }).session(session);
+    // await Exchange.deleteMany({
+    //   $or: [
+    //     { email: userEmail },
+    //     { selectedEmail: userEmail },
+    //   ]
+    // }).session(session);
 
     // await ExchangeAccepted.deleteMany({
     //   $or: [
