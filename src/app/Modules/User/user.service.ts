@@ -602,11 +602,11 @@ const deleteUser = async (userId: string) => {
 
     const userEmail = userData.email;
 
-    console.log(userEmail);
-    
-    
-    const res = await User.findOneAndUpdate({ email: userEmail }, { isDeleted: true }, { runValidators: true, new: true });
-    console.log({res});
+    // console.log(userEmail);
+
+
+    await User.findOneAndUpdate({ email: userEmail }, { isDeleted: true }, { runValidators: true, new: true });
+    // console.log({res});
     // await User.findOneAndDelete({ email: userEmail }).session(session);
 
     // await Exchange.deleteMany({
