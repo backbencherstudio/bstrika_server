@@ -168,7 +168,7 @@ const exchangeServiceDone = catchAsync(async (req, res) => {
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: ' email send successfully  ',
+    message: 'Exchange Service Completed – Reminder Email Sent Successfully',
     data: result,
   });
 });
