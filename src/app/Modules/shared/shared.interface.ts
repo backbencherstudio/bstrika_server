@@ -24,6 +24,8 @@ export type TExchange = {
     reciverService?: string;
     senderUserAccepted: boolean;
     reciverUserAccepted: boolean;
+    senderServiceDone: boolean;
+    reciverServiceDone: boolean;
     my_service: string[];
     createdAt: Date;
     updatedAt: Date;

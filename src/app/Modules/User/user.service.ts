@@ -1,4 +1,4 @@
-import { Exchange, ExchangeAccepted } from './../shared/shared.module';
+import { Exchange } from './../shared/shared.module';
 /* eslint-disable no-undef */
 /* eslint-disable prefer-const */
 /* eslint-disable @typescript-eslint/no-unused-vars */
@@ -608,12 +608,12 @@ const deleteUser = async (userId: string) => {
       ]
     }).session(session);
 
-    await ExchangeAccepted.deleteMany({
-      $or: [
-        { email: userEmail },
-        { selectedEmail: userEmail },
-      ]
-    }).session(session);
+    // await ExchangeAccepted.deleteMany({
+    //   $or: [
+    //     { email: userEmail },
+    //     { selectedEmail: userEmail },
+    //   ]
+    // }).session(session);
 
     await session.commitTransaction();
     console.log("✅ Successfully deleted user and related exchange data");

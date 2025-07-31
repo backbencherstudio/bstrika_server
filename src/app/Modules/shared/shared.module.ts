@@ -90,6 +90,14 @@ const exchangeSchema = new Schema<TExchange>(
       enum: ['true', 'false', 'decline'],
       default: 'false',
     },
+    senderServiceDone: {
+      type: Boolean,
+      default: false,
+    },
+    reciverServiceDone: {
+      type: Boolean,
+      default: false,
+    },
     reciverUserAccepted: {
       type: Boolean,
       default: false,

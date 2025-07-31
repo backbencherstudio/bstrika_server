@@ -9,6 +9,7 @@ import { AppError } from "../../errors/AppErrors";
 import { NOT_ACCEPTABLE } from "http-status";
 import { sendExchangeRequestEmail } from "../../utils/sendExchangeRequestEmail";
 import crypto from 'crypto';
+import { serviceDoneEmail } from "../../utils/serviceDoneEmail";
 
 export const findUsersBasedOnSubcategoryFromDB = async (subCategory: any) => {
   const users = await User.find({
@@ -197,10 +198,10 @@ const getAllExchangeDataFromDB = async (id: string, isAccepted: string) => {
   return result;
 };
 
-const getSingleExchangeDataFromDBByUser = async (exchangeId : string)=>{
-  const result = await Exchange.findById({_id : exchangeId}).populate(["senderUserId", "reciverUserId"]);
+const getSingleExchangeDataFromDBByUser = async (exchangeId: string) => {
+  const result = await Exchange.findById({ _id: exchangeId }).populate(["senderUserId", "reciverUserId"]);
   return result
-} 
+}
 
 
 const getAllExchangeDataFromDBForEachUser = async (id: string) => {
@@ -305,7 +306,7 @@ const getIsAcceptNotificationUnReadDataForEachUserIsAcceptTrue = async (senderUs
 }
 
 const getAcceptedDataForNav = async (senderUserId: string) => {
-  const result = await ExchangeAccepted.find({ senderUserId})
+  const result = await ExchangeAccepted.find({ senderUserId })
   return result
 }
 
@@ -344,10 +345,53 @@ const acceptExchange = async (exchangeId: string, payload: any) => {
     { new: true, runValidators: true }
   ).sort("-updateAt");
 
-  console.log(result);
-
   return result;
 };
+
+const exchangeServiceDone = async (exchangeId: string, payload: any) => {
+  const exchangeData = await Exchange.findOne({
+    _id: exchangeId,
+    $or: [
+      { senderUserId: payload.userId },
+      { reciverUserId: payload.userId }
+    ]
+  });
+
+  if (!exchangeData) {
+    return { success: false, message: "No exchange found for this user." };
+  }
+
+  const isSender = exchangeData.senderUserId.toString() === payload.userId;
+
+  const updateData: any = {};
+  let serviceName;
+  let to;
+
+  if (isSender) {
+    updateData.senderServiceDone = true;
+    serviceName = exchangeData.reciverService;
+    to = exchangeData.selectedEmail;
+  } else {
+    updateData.reciverServiceDone = true;
+    serviceName = exchangeData.senderService
+    to = exchangeData.email;
+  }
+
+  await serviceDoneEmail(to, serviceName, payload.email, payload.name)
+
+  const result = await Exchange.findByIdAndUpdate(
+    { _id: exchangeId },
+    updateData,
+    { new: true, runValidators: true }
+  ).sort("-updateAt");
+
+  return result;
+
+
+
+}
+
+
 
 
 
@@ -424,6 +468,7 @@ export const SharedServices = {
   getIsAcceptNotificationUnReadDataForEachUserIsAcceptTrue,
   getAcceptedDataForNav,
   acceptExchange,
+  exchangeServiceDone,
   reportPlacedToAdmin,
   getALlReportsFromDBByAdmin,
   reportAcceptOrRejectByAdmin,
