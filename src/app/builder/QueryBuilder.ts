@@ -38,17 +38,20 @@ class QueryBuilder<T> {
     const queryObj = { ...this.query };
     const excludedFields = ['searchTerm', 'sort', 'limit', 'page', 'fields'];
     excludedFields.forEach((el) => delete queryObj[el]);
-  
-    const filterConditions: Record<string, any> = {};
+
+    const filterConditions: Record<string, any> = {
+      profileStatus: 'safe',
+      isDeleted: false,
+    };
 
     if (queryObj.city) {
       filterConditions['addressInfo.city'] = queryObj.city;
     }
-  
+
     if (queryObj.country) {
       filterConditions['addressInfo.country'] = queryObj.countru;
     }
-  
+
     if (queryObj.my_service) {
       filterConditions['my_service'] = {
         $in: Array.isArray(queryObj.my_service)
@@ -56,20 +59,20 @@ class QueryBuilder<T> {
           : [queryObj.my_service],
       };
     }
-  
+
     if (queryObj.rating) {
       filterConditions['rating'] = Number(queryObj.rating);
     }
-  
+
     if (queryObj.review) {
       filterConditions['review'] = Number(queryObj.review);
     }
-  
+
     this.modelQuery = this.modelQuery.find(filterConditions);
-  
+
     return this;
   }
-  
+
 
 
   sort() {
