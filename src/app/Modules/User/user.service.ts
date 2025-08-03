@@ -26,7 +26,7 @@ const createUserIntoDB = async (payload: TUser) => {
   const otp = Math.floor(100000 + Math.random() * 900000).toString();
   const isUserExistsInUser = await User.findOne({ email: payload?.email });
   const isTempUserExistsInUser = await TempUser.findOne({ email: payload?.email });
-  if (isUserExistsInUser) {
+  if (isUserExistsInUser && !isUserExistsInUser.isDeleted) {
     throw new AppError(400, 'User already exists');
   }
 
@@ -59,7 +59,13 @@ const verifyOTPintoDB = async (otp: string, email: string) => {
     throw new AppError(httpStatus.NOT_ACCEPTABLE, "OTP not match")
   }
 
+  const isUserExists = await User.findOne({ email });
 
+  if (isUserExists) {
+    await User.findOneAndUpdate({ email }, { isDeleted: false }, { runValidators: true, new: true })
+    await TempUser.findOneAndDelete({ email })
+    return
+  }
 
 
   const { first_name, isDeleted, role } = TempUserData;
