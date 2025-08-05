@@ -41,8 +41,7 @@ export const serviceDoneEmail = async (to: string, serviceName: any, email: stri
 
           <div style="background-color: #f0f5ff; border-left: 4px solid #4a90e2; padding: 15px; margin: 25px 0; border-radius: 6px;">
             <p style="margin: 0; font-size: 14px;">
-              If you have any feedback or need further assistance, feel free to reply to this email: 
-              <a href="mailto:${email}" style="color: #007aff;">${email}</a>
+              If you have any feedback or need further assistance, please feel free to contact me directly through the Ollivu platform.
             </p>
           </div>
 
@@ -80,6 +79,6 @@ export const serviceDoneEmail = async (to: string, serviceName: any, email: stri
       },
     }
   );
-  
+
   return response.data;
 };
