@@ -60,16 +60,21 @@ const verifyOTPintoDB = async (otp: string, email: string) => {
   }
 
   const isUserExists = await User.findOne({ email });
+  const hashedPassword = await bcrypt.hash(TempUserData?.password, 8);
 
   if (isUserExists) {
-    await User.findOneAndUpdate({ email }, { isDeleted: false }, { runValidators: true, new: true })
+    await User.findOneAndUpdate({ email },
+      {
+        isDeleted: false,
+        password: hashedPassword
+      },
+      { runValidators: true, new: true })
     await TempUser.findOneAndDelete({ email })
     return
   }
 
 
   const { first_name, isDeleted, role } = TempUserData;
-  const hashedPassword = await bcrypt.hash(TempUserData?.password, 8);
   const updateData = {
     first_name, isDeleted, role, email,
     password: hashedPassword
@@ -629,8 +634,16 @@ const deleteUser = async (userId: string) => {
     // console.log(userEmail);
 
 
-    await User.findOneAndUpdate({ email: userEmail }, { isDeleted: true }, { runValidators: true, new: true });
-    // console.log({res});
+    await User.findOneAndUpdate(
+      { email: userEmail },
+      {
+        isDeleted: true,
+        rating: 0,
+        review: 0
+      },
+      { runValidators: true, new: true }).session(session);
+    await Review.deleteMany({ reciverId: userData?._id }).session(session);
+
     // await User.findOneAndDelete({ email: userEmail }).session(session);
 
     // await Exchange.deleteMany({
