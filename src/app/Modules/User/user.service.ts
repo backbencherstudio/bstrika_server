@@ -329,7 +329,7 @@ const getAllUserFromDB = async (query: Record<string, unknown>) => {
 };
 
 
-const getSingleUserFromDB = async (userId: string) => {
+const getSingleUserFromDB = async (userId: string) => { 
   const result = await User.findById({ _id: userId });
   const allReview = await Review.find({ reviewerId: userId }).sort({ createdAt: -1 }).populate([
     {
@@ -618,58 +618,85 @@ const changePassword = async (userId: string, oldPass: string, newPass: string) 
 }
 
 
-const deleteUser = async (userId: string) => {
-  const session = await mongoose.startSession();
+// const deleteUser = async (userId: string) => {
+//   const session = await mongoose.startSession();
 
+//   try {
+//     session.startTransaction();
+//     const userData = await User.findById(userId).select("email").session(session);
+
+//     if (!userData?.email) {
+//       throw new Error("User not found");
+//     }
+
+//     const userEmail = userData.email;
+
+//     // console.log(userEmail);
+
+
+//     await User.findOneAndUpdate(
+//       { email: userEmail },
+//       {
+//         isDeleted: true,
+//         rating: 0,
+//         review: 0
+//       },
+//       { runValidators: true, new: true }).session(session);
+
+//     await Review.deleteMany({ reciverId: userData?._id }).session(session);
+
+//     // await User.findOneAndDelete({ email: userEmail }).session(session);
+
+//     // await Exchange.deleteMany({
+//     //   $or: [
+//     //     { email: userEmail },
+//     //     { selectedEmail: userEmail },
+//     //   ]
+//     // }).session(session);
+
+//     // await ExchangeAccepted.deleteMany({
+//     //   $or: [
+//     //     { email: userEmail },
+//     //     { selectedEmail: userEmail },
+//     //   ]
+//     // }).session(session);
+
+//     await session.commitTransaction();
+//     console.log("✅ Successfully deleted user and related exchange data");
+
+//     return { success: true };
+//   } catch (error: any) {
+//     await session.abortTransaction();
+//     console.error("❌ Deletion failed:", error);
+//     return { success: false, error: error.message };
+//   } finally {
+//     session.endSession();
+//   }
+// };
+
+const deleteUser = async (userId: string) => {
   try {
-    session.startTransaction();
-    const userData = await User.findById(userId).select("email").session(session);
+    const userData = await User.findById(userId).select("email");
 
     if (!userData?.email) {
       throw new Error("User not found");
     }
 
-    const userEmail = userData.email;
-
-    // console.log(userEmail);
-
+    const userEmail = userData?.email;
 
     await User.findOneAndUpdate(
       { email: userEmail },
-      {
-        isDeleted: true,
-        rating: 0,
-        review: 0
-      },
-      { runValidators: true, new: true }).session(session);
-    await Review.deleteMany({ reciverId: userData?._id }).session(session);
+      { isDeleted: true, rating: 0, review: 0 },
+      { runValidators: true, new: true }
+    );
 
-    // await User.findOneAndDelete({ email: userEmail }).session(session);
+    await Review.deleteMany({ reciverId: userData?._id });
 
-    // await Exchange.deleteMany({
-    //   $or: [
-    //     { email: userEmail },
-    //     { selectedEmail: userEmail },
-    //   ]
-    // }).session(session);
-
-    // await ExchangeAccepted.deleteMany({
-    //   $or: [
-    //     { email: userEmail },
-    //     { selectedEmail: userEmail },
-    //   ]
-    // }).session(session);
-
-    await session.commitTransaction();
     console.log("✅ Successfully deleted user and related exchange data");
-
     return { success: true };
   } catch (error: any) {
-    await session.abortTransaction();
     console.error("❌ Deletion failed:", error);
     return { success: false, error: error.message };
-  } finally {
-    session.endSession();
   }
 };
 
